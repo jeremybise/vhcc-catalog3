@@ -1,0 +1,35 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@import "@fontsource/pt-sans/400.css";
+@import "@fontsource/pt-sans/700.css";
+@import "@fontsource/fira-sans-condensed/400.css";
+@import "@fontsource/fira-sans-condensed/600.css";
+@import "@fontsource/fira-sans-condensed/700.css";
+
+@theme {
+  --color-vhcc-navy: #0b2439;
+  --color-vhcc-blue: #4578ba;
+  --color-vhcc-green: #284e36;
+}
+
+:root {
+  --font-body: "PT Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-heading:
+    "Fira Sans Condensed", "Arial Narrow", "Franklin Gothic Medium", Arial,
+    sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+}

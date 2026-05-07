@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../layouts/Layout.astro";
+
+const catalogYears = await getCollection("catalogYears");
+const years = catalogYears
+  .map((entry) => {
+    const year = entry.id.split("/")[0];
+    return { year, title: entry.data.title || year };
+  })
+  .sort((a, b) => {
+    const aStart = Number.parseInt(a.year.split("-")[0] ?? a.year, 10);
+    const bStart = Number.parseInt(b.year.split("-")[0] ?? b.year, 10);
+    if (Number.isNaN(aStart) || Number.isNaN(bStart)) {
+      return b.year.localeCompare(a.year);
+    }
+    return bStart - aStart;
+  });
+---
+
+<Layout title="Virginia Highlands Community College Catalog">
+  <main class="mx-auto max-w-3xl px-6 py-12">
+    <h1 class="text-3xl font-semibold text-blue-900">College Catalogs</h1>
+    <p class="mt-3 text-gray-700">
+      Select a catalog year to view program, policy, and course information.
+    </p>
+
+    <ul class="mt-8 space-y-3">
+      {
+        years.map((item) => (
+          <li>
+            <a
+              href={`/${item.year}`}
+              class="block rounded-lg border border-gray-200 bg-white px-4 py-3 font-medium text-blue-900 hover:border-blue-300 hover:bg-blue-50"
+            >
+              {item.title}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="mt-8 text-sm text-gray-600">
+      Need to edit content? Visit <a
+        class="text-blue-700 underline"
+        href="/keystatic">Keystatic Admin</a
+      >.
+    </p>
+  </main>
+</Layout>

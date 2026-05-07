@@ -1,0 +1,124 @@
+---
+import { getCollection, render } from "astro:content";
+import CatalogLayout from "../../layouts/CatalogLayout.astro";
+
+export async function getStaticPaths() {
+  const allEntries = await getCollection("catalog");
+  const years = [...new Set(allEntries.map((e) => e.id.split("/")[0]))];
+  return years.map((year) => ({ params: { year }, props: { year } }));
+}
+
+const { year } = Astro.props;
+
+// Render the year's root index.mdoc
+const yearEntries2 = await getCollection("catalogYears");
+const yearIndex = yearEntries2.find(
+  (e) => e.id === year || e.id.startsWith(`${year}/`),
+);
+if (!yearIndex) throw new Error(`No index entry found for year: ${year}`);
+const { Content, headings } = await render(yearIndex);
+
+// Build sidebar — same logic as [...slug].astro
+const allEntries = await getCollection("catalog");
+const availableYears = [
+  ...new Set(allEntries.map((e) => e.id.split("/")[0])),
+].sort((a, b) => {
+  const aStart = Number.parseInt(a.split("-")[0] ?? a, 10);
+  const bStart = Number.parseInt(b.split("-")[0] ?? b, 10);
+  if (Number.isNaN(aStart) || Number.isNaN(bStart)) {
+    return b.localeCompare(a);
+  }
+  return bStart - aStart;
+});
+const yearEntries = allEntries.filter((e) =>
+  e.id.startsWith(`${year}/catalog/`),
+);
+
+type SidebarPage = { title: string; href: string; order: number };
+type SidebarSection = {
+  label: string;
+  slug: string;
+  href: string;
+  order: number;
+  pages: SidebarPage[];
+};
+
+const sectionsMap = new Map<string, SidebarSection>();
+
+for (const e of yearEntries) {
+  const parts = e.id.split("/");
+  const section = parts[2];
+  const pageParts = parts.slice(3);
+  const isIndex =
+    pageParts.length === 0 || pageParts[pageParts.length - 1] === "index";
+
+  if (!sectionsMap.has(section)) {
+    sectionsMap.set(section, {
+      label: section
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" "),
+      slug: section,
+      href: `/${year}/${section}`,
+      order: 99,
+      pages: [],
+    });
+  }
+
+  if (isIndex) {
+    const sec = sectionsMap.get(section)!;
+    sec.order = e.data.order ?? 99;
+    sec.pages.unshift({
+      title: e.data.title,
+      href: `/${year}/${section}`,
+      order: -1,
+    });
+  } else {
+    const pageSlug = pageParts.join("/").replace(/\.mdoc$/, "");
+    sectionsMap.get(section)!.pages.push({
+      title: e.data.title,
+      href: `/${year}/${section}/${pageSlug}`,
+      order: e.data.order ?? 99,
+    });
+  }
+}
+
+const sidebar: SidebarSection[] = Array.from(sectionsMap.values())
+  .sort((a, b) => a.order - b.order || a.slug.localeCompare(b.slug))
+  .map((sec) => ({
+    ...sec,
+    pages: sec.pages.sort(
+      (a, b) => a.order - b.order || a.title.localeCompare(b.title),
+    ),
+  }));
+
+const orderedPages = sidebar.flatMap((section) =>
+  section.pages.map((page) => ({ href: page.href, title: page.title })),
+);
+const currentHref = `/${year}`;
+const currentIndex = orderedPages.findIndex(
+  (page) => page.href === currentHref,
+);
+const prevPage = currentIndex > 0 ? orderedPages[currentIndex - 1] : null;
+const nextPage =
+  currentIndex === -1
+    ? (orderedPages[0] ?? null)
+    : currentIndex < orderedPages.length - 1
+      ? orderedPages[currentIndex + 1]
+      : null;
+const tocHeadings = headings.filter((heading) => heading.depth >= 2);
+---
+
+<CatalogLayout
+  title={yearIndex.data.title}
+  {year}
+  {availableYears}
+  {sidebar}
+  {currentHref}
+  currentSection=""
+  headings={tocHeadings}
+  {prevPage}
+  {nextPage}
+>
+  <Content />
+</CatalogLayout>
