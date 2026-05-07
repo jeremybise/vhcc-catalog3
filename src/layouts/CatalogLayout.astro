@@ -18,6 +18,7 @@ export interface Props {
   headings?: { depth: number; slug: string; text: string }[];
   prevPage?: { href: string; title: string } | null;
   nextPage?: { href: string; title: string } | null;
+  breadcrumbs?: { label: string; href: string }[];
 }
 
 const {
@@ -30,6 +31,7 @@ const {
   headings = [],
   prevPage = null,
   nextPage = null,
+  breadcrumbs = [],
 } = Astro.props;
 const tocHeadings = headings.filter((heading) => heading.depth === 2);
 ---
@@ -204,31 +206,25 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
           {
             sidebar.map((section) => (
               <li>
-                <details
-                  class="group"
-                  open={section.slug === currentSection || undefined}
-                >
-                  <summary class="flex items-center justify-between px-4 py-2 text-sm font-semibold uppercase tracking-wide text-gray-600 cursor-pointer select-none hover:bg-slate-100 hover:text-vhcc-navy group-open:text-vhcc-navy list-none [&::-webkit-details-marker]:hidden">
-                    <a
-                      href={section.href}
-                      class="flex-1 focus-visible:outline-none focus-visible:underline"
-                      onclick="event.stopPropagation()"
-                    >
-                      {section.label}
-                    </a>
-                    <svg
-                      class="w-3.5 h-3.5 shrink-0 ml-1 transition-transform group-open:rotate-90"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  </summary>
-                  {section.pages.length > 0 && (
+                {section.pages.length > 0 ? (
+                  <details
+                    class="group"
+                    open={section.slug === currentSection || undefined}
+                  >
+                    <summary class="flex items-center justify-between px-4 py-2 text-sm font-semibold uppercase tracking-wide text-gray-600 cursor-pointer select-none hover:bg-slate-100 hover:text-vhcc-navy group-open:text-vhcc-navy list-none [&::-webkit-details-marker]:hidden">
+                      <span>{section.label}</span>
+                      <svg
+                        class="w-3.5 h-3.5 shrink-0 ml-1 transition-transform group-open:rotate-90"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    </summary>
                     <ul class="pb-1">
                       {section.pages.map((page) => {
                         const isActive = page.href === currentHref;
@@ -250,8 +246,23 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                         );
                       })}
                     </ul>
-                  )}
-                </details>
+                  </details>
+                ) : (
+                  <a
+                    href={section.href}
+                    aria-current={
+                      section.href === currentHref ? "page" : undefined
+                    }
+                    class:list={[
+                      "block px-4 py-2 text-sm font-semibold uppercase tracking-wide transition-colors",
+                      section.href === currentHref
+                        ? "bg-vhcc-blue/15 text-vhcc-navy border-l-2 border-vhcc-green"
+                        : "text-gray-600 hover:bg-slate-100 hover:text-vhcc-navy",
+                    ]}
+                  >
+                    {section.label}
+                  </a>
+                )}
               </li>
             ))
           }
@@ -262,6 +273,43 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         <div class="mx-auto flex w-full max-w-screen-2xl gap-5 xl:gap-6">
           <!-- Main content -->
           <main id="main-content" class="min-w-0 flex-1 max-w-2xl">
+            {
+              breadcrumbs.length > 0 && (
+                <nav
+                  aria-label="Breadcrumb"
+                  class="mb-4 flex items-center gap-1.5 text-sm text-gray-500"
+                >
+                  <a
+                    href={`/${year}`}
+                    class="hover:text-vhcc-navy transition-colors"
+                  >
+                    {year} Catalog
+                  </a>
+                  {breadcrumbs.map((crumb, i) => (
+                    <>
+                      <span aria-hidden="true" class="text-gray-300">
+                        /
+                      </span>
+                      {i === breadcrumbs.length - 1 ? (
+                        <span
+                          class="font-medium text-vhcc-navy"
+                          aria-current="page"
+                        >
+                          {crumb.label}
+                        </span>
+                      ) : (
+                        <a
+                          href={crumb.href}
+                          class="hover:text-vhcc-navy transition-colors"
+                        >
+                          {crumb.label}
+                        </a>
+                      )}
+                    </>
+                  ))}
+                </nav>
+              )
+            }
             <article
               class="prose prose-lg max-w-none prose-slate prose-headings:font-semibold prose-h1:text-4xl prose-h2:text-2xl prose-h1:text-vhcc-navy prose-a:text-vhcc-blue"
             >

@@ -1,7 +1,11 @@
 import { config, fields, collection } from "@keystatic/core";
-import { block } from "@keystatic/core/content-components";
+import { block, inline } from "@keystatic/core/content-components";
 
 const markdocComponents = {
+  br: inline({
+    label: "Line Break",
+    schema: {},
+  }),
   sectiontoc: block({
     label: "Section TOC",
     schema: {

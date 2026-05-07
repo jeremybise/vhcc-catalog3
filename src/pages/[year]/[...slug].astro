@@ -124,6 +124,23 @@ const nextPage =
     ? orderedPages[currentIndex + 1]
     : null;
 const tocHeadings = headings.filter((heading) => heading.depth >= 2);
+
+// Build breadcrumbs: always include the section, plus the page title if this is a leaf page
+const currentSidebarSection = sidebar.find((s) => s.slug === currentSection);
+const sectionLabel =
+  currentSidebarSection?.label ??
+  currentSection
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+const sectionHref = `/${year}/${currentSection}`;
+const isLeafPage = currentHref !== sectionHref;
+const breadcrumbs = isLeafPage
+  ? [
+      { label: sectionLabel, href: sectionHref },
+      { label: entry.data.title, href: currentHref },
+    ]
+  : [{ label: sectionLabel, href: sectionHref }];
 ---
 
 <CatalogLayout
@@ -136,6 +153,7 @@ const tocHeadings = headings.filter((heading) => heading.depth >= 2);
   headings={tocHeadings}
   {prevPage}
   {nextPage}
+  {breadcrumbs}
 >
   <h1>{entry.data.title}</h1>
   <Content />
