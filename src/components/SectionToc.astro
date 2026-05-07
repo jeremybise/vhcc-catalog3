@@ -1,0 +1,84 @@
+---
+import { getCollection } from "astro:content";
+
+export interface Props {
+  title?: string;
+  includeIndex?: boolean;
+  variant?: "list" | "cards";
+}
+
+const {
+  title = "Programs",
+  includeIndex = false,
+  variant = "list",
+} = Astro.props;
+
+const segments = Astro.url.pathname.split("/").filter(Boolean);
+const [year, section] = segments;
+
+let items: { href: string; title: string; order: number }[] = [];
+
+if (year && section) {
+  const entries = await getCollection("catalog", (entry) =>
+    entry.id.startsWith(`${year}/catalog/${section}/`),
+  );
+
+  items = entries
+    .map((entry) => {
+      const parts = entry.id.split("/");
+      const pageParts = parts.slice(3);
+      const isIndex =
+        pageParts.length === 0 || pageParts[pageParts.length - 1] === "index";
+
+      if (isIndex && !includeIndex) return null;
+
+      const href = isIndex
+        ? `/${year}/${section}`
+        : `/${year}/${section}/${pageParts.join("/")}`;
+
+      return {
+        href,
+        title: entry.data.title,
+        order: isIndex ? -1 : (entry.data.order ?? 99),
+      };
+    })
+    .filter(
+      (item): item is { href: string; title: string; order: number } =>
+        item !== null,
+    )
+    .sort((a, b) => a.order - b.order || a.title.localeCompare(b.title));
+}
+---
+
+{title && <h2>{title}</h2>}
+
+{
+  items.length > 0 ? (
+    variant === "cards" ? (
+      <ul class="not-prose grid grid-cols-1 gap-3">
+        {items.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="group block h-full rounded-lg border border-slate-200 bg-white p-4 no-underline transition-colors hover:border-vhcc-blue/60 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+            >
+              <span class="text-sm font-semibold leading-tight text-vhcc-navy group-hover:text-vhcc-blue">
+                {item.title}
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <ul>
+        {items.map((item) => (
+          <li>
+            <a href={item.href}>{item.title}</a>
+          </li>
+        ))}
+      </ul>
+    )
+  ) : (
+    <p>No pages found for this section.</p>
+  )
+}

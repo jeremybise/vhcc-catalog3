@@ -31,7 +31,7 @@ const {
   prevPage = null,
   nextPage = null,
 } = Astro.props;
-const tocHeadings = headings.filter((heading) => heading.depth >= 2);
+const tocHeadings = headings.filter((heading) => heading.depth === 2);
 ---
 
 <!doctype html>
@@ -318,17 +318,12 @@ const tocHeadings = headings.filter((heading) => heading.depth >= 2);
                     <span class="h-1.5 w-1.5 rounded-full bg-vhcc-green" />
                     What's on this page
                   </p>
-                  <ul class="space-y-1 text-base">
+                  <ul class="space-y-1 text-sm">
                     {tocHeadings.map((heading) => (
                       <li>
                         <a
                           href={`#${heading.slug}`}
-                          class:list={[
-                            "group block rounded-md px-2 py-1 text-gray-700 transition-colors hover:bg-slate-100 hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue",
-                            heading.depth === 2
-                              ? "ml-0 font-medium"
-                              : "ml-3 border-l border-vhcc-blue/40 pl-3 text-gray-600",
-                          ]}
+                          class="group block rounded-md px-2 py-1 font-medium text-gray-700 transition-colors hover:bg-slate-100 hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
                         >
                           {heading.text}
                         </a>

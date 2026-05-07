@@ -1,4 +1,29 @@
 import { config, fields, collection } from "@keystatic/core";
+import { block } from "@keystatic/core/content-components";
+
+const markdocComponents = {
+  sectiontoc: block({
+    label: "Section TOC",
+    schema: {
+      title: fields.text({
+        label: "Title",
+        description: "Heading shown above the generated links.",
+      }),
+      includeIndex: fields.checkbox({
+        label: "Include index page",
+        defaultValue: false,
+      }),
+      variant: fields.select({
+        label: "Variant",
+        options: [
+          { label: "List", value: "list" },
+          { label: "Cards", value: "cards" },
+        ],
+        defaultValue: "list",
+      }),
+    },
+  }),
+};
 
 export default config({
   storage: {
@@ -20,6 +45,7 @@ export default config({
         }),
         content: fields.markdoc({
           label: "Content",
+          components: markdocComponents,
           options: {
             image: {
               directory: "src/assets/",
@@ -47,7 +73,7 @@ export default config({
           }),
           {
             label: "Prerequisites",
-            itemLabel: (props) => props.value,
+            itemLabel: (props) => props.value ?? "",
           },
         ),
         prerequisiteNote: fields.text({
@@ -61,7 +87,7 @@ export default config({
           }),
           {
             label: "Corequisites",
-            itemLabel: (props) => props.value,
+            itemLabel: (props) => props.value ?? "",
           },
         ),
         corequisiteNote: fields.text({
@@ -70,6 +96,7 @@ export default config({
         }),
         content: fields.markdoc({
           label: "Content",
+          components: markdocComponents,
           options: {
             image: {
               directory: "src/assets/",
