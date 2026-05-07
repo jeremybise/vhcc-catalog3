@@ -31,7 +31,11 @@ const markdocComponents = {
 
 export default config({
   storage: {
-    kind: "local",
+    kind: "github",
+    repo: {
+      owner: "jeremybise",
+      name: "vhcc-catalog3",
+    },
   },
   collections: {
     catalog_2026: collection({
