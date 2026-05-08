@@ -85,23 +85,22 @@ const markdocComponents = {
             {
               label: "Rows",
               itemLabel: (props) => {
-                const row = (props as any).value;
-                if (!row) return "Row";
-                if (row.rowType === "note") {
-                  return row.note
-                    ? `Note: ${String(row.note).slice(0, 32)}`
-                    : "Note row";
+                const rowType = props.fields.rowType.value;
+                if (rowType === "note") {
+                  const note = props.fields.note.value;
+                  return note ? `Note: ${String(note).slice(0, 32)}` : "Note row";
                 }
-                if (row.rowType === "options") {
-                  return row.optionLabel
-                    ? `Options: ${row.optionLabel}`
-                    : "Option group";
+                if (rowType === "options") {
+                  const optionLabel = props.fields.optionLabel.value;
+                  return optionLabel ? `Options: ${optionLabel}` : "Option group";
                 }
-                if (row.course) {
-                  return `Course: ${row.course}`;
+                const course = props.fields.course.value;
+                if (course) {
+                  return `Course: ${course}`;
                 }
-                if (row.codeOverride) {
-                  return `Course: ${row.codeOverride}`;
+                const codeOverride = props.fields.codeOverride.value;
+                if (codeOverride) {
+                  return `Course: ${codeOverride}`;
                 }
                 return "Course row";
               },
@@ -111,8 +110,8 @@ const markdocComponents = {
         {
           label: "Terms",
           itemLabel: (props) => {
-            const term = (props as any).value;
-            return term?.termLabel ? `Term: ${term.termLabel}` : "Term";
+            const termLabel = props.fields.termLabel.value;
+            return termLabel ? `Term: ${termLabel}` : "Term";
           },
         },
       ),
