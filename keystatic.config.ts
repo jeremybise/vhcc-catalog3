@@ -84,11 +84,36 @@ const markdocComponents = {
             }),
             {
               label: "Rows",
+              itemLabel: (props) => {
+                const row = (props as any).value;
+                if (!row) return "Row";
+                if (row.rowType === "note") {
+                  return row.note
+                    ? `Note: ${String(row.note).slice(0, 32)}`
+                    : "Note row";
+                }
+                if (row.rowType === "options") {
+                  return row.optionLabel
+                    ? `Options: ${row.optionLabel}`
+                    : "Option group";
+                }
+                if (row.course) {
+                  return `Course: ${row.course}`;
+                }
+                if (row.codeOverride) {
+                  return `Course: ${row.codeOverride}`;
+                }
+                return "Course row";
+              },
             },
           ),
         }),
         {
           label: "Terms",
+          itemLabel: (props) => {
+            const term = (props as any).value;
+            return term?.termLabel ? `Term: ${term.termLabel}` : "Term";
+          },
         },
       ),
     },
