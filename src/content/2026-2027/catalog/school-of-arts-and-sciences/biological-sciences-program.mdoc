@@ -18,59 +18,81 @@ The Associate of Science degree is best for students who will be seeking to tran
 
 **Course of Study Requirements**: Although the major emphasis in this curriculum is the biological sciences and the physical sciences, the curriculum also includes additional courses in health and mathematics. Electives are provided so that the student can select the appropriate courses for the pre-professional or scientific program as required in the first two years of the four-year college or university. In order to help prepare for upper division (junior class) standing at a four-year institution, the student usually must complete a program at the community college which is comparable in length and courses to the first two years of the program at the four-year institution. Upon satisfactory completion of the four-semester program described, the graduate will be awarded the Associate of Science Degree in Science.
 
-### **First Semester (Fall)**
-
-
-| **Course Number** | **Course Title** | **Credits** |
-| ----------------- | ------------------------------ | ----------- |
-| SDV 101 | Orientation to College Success | 1 |
-| ENG 111 | College Composition I | 3 |
-| ART/HUM/MUS | ART/HUM/MUS from UCGS1 | 4 |
-| MTH | Approved Mathematics Course2 | 3 |
-| EEE | Approved Elective3 | 3 |
-|  | **Total** | 14 |
-
-
-### **Second Semester (Spring)**
-
-
-| **Course Number** | **Course Title** | **Credits** |
-| ----------------- | ------------------------------------------------------------- | ----------- |
-| ENG 112 | College Composition II | 3 |
-| EEE | Approved Elective3 | 3 |
-| MTH or SCI | Approved Mathematics or Science Course4 | 3 |
-| EEE or MTH or SCI | Approved Elective3 or Approved Mathematics of Science Course4 | 3 |
-| MTH or SCI | Approved Mathematics or Science Course4 | 3 |
-|  | **Total** | 15 |
-
-
-### **Third Semester (Fall)**
-
-
-| **Course Number** | **Course Title** | **Credits** |
-| -------------------------- | ----------------------------------------------------------------- | ----------- |
-| HIS 121 or HIS 122 | United States History to 1877 or United States History Since 1865 | 3 |
-| BIO 101, CHM111 or PHY 241 | General Biology I, General Chemistry I, or University Physics I | 4 |
-| MTH or SCI | Approved Mathematics or Science Course4 | 3 |
-| MTH or SCI | Approved Mathematics or Science Course4 | 3 |
-| ENG 245 or ENG 246 | British Literature or American Literature | 3 |
-|  | **Total** | 16 |
-
-
-### **Fourth Semester (Spring)**
-
-
-| **Course Number** | **Course Title** | **Credits** |
-| --------------------------- | ------------------------------------------------------------------ | ----------- |
-| CST 100 | Principles of Public Speaking | 3 |
-| MTH or SCI | Approved Mathematics or Science Course4 | 3 |
-| BIO 102, CHM 112 or PHY 241 | General Biology II, General Chemistry II, or University Physics II | 4 |
-| PSY 200 or SOC 200 | Principles of Psychology or Introduction to Sociology | 3 |
-| MTH or SCI | Approved Mathematics or Science Course4 | 3 |
-|  | **Total** | 16 |
-
-
-**Total Minimum Credits: 61**
+{% programofstudy
+	title="Course of Study"
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "ENG-111" },
+				{ codeOverride: "ART/HUM/MUS", titleOverride: "ART/HUM/MUS from UCGS1", creditsOverride: "4" },
+				{ codeOverride: "MTH", titleOverride: "Approved Mathematics Course2", creditsOverride: "3" },
+				{ codeOverride: "EEE", titleOverride: "Approved Elective3", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ENG-112" },
+				{ codeOverride: "EEE", titleOverride: "Approved Elective3", creditsOverride: "3" },
+				{ codeOverride: "MTH or SCI", titleOverride: "Approved Mathematics or Science Course4", creditsOverride: "3" },
+				{ codeOverride: "EEE or MTH or SCI", titleOverride: "Approved Elective3 or Approved Mathematics of Science Course4", creditsOverride: "3" },
+				{ codeOverride: "MTH or SCI", titleOverride: "Approved Mathematics or Science Course4", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{
+					rowType: "options",
+					optionLabel: "Select one history course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["HIS-121", "HIS-122"]
+				},
+				{
+					rowType: "options",
+					optionLabel: "Select one lab science course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["BIO-101", "CHM-111", "PHY-241"]
+				},
+				{ codeOverride: "MTH or SCI", titleOverride: "Approved Mathematics or Science Course4", creditsOverride: "3" },
+				{ codeOverride: "MTH or SCI", titleOverride: "Approved Mathematics or Science Course4", creditsOverride: "3" },
+				{
+					rowType: "options",
+					optionLabel: "Select one literature course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-245", "ENG-246"]
+				}
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "CST-100" },
+				{ codeOverride: "MTH or SCI", titleOverride: "Approved Mathematics or Science Course4", creditsOverride: "3" },
+				{
+					rowType: "options",
+					optionLabel: "Select one lab science course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["BIO-102", "CHM-112", "PHY-241"]
+				},
+				{
+					rowType: "options",
+					optionLabel: "Select one social science course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["PSY-200", "SOC-200"]
+				},
+				{ codeOverride: "MTH or SCI", titleOverride: "Approved Mathematics or Science Course4", creditsOverride: "3" }
+			]
+		}
+	]
+/%}
 
 **Notes:**
 

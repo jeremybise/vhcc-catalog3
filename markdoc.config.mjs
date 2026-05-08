@@ -7,6 +7,14 @@ export default defineMarkdocConfig({
       render: "br",
       selfClosing: true,
     },
+    programofstudy: {
+      render: component("./src/components/ProgramOfStudy.astro"),
+      attributes: {
+        title: { type: String },
+        showTotals: { type: Boolean },
+        terms: { type: Array },
+      },
+    },
     sectiontoc: {
       render: component("./src/components/SectionToc.astro"),
       attributes: {
