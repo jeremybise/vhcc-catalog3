@@ -95,6 +95,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
 
     <!-- Top header -->
     <header
+      id="site-header"
       class="bg-vhcc-navy text-white px-4 sm:px-6 py-3 flex items-center gap-3 sticky top-0 z-10 shadow-md"
     >
       <a
@@ -109,7 +110,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
           decoding="async"
           format="png"
         />
-        <span>VHCC College Catalog</span>
+        <span class="tracking-tight leading-tight">College Catalog</span>
       </a>
       <label for="catalog-year-switcher" class="sr-only">Catalog Year</label>
       <select
@@ -127,13 +128,14 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       </select>
       <div class="ml-auto flex items-center gap-2">
         <CatalogSearch client:load currentYear={year} />
-        <details class="xl:hidden">
+        <details class="xl:hidden group">
           <summary
             class="list-none cursor-pointer rounded-md p-1.5 hover:bg-vhcc-blue/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue [&::-webkit-details-marker]:hidden"
           >
-            <span class="sr-only">Open navigation menu</span>
+            <span class="sr-only">Toggle navigation menu</span>
+            <!-- Hamburger: visible when closed -->
             <svg
-              class="h-5 w-5"
+              class="h-5 w-5 group-open:hidden"
               viewBox="0 0 20 20"
               fill="currentColor"
               aria-hidden="true"
@@ -143,18 +145,31 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                 d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm1 4a1 1 0 100 2h12a1 1 0 100-2H4z"
                 clip-rule="evenodd"></path>
             </svg>
+            <!-- X: visible when open -->
+            <svg
+              class="h-5 w-5 hidden group-open:block"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                clip-rule="evenodd"></path>
+            </svg>
           </summary>
           <nav
-            class="fixed inset-x-0 top-13 z-20 max-h-[70vh] overflow-y-auto border-y border-vhcc-navy/70 bg-white text-gray-900 shadow-lg"
+            class="fixed inset-x-0 z-20 overflow-y-auto border-t border-vhcc-navy/30 bg-white text-gray-900 shadow-xl"
+            style="top: var(--header-h, 52px); height: calc(100vh - var(--header-h, 52px))"
             aria-label="Mobile catalog navigation"
           >
-            <ul class="py-2">
+            <ul class="py-3">
               {
                 sidebar.map((section) => (
                   <li class="border-b border-gray-100 last:border-b-0">
                     <a
                       href={section.href}
-                      class="block px-4 py-2.5 text-sm font-semibold text-vhcc-navy hover:bg-slate-100"
+                      class="block px-4 py-3 text-base font-semibold text-vhcc-navy hover:bg-slate-100"
                     >
                       {section.label}
                     </a>
@@ -168,10 +183,10 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                                 page.href === currentHref ? "page" : undefined
                               }
                               class:list={[
-                                "block px-6 py-1.5 text-sm",
+                                "block px-6 py-2 text-base",
                                 page.href === currentHref
-                                  ? "text-vhcc-navy font-semibold"
-                                  : "text-gray-700 hover:text-vhcc-navy",
+                                  ? "text-vhcc-navy font-semibold bg-slate-50"
+                                  : "text-gray-700 hover:text-vhcc-navy hover:bg-slate-50",
                               ]}
                             >
                               {page.title}
@@ -430,6 +445,20 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       } else {
         addHeadingAnchors();
       }
+    </script>
+    <script>
+      (function () {
+        const header = document.getElementById("site-header");
+        function syncHeaderHeight() {
+          if (header)
+            document.documentElement.style.setProperty(
+              "--header-h",
+              header.offsetHeight + "px",
+            );
+        }
+        syncHeaderHeight();
+        window.addEventListener("resize", syncHeaderHeight);
+      })();
     </script>
   </body>
 </html>
