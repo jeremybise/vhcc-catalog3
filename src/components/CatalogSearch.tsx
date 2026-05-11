@@ -28,20 +28,19 @@ export interface CatalogSearchProps {
 }
 
 export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
-  const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<ResolvedResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [showResults, setShowResults] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const resultsRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const selectedResultRef = useRef<HTMLAnchorElement>(null);
   const pagefindRef = useRef<PagefindModule | null>(null);
 
-  // Load Pagefind via dynamic import (ES module with named exports, not window.pagefind)
+  // Load Pagefind via dynamic import (ES module with named exports)
   useEffect(() => {
     if (pagefindRef.current) return;
-    // @vite-ignore prevents Vite from trying to bundle this runtime-only URL
     const load = new Function(
       'return import("/pagefind/pagefind.js")',
     ) as () => Promise<PagefindModule>;
@@ -52,7 +51,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
       .catch((e) => console.warn("Pagefind failed to load:", e));
   }, []);
 
-  // Perform search: call .data() on each result to get the actual content
+  // Perform search: resolve each lazy result via .data()
   const performSearch = useCallback(
     async (searchQuery: string) => {
       if (!searchQuery.trim() || !pagefindRef.current) {
@@ -60,28 +59,22 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
         setSelectedIndex(-1);
         return;
       }
-
       setIsSearching(true);
       try {
         const { results: rawResults } =
           await pagefindRef.current.search(searchQuery);
-
-        // Resolve data for all results, but cap at 50 to avoid too many fetches.
-        // Pagefind result.data() is the only way to get url/excerpt/meta.
         const resolved = await Promise.all(
           rawResults.slice(0, 50).map(async (r) => {
             const data = await r.data();
             return { id: r.id, ...data };
           }),
         );
-
         const yearFiltered = resolved
           .filter((data) => {
             const pathname = new URL(data.url, window.location.href).pathname;
             return pathname.split("/").filter(Boolean)[0] === currentYear;
           })
           .slice(0, 20);
-
         setResults(
           yearFiltered.map((data) => ({
             id: data.id,
@@ -106,54 +99,61 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
     const timer = setTimeout(() => {
       performSearch(query);
     }, 150);
-
     return () => clearTimeout(timer);
   }, [query, performSearch]);
+
+  // Click outside to dismiss results
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
+        setShowResults(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
 
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Slash to open/focus search
-      if (e.key === "/" && !isOpen && e.target === document.body) {
+      // / focuses the search input
+      if (e.key === "/" && e.target === document.body) {
         e.preventDefault();
-        setIsOpen(true);
-        setTimeout(() => inputRef.current?.focus(), 0);
+        inputRef.current?.focus();
+        setShowResults(true);
       }
-
-      // Escape to close
-      if (e.key === "Escape" && isOpen) {
-        setIsOpen(false);
+      // Escape clears and blurs
+      if (e.key === "Escape" && showResults) {
+        setShowResults(false);
         setQuery("");
         setResults([]);
+        inputRef.current?.blur();
       }
-
-      // Arrow keys to navigate results
+      // Arrow keys navigate results
       if (
         (e.key === "ArrowDown" || e.key === "ArrowUp") &&
-        isOpen &&
+        showResults &&
         results.length > 0
       ) {
         e.preventDefault();
         setSelectedIndex((prev) => {
-          if (e.key === "ArrowDown") {
+          if (e.key === "ArrowDown")
             return prev < results.length - 1 ? prev + 1 : 0;
-          } else {
-            return prev > 0 ? prev - 1 : results.length - 1;
-          }
+          return prev > 0 ? prev - 1 : results.length - 1;
         });
       }
-
-      // Enter to navigate to selected result
+      // Enter navigates to selected result
       if (e.key === "Enter" && selectedIndex >= 0 && results[selectedIndex]) {
         e.preventDefault();
-        const url = new URL(results[selectedIndex].url);
-        window.location.href = url.toString();
+        window.location.href = results[selectedIndex].url;
       }
     };
-
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, results, selectedIndex]);
+  }, [showResults, results, selectedIndex]);
 
   // Scroll selected result into view
   useEffect(() => {
@@ -163,162 +163,110 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
   }, [selectedIndex]);
 
   return (
-    <>
-      {/* Search button in header */}
-      <button
-        onClick={() => {
-          setIsOpen(!isOpen);
-          setTimeout(() => inputRef.current?.focus(), 0);
-        }}
-        className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-vhcc-navy/50 hover:bg-vhcc-navy/70 text-slate-200 hover:text-white text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
-        aria-label="Open search"
-        title="Press / to search"
-      >
+    <div ref={containerRef} className="relative w-40 sm:w-56 md:w-72">
+      {/* Inline search input */}
+      <div className="relative">
         <svg
-          className="h-4 w-4"
+          className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400"
           viewBox="0 0 20 20"
           fill="none"
           stroke="currentColor"
           strokeWidth="2"
+          aria-hidden="true"
         >
           <circle cx="8" cy="8" r="6" />
           <path d="M14 14l4 4" />
         </svg>
-        <span className="hidden md:inline">Search</span>
-        <kbd className="text-xs font-semibold text-slate-300">/</kbd>
-      </button>
+        <input
+          ref={inputRef}
+          type="search"
+          placeholder="Search catalog…"
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setShowResults(true);
+          }}
+          onFocus={() => {
+            if (query || results.length > 0) setShowResults(true);
+          }}
+          aria-label={`Search ${currentYear} catalog`}
+          aria-expanded={showResults && (results.length > 0 || !!query)}
+          aria-autocomplete="list"
+          className="w-full rounded-md border border-white/20 bg-white/10 py-1.5 pl-8 pr-7 text-sm text-white placeholder:text-slate-400 transition-colors focus:border-transparent focus:bg-white focus:text-gray-900 focus:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-vhcc-blue"
+        />
+        <kbd className="pointer-events-none absolute right-2 top-1/2 hidden -translate-y-1/2 text-xs text-slate-400 sm:block">
+          /
+        </kbd>
+      </div>
 
-      {/* Mobile search button */}
-      <button
-        onClick={() => {
-          setIsOpen(!isOpen);
-          setTimeout(() => inputRef.current?.focus(), 0);
-        }}
-        className="sm:hidden p-1.5 rounded-md hover:bg-vhcc-blue/50 text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
-        aria-label="Open search"
-      >
-        <svg
-          className="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-        >
-          <circle cx="8" cy="8" r="6" />
-          <path d="M14 14l4 4" />
-        </svg>
-      </button>
-
-      {/* Search modal */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
-          onClick={() => setIsOpen(false)}
-          role="presentation"
-        >
-          <div
-            className="fixed inset-x-0 top-0 sm:inset-0 sm:flex sm:items-start sm:justify-center pt-12 sm:pt-16 px-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="w-full max-w-2xl bg-white rounded-lg shadow-2xl flex flex-col max-h-[70vh] sm:max-h-[80vh]">
-              {/* Search input */}
-              <div className="flex-shrink-0 border-b border-gray-200 p-4">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  placeholder={`Search ${currentYear} catalog...`}
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  className="w-full px-4 py-2 text-lg text-gray-900 placeholder:text-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-vhcc-blue focus:border-transparent"
-                  autoFocus
-                />
-                <p className="text-xs text-gray-500 mt-2">
-                  {results.length > 0 && (
-                    <>
-                      Found{" "}
-                      <span className="font-semibold">{results.length}</span>{" "}
-                      result
-                      {results.length !== 1 ? "s" : ""}
-                      {query && <> for "{query}"</>}
-                    </>
-                  )}
-                  {query && results.length === 0 && !isSearching && (
-                    <>
-                      No results found for "{query}" in {currentYear} catalog
-                    </>
-                  )}
-                  {isSearching && <>Searching...</>}
-                </p>
-              </div>
-
-              {/* Results */}
-              <div
-                ref={resultsRef}
-                className="flex-1 overflow-y-auto"
-                role="listbox"
-              >
-                {results.length > 0 ? (
-                  <ul className="divide-y divide-gray-200">
-                    {results.map((result, index) => (
-                      <li
-                        key={result.id}
-                        role="option"
-                        aria-selected={index === selectedIndex}
-                      >
-                        <a
-                          ref={
-                            index === selectedIndex ? selectedResultRef : null
-                          }
-                          href={result.url}
-                          className={`block p-4 transition-colors ${
-                            index === selectedIndex
-                              ? "bg-vhcc-blue/10 border-l-4 border-vhcc-blue"
-                              : "hover:bg-gray-50"
-                          }`}
-                          onMouseEnter={() => setSelectedIndex(index)}
-                        >
-                          <h3 className="font-semibold text-gray-900 text-sm mb-1">
-                            {result.title}
-                          </h3>
-                          <p
-                            className="text-xs text-gray-600 line-clamp-2"
-                            dangerouslySetInnerHTML={{ __html: result.excerpt }}
-                          />
-                          <p className="text-xs text-gray-400 mt-1 font-mono">
-                            {new URL(result.url, window.location.href).pathname}
-                          </p>
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                ) : query && !isSearching ? (
-                  <div className="flex items-center justify-center h-32 text-gray-500">
-                    <p>No results found</p>
-                  </div>
-                ) : null}
-              </div>
-
-              {/* Footer hint */}
-              {results.length > 0 && (
-                <div className="flex-shrink-0 border-t border-gray-200 bg-gray-50 px-4 py-2 text-xs text-gray-600">
-                  <kbd className="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-xs font-semibold">
-                    ↑↓
-                  </kbd>{" "}
-                  to navigate •{" "}
-                  <kbd className="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-xs font-semibold">
-                    Enter
-                  </kbd>{" "}
-                  to select •{" "}
-                  <kbd className="px-1.5 py-0.5 bg-white border border-gray-300 rounded text-xs font-semibold">
-                    Esc
-                  </kbd>{" "}
-                  to close
-                </div>
-              )}
+      {/* Results dropdown */}
+      {showResults && (query || results.length > 0) && (
+        <div className="absolute left-0 right-0 top-full z-50 mt-1 flex max-h-[70vh] flex-col overflow-hidden rounded-lg border border-gray-200 bg-white shadow-2xl">
+          {/* Status bar */}
+          {query && (
+            <div className="shrink-0 border-b border-gray-100 px-3 py-1.5 text-xs text-gray-500">
+              {isSearching
+                ? "Searching…"
+                : results.length > 0
+                  ? `${results.length} result${results.length !== 1 ? "s" : ""} for "${query}"`
+                  : `No results for "${query}"`}
             </div>
+          )}
+
+          {/* Results list */}
+          <div className="overflow-y-auto" role="listbox">
+            {results.length > 0 ? (
+              <ul className="divide-y divide-gray-100">
+                {results.map((result, index) => (
+                  <li
+                    key={result.id}
+                    role="option"
+                    aria-selected={index === selectedIndex}
+                  >
+                    <a
+                      ref={index === selectedIndex ? selectedResultRef : null}
+                      href={result.url}
+                      className={`block px-3 py-2.5 transition-colors ${
+                        index === selectedIndex
+                          ? "border-l-2 border-vhcc-blue bg-vhcc-blue/10"
+                          : "hover:bg-gray-50"
+                      }`}
+                      onMouseEnter={() => setSelectedIndex(index)}
+                    >
+                      <p className="text-sm font-semibold text-gray-900">
+                        {result.title}
+                      </p>
+                      <p
+                        className="mt-0.5 line-clamp-1 text-xs text-gray-500"
+                        dangerouslySetInnerHTML={{ __html: result.excerpt }}
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : query && !isSearching ? (
+              <p className="px-3 py-6 text-center text-sm text-gray-500">
+                No results found
+              </p>
+            ) : null}
           </div>
+
+          {/* Footer hints */}
+          {results.length > 0 && (
+            <div className="shrink-0 flex gap-3 border-t border-gray-100 bg-gray-50 px-3 py-1.5 text-xs text-gray-500">
+              <span>
+                <kbd className="font-semibold">↑↓</kbd> navigate
+              </span>
+              <span>
+                <kbd className="font-semibold">↵</kbd> select
+              </span>
+              <span>
+                <kbd className="font-semibold">Esc</kbd> close
+              </span>
+            </div>
+          )}
         </div>
       )}
-    </>
+    </div>
   );
 }

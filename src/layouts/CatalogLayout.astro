@@ -97,66 +97,6 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
     <header
       class="bg-vhcc-navy text-white px-4 sm:px-6 py-3 flex items-center gap-3 sticky top-0 z-10 shadow-md"
     >
-      <details class="xl:hidden">
-        <summary
-          class="list-none cursor-pointer rounded-md p-1.5 hover:bg-vhcc-blue/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue [&::-webkit-details-marker]:hidden"
-        >
-          <span class="sr-only">Open navigation menu</span>
-          <svg
-            class="h-5 w-5"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm1 4a1 1 0 100 2h12a1 1 0 100-2H4z"
-              clip-rule="evenodd"></path>
-          </svg>
-        </summary>
-        <nav
-          class="fixed inset-x-0 top-13 z-20 max-h-[70vh] overflow-y-auto border-y border-vhcc-navy/70 bg-white text-gray-900 shadow-lg"
-          aria-label="Mobile catalog navigation"
-        >
-          <ul class="py-2">
-            {
-              sidebar.map((section) => (
-                <li class="border-b border-gray-100 last:border-b-0">
-                  <a
-                    href={section.href}
-                    class="block px-4 py-2.5 text-sm font-semibold text-vhcc-navy hover:bg-slate-100"
-                  >
-                    {section.label}
-                  </a>
-                  {section.pages.length > 0 && (
-                    <ul class="pb-2">
-                      {section.pages.map((page) => (
-                        <li>
-                          <a
-                            href={page.href}
-                            aria-current={
-                              page.href === currentHref ? "page" : undefined
-                            }
-                            class:list={[
-                              "block px-6 py-1.5 text-sm",
-                              page.href === currentHref
-                                ? "text-vhcc-navy font-semibold"
-                                : "text-gray-700 hover:text-vhcc-navy",
-                            ]}
-                          >
-                            {page.title}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </li>
-              ))
-            }
-          </ul>
-        </nav>
-      </details>
-
       <a
         href={`/${year}`}
         class="flex items-center gap-2 text-white font-semibold text-lg sm:text-xl hover:text-slate-200 transition-colors"
@@ -164,37 +104,88 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         <Image
           src={logo}
           alt="Virginia Highlands Community College logo"
-          class="h-8 w-auto sm:h-9"
+          class="h-6 w-auto sm:h-7"
           loading="eager"
           decoding="async"
           format="png"
         />
         <span>VHCC College Catalog</span>
       </a>
-      <span class="hidden sm:inline text-slate-200 text-sm font-medium"
-        >{year}</span
+      <label for="catalog-year-switcher" class="sr-only">Catalog Year</label>
+      <select
+        id="catalog-year-switcher"
+        class="rounded-md border border-vhcc-blue bg-vhcc-navy px-2 py-1 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+        onchange="window.location.href='/' + this.value"
       >
-      <div class="ml-auto flex items-center gap-3">
+        {
+          availableYears.map((y) => (
+            <option value={y} selected={y === year}>
+              {y}
+            </option>
+          ))
+        }
+      </select>
+      <div class="ml-auto flex items-center gap-2">
         <CatalogSearch client:load currentYear={year} />
-        <label
-          for="catalog-year-switcher"
-          class="hidden sm:inline text-sm text-slate-200"
-        >
-          Catalog Year
-        </label>
-        <select
-          id="catalog-year-switcher"
-          class="rounded-md border border-vhcc-blue bg-vhcc-navy px-2 py-1 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
-          onchange="window.location.href='/' + this.value"
-        >
-          {
-            availableYears.map((y) => (
-              <option value={y} selected={y === year}>
-                {y}
-              </option>
-            ))
-          }
-        </select>
+        <details class="xl:hidden">
+          <summary
+            class="list-none cursor-pointer rounded-md p-1.5 hover:bg-vhcc-blue/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue [&::-webkit-details-marker]:hidden"
+          >
+            <span class="sr-only">Open navigation menu</span>
+            <svg
+              class="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm1 4a1 1 0 100 2h12a1 1 0 100-2H4z"
+                clip-rule="evenodd"></path>
+            </svg>
+          </summary>
+          <nav
+            class="fixed inset-x-0 top-13 z-20 max-h-[70vh] overflow-y-auto border-y border-vhcc-navy/70 bg-white text-gray-900 shadow-lg"
+            aria-label="Mobile catalog navigation"
+          >
+            <ul class="py-2">
+              {
+                sidebar.map((section) => (
+                  <li class="border-b border-gray-100 last:border-b-0">
+                    <a
+                      href={section.href}
+                      class="block px-4 py-2.5 text-sm font-semibold text-vhcc-navy hover:bg-slate-100"
+                    >
+                      {section.label}
+                    </a>
+                    {section.pages.length > 0 && (
+                      <ul class="pb-2">
+                        {section.pages.map((page) => (
+                          <li>
+                            <a
+                              href={page.href}
+                              aria-current={
+                                page.href === currentHref ? "page" : undefined
+                              }
+                              class:list={[
+                                "block px-6 py-1.5 text-sm",
+                                page.href === currentHref
+                                  ? "text-vhcc-navy font-semibold"
+                                  : "text-gray-700 hover:text-vhcc-navy",
+                              ]}
+                            >
+                              {page.title}
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </details>
       </div>
     </header>
 
