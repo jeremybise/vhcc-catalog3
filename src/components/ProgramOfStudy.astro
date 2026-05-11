@@ -398,13 +398,19 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                 <li>
                                   <span class="font-medium">{item.code}</span>
                                   {": "}
-                                  <span class="group/tooltip relative ml-1 inline-flex items-center gap-1 align-middle">
+                                  <span
+                                    class="group/tooltip relative ml-1 inline-flex items-center gap-1 align-middle"
+                                    data-tooltip-container
+                                  >
                                     <span
                                       class={
                                         item.meta
-                                          ? "underline decoration-dotted underline-offset-2"
+                                          ? "cursor-pointer underline decoration-dotted underline-offset-2"
                                           : undefined
                                       }
+                                      data-tooltip-trigger={item.meta ? "true" : undefined}
+                                      role={item.meta ? "button" : undefined}
+                                      tabindex={item.meta ? "0" : undefined}
                                     >
                                       {item.title.parts.map(
                                         (part, partIndex) => {
@@ -437,6 +443,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                         <button
                                           type="button"
                                           class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+                                          data-tooltip-trigger
                                           aria-label={`View course details for ${item.meta.code}`}
                                           aria-describedby={`course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
                                         >
@@ -445,6 +452,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                         <div
                                           id={`course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
                                           role="tooltip"
+                                          data-tooltip-panel
                                           class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100 sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)]"
                                         >
                                           <p class="font-semibold text-vhcc-navy wrap-break-word">
@@ -480,13 +488,19 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                           {row.code}
                         </td>
                         <td class="border-b border-slate-100 px-3 py-2 text-gray-800 align-top wrap-break-word">
-                          <div class="group/tooltip relative inline-flex items-center gap-1">
+                          <div
+                            class="group/tooltip relative inline-flex items-center gap-1"
+                            data-tooltip-container
+                          >
                             <span
                               class={
                                 row.meta
-                                  ? "underline decoration-dotted underline-offset-2"
+                                  ? "cursor-pointer underline decoration-dotted underline-offset-2"
                                   : undefined
                               }
+                              data-tooltip-trigger={row.meta ? "true" : undefined}
+                              role={row.meta ? "button" : undefined}
+                              tabindex={row.meta ? "0" : undefined}
                             >
                               {row.title.parts.map((part, partIndex) => {
                                 if (part.kind === "text") return part.text;
@@ -516,6 +530,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                 <button
                                   type="button"
                                   class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+                                  data-tooltip-trigger
                                   aria-label={`View course details for ${row.meta.code}`}
                                   aria-describedby={`course-tip-${termIndex}-${rowIndex}`}
                                 >
@@ -524,6 +539,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                 <div
                                   id={`course-tip-${termIndex}-${rowIndex}`}
                                   role="tooltip"
+                                  data-tooltip-panel
                                   class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100 sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)]"
                                 >
                                   <p class="font-semibold text-vhcc-navy wrap-break-word">
@@ -601,3 +617,63 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
     )
   }
 </section>
+
+<script is:inline>
+  (() => {
+    if (window.__vhccTooltipInit) return;
+    window.__vhccTooltipInit = true;
+
+    const setOpen = (container, open) => {
+      const panel = container.querySelector("[data-tooltip-panel]");
+      if (!panel) return;
+
+      if (open) {
+        panel.classList.remove("invisible", "opacity-0", "pointer-events-none");
+        panel.classList.add("visible", "opacity-100", "pointer-events-auto");
+      } else {
+        panel.classList.add("invisible", "opacity-0", "pointer-events-none");
+        panel.classList.remove("visible", "opacity-100", "pointer-events-auto");
+      }
+      container.setAttribute("data-tooltip-open", open ? "true" : "false");
+    };
+
+    const closeAll = (except) => {
+      document.querySelectorAll("[data-tooltip-container]").forEach((container) => {
+        if (except && container === except) return;
+        setOpen(container, false);
+      });
+    };
+
+    document.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!target) return;
+
+      const trigger = target.closest("[data-tooltip-trigger]");
+      if (trigger) {
+        const container = trigger.closest("[data-tooltip-container]");
+        if (!container) return;
+        const isOpen = container.getAttribute("data-tooltip-open") === "true";
+        closeAll(container);
+        setOpen(container, !isOpen);
+        event.preventDefault();
+        return;
+      }
+
+      const inTooltip = target.closest("[data-tooltip-container]");
+      if (!inTooltip) closeAll();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      const target = event.target;
+      if (!target) return;
+
+      if ((event.key === "Enter" || event.key === " ") && target.matches("[data-tooltip-trigger][role='button']")) {
+        event.preventDefault();
+        target.click();
+        return;
+      }
+
+      if (event.key === "Escape") closeAll();
+    });
+  })();
+</script>
