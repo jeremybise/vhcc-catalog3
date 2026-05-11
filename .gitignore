@@ -23,3 +23,6 @@ pnpm-debug.log*
 node_modules
 # Local Netlify folder
 .netlify
+
+# Pagefind search index (dev copy)
+public/pagefind/

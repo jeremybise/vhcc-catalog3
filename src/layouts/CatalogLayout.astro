@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { Image } from "astro:assets";
 import logo from "../assets/image007.png";
+import CatalogSearch from "../components/CatalogSearch";
 
 export interface Props {
   title: string;
@@ -173,7 +174,8 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       <span class="hidden sm:inline text-slate-200 text-sm font-medium"
         >{year}</span
       >
-      <div class="ml-auto flex items-center gap-2">
+      <div class="ml-auto flex items-center gap-3">
+        <CatalogSearch client:load currentYear={year} />
         <label
           for="catalog-year-switcher"
           class="hidden sm:inline text-sm text-slate-200"
@@ -312,6 +314,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
             }
             <article
               class="prose prose-lg max-w-none prose-slate prose-headings:font-semibold prose-h1:text-4xl prose-h2:text-2xl prose-h1:text-vhcc-navy prose-a:text-vhcc-blue"
+              data-pagefind-body
             >
               <slot />
             </article>
