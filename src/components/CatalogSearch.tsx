@@ -1,26 +1,26 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 
-interface SearchResult {
+interface PagefindResultData {
+  url: string;
+  excerpt: string;
+  meta: { title?: string; image?: string };
+}
+
+interface PagefindRawResult {
+  id: string;
+  data: () => Promise<PagefindResultData>;
+}
+
+interface ResolvedResult {
   id: string;
   url: string;
-  title?: string;
-  excerpt?: string;
-  meta?: Record<string, string>;
+  title: string;
+  excerpt: string;
 }
 
-interface SearchResultWithMeta extends SearchResult {
-  meta?: { year?: string; title?: string; image?: string };
-}
-
-declare global {
-  interface Window {
-    pagefind?: {
-      search: (
-        query: string,
-      ) => Promise<{ results: SearchResult[] } | { id: string }>;
-      init: () => Promise<void>;
-    };
-  }
+interface PagefindModule {
+  search: (query: string) => Promise<{ results: PagefindRawResult[] }>;
+  init?: () => Promise<void>;
 }
 
 export interface CatalogSearchProps {
@@ -30,50 +30,32 @@ export interface CatalogSearchProps {
 export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchResultWithMeta[]>([]);
+  const [results, setResults] = useState<ResolvedResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [pagefindReady, setPagefindReady] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
   const selectedResultRef = useRef<HTMLAnchorElement>(null);
+  const pagefindRef = useRef<PagefindModule | null>(null);
 
-  // Initialize Pagefind
+  // Load Pagefind via dynamic import (ES module with named exports, not window.pagefind)
   useEffect(() => {
-    const initPagefind = async () => {
-      if (typeof window !== "undefined") {
-        try {
-          // Load Pagefind library dynamically
-          if (!window.pagefind) {
-            const script = document.createElement("script");
-            script.src = "/pagefind/pagefind.js";
-            script.async = true;
-            script.onload = async () => {
-              if (window.pagefind) {
-                await window.pagefind.init();
-                setPagefindReady(true);
-              }
-            };
-            script.onerror = () => {
-              console.warn("Failed to load Pagefind library");
-            };
-            document.head.appendChild(script);
-          } else {
-            setPagefindReady(true);
-          }
-        } catch (error) {
-          console.warn("Pagefind initialization failed:", error);
-        }
-      }
-    };
-
-    initPagefind();
+    if (pagefindRef.current) return;
+    // @vite-ignore prevents Vite from trying to bundle this runtime-only URL
+    const load = new Function(
+      'return import("/pagefind/pagefind.js")',
+    ) as () => Promise<PagefindModule>;
+    load()
+      .then((pf) => {
+        pagefindRef.current = pf;
+      })
+      .catch((e) => console.warn("Pagefind failed to load:", e));
   }, []);
 
-  // Perform search with year filtering
+  // Perform search: call .data() on each result to get the actual content
   const performSearch = useCallback(
     async (searchQuery: string) => {
-      if (!searchQuery.trim() || !window.pagefind) {
+      if (!searchQuery.trim() || !pagefindRef.current) {
         setResults([]);
         setSelectedIndex(-1);
         return;
@@ -81,24 +63,34 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
 
       setIsSearching(true);
       try {
-        const searchResults = await window.pagefind.search(searchQuery);
+        const { results: rawResults } =
+          await pagefindRef.current.search(searchQuery);
 
-        if ("results" in searchResults) {
-          // Filter results by current year by parsing the URL
-          // URLs should look like /2026-2027/... so extract the year from the path
-          const yearFiltered = (
-            searchResults.results as SearchResultWithMeta[]
-          ).filter((result) => {
-            // Parse year from URL: /2026-2027/... → 2026-2027
-            const urlPath = new URL(result.url, window.location.href).pathname;
-            const pathParts = urlPath.split("/").filter(Boolean);
-            const resultYear = pathParts[0]; // First path segment should be the year
-            return resultYear === currentYear;
-          });
+        // Resolve data for all results, but cap at 50 to avoid too many fetches.
+        // Pagefind result.data() is the only way to get url/excerpt/meta.
+        const resolved = await Promise.all(
+          rawResults.slice(0, 50).map(async (r) => {
+            const data = await r.data();
+            return { id: r.id, ...data };
+          }),
+        );
 
-          setResults(yearFiltered);
-          setSelectedIndex(-1);
-        }
+        const yearFiltered = resolved
+          .filter((data) => {
+            const pathname = new URL(data.url, window.location.href).pathname;
+            return pathname.split("/").filter(Boolean)[0] === currentYear;
+          })
+          .slice(0, 20);
+
+        setResults(
+          yearFiltered.map((data) => ({
+            id: data.id,
+            url: data.url,
+            title: data.meta?.title ?? "Untitled",
+            excerpt: data.excerpt,
+          })),
+        );
+        setSelectedIndex(-1);
       } catch (error) {
         console.error("Search error:", error);
         setResults([]);
@@ -237,7 +229,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
                   placeholder={`Search ${currentYear} catalog...`}
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  className="w-full px-4 py-2 text-lg border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-vhcc-blue focus:border-transparent"
+                  className="w-full px-4 py-2 text-lg text-gray-900 placeholder:text-gray-400 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-vhcc-blue focus:border-transparent"
                   autoFocus
                 />
                 <p className="text-xs text-gray-500 mt-2">
@@ -286,11 +278,12 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
                           onMouseEnter={() => setSelectedIndex(index)}
                         >
                           <h3 className="font-semibold text-gray-900 text-sm mb-1">
-                            {result.meta?.title || "Untitled"}
+                            {result.title}
                           </h3>
-                          <p className="text-xs text-gray-600 line-clamp-2">
-                            {result.excerpt || result.meta?.image || ""}
-                          </p>
+                          <p
+                            className="text-xs text-gray-600 line-clamp-2"
+                            dangerouslySetInnerHTML={{ __html: result.excerpt }}
+                          />
                           <p className="text-xs text-gray-400 mt-1 font-mono">
                             {new URL(result.url, window.location.href).pathname}
                           </p>
