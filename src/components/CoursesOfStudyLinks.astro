@@ -1,0 +1,112 @@
+---
+import { getCollection, render } from "astro:content";
+
+const pathnameParts = Astro.url.pathname.split("/").filter(Boolean);
+const year = pathnameParts[0] ?? "";
+
+const targetSections = [
+  "school-of-arts-and-sciences",
+  "school-of-business-and-industry",
+  "school-of-health-professions",
+];
+
+const allEntries = await getCollection("catalog");
+const sectionEntries = allEntries
+  .filter((entry) => entry.id.startsWith(`${year}/catalog/`))
+  .filter((entry) => {
+    const parts = entry.id.split("/");
+    const section = parts[2] ?? "";
+    return targetSections.includes(section) && !entry.id.endsWith("/index");
+  });
+
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+
+type BucketKey = "AA" | "AS" | "AAS" | "C" | "CSC";
+
+const bucketMeta: { key: BucketKey; title: string }[] = [
+  { key: "AA", title: "Associates of Arts (AA)" },
+  { key: "AS", title: "Associates of Science (AS)" },
+  { key: "AAS", title: "Associates of Applied Science (AAS)" },
+  { key: "C", title: "Certificates (C)" },
+  { key: "CSC", title: "Career Studies Certificates (CSC)" },
+];
+
+const getBucket = (heading: string): BucketKey | null => {
+  if (/^associate of arts\b/i.test(heading)) return "AA";
+  if (/^associate of science\b/i.test(heading)) return "AS";
+  if (/^associate of applied science\b/i.test(heading)) return "AAS";
+  if (/^certificate\b/i.test(heading)) return "C";
+  if (/^career studies certificate\b/i.test(heading)) return "CSC";
+  return null;
+};
+
+const buckets = new Map<BucketKey, { text: string; href: string }[]>(
+  bucketMeta.map((meta) => [meta.key, []]),
+);
+
+for (const entry of sectionEntries) {
+  const parts = entry.id.split("/");
+  const section = parts[2] ?? "";
+  const pageSlug = parts.slice(3).join("/");
+  const pageHref = `/${year}/${section}/${pageSlug}`;
+
+  const { headings } = await render(entry);
+  for (const heading of headings) {
+    // Degree/certificate titles are authored mostly as h2/h3 in these pages.
+    if (heading.depth < 2 || heading.depth > 3) continue;
+
+    const bucket = getBucket(heading.text || "");
+    if (!bucket) continue;
+
+    const anchor = slugify(heading.text || "");
+    if (!anchor) continue;
+
+    const target = buckets.get(bucket);
+    if (!target) continue;
+
+    target.push({
+      text: heading.text,
+      href: `${pageHref}#${anchor}`,
+    });
+  }
+}
+
+for (const meta of bucketMeta) {
+  const items = buckets.get(meta.key);
+  if (!items) continue;
+  items.sort((a, b) => a.text.localeCompare(b.text));
+}
+---
+
+<div class="not-prose mt-6 space-y-8">
+  {
+    bucketMeta.map((meta) => {
+      const items = buckets.get(meta.key) ?? [];
+      if (items.length === 0) return null;
+
+      return (
+        <section>
+          <h2 class="text-xl font-semibold text-vhcc-navy">{meta.title}</h2>
+          <ul class="mt-3 list-disc space-y-2 pl-6 text-gray-800">
+            {items.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  class="text-vhcc-blue underline decoration-vhcc-blue/40 underline-offset-2 hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+                >
+                  {item.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      );
+    })
+  }
+</div>

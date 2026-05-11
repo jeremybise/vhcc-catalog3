@@ -31,5 +31,9 @@ export default defineMarkdocConfig({
         variant: { type: String },
       },
     },
+    coursesofstudylinks: {
+      render: component("./src/components/CoursesOfStudyLinks.astro"),
+      selfClosing: true,
+    },
   },
 });
