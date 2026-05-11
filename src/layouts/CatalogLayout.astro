@@ -289,37 +289,31 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                 >
                   <a
                     href={`/${year}`}
-                    class="hover:text-vhcc-navy transition-colors"
+                    class="text-vhcc-blue hover:text-vhcc-navy transition-colors"
                   >
                     {year} Catalog
                   </a>
-                  {breadcrumbs.map((crumb, i) => (
+                  {breadcrumbs.slice(0, -1).map((crumb) => (
                     <>
-                      <span aria-hidden="true" class="text-gray-300">
-                        /
+                      <span aria-hidden="true" class="text-gray-400">
+                        &#8250;
                       </span>
-                      {i === breadcrumbs.length - 1 ? (
-                        <span
-                          class="font-medium text-vhcc-navy"
-                          aria-current="page"
-                        >
-                          {crumb.label}
-                        </span>
-                      ) : (
-                        <a
-                          href={crumb.href}
-                          class="hover:text-vhcc-navy transition-colors"
-                        >
-                          {crumb.label}
-                        </a>
-                      )}
+                      <a
+                        href={crumb.href}
+                        class="text-vhcc-blue hover:text-vhcc-navy transition-colors"
+                      >
+                        {crumb.label}
+                      </a>
                     </>
                   ))}
+                  <span aria-hidden="true" class="text-gray-400">
+                    &#8250;
+                  </span>
                 </nav>
               )
             }
             <article
-              class="prose prose-lg max-w-none prose-slate prose-headings:font-semibold prose-h1:text-4xl prose-h2:text-2xl prose-h1:text-vhcc-navy prose-a:text-vhcc-blue"
+              class="prose prose-lg max-w-none prose-slate prose-headings:font-semibold prose-h1:text-5xl prose-h1:font-bold prose-h2:text-3xl prose-h3:text-xl prose-h1:text-vhcc-navy prose-a:text-vhcc-blue"
               data-pagefind-body
             >
               <slot />
