@@ -88,11 +88,15 @@ const markdocComponents = {
                 const rowType = props.fields.rowType.value;
                 if (rowType === "note") {
                   const note = props.fields.note.value;
-                  return note ? `Note: ${String(note).slice(0, 32)}` : "Note row";
+                  return note
+                    ? `Note: ${String(note).slice(0, 32)}`
+                    : "Note row";
                 }
                 if (rowType === "options") {
                   const optionLabel = props.fields.optionLabel.value;
-                  return optionLabel ? `Options: ${optionLabel}` : "Option group";
+                  return optionLabel
+                    ? `Options: ${optionLabel}`
+                    : "Option group";
                 }
                 const course = props.fields.course.value;
                 if (course) {

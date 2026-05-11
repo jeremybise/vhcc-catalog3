@@ -307,37 +307,39 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                 <li>
                                   <span class="font-medium">{item.code}</span>
                                   {": "}
-                                  {item.title}
-                                  {item.meta && (
-                                    <span class="group/tooltip relative ml-1 inline-flex align-middle">
-                                      <button
-                                        type="button"
-                                        class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
-                                        aria-label={`View course details for ${item.meta.code}`}
-                                        aria-describedby={`course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
-                                      >
-                                        i
-                                      </button>
-                                      <div
-                                        id={`course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
-                                        role="tooltip"
-                                        class="pointer-events-none invisible absolute left-0 top-full z-20 mt-2 w-80 max-w-[calc(100vw-4rem)] rounded-md border border-slate-300 bg-white p-3 text-xs text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100"
-                                      >
-                                        <p class="font-semibold text-vhcc-navy">
-                                          {item.meta.code}: {item.meta.title}
-                                        </p>
-                                        <p class="mt-1 text-slate-700">
-                                          <span class="font-semibold">
-                                            Credits:
-                                          </span>{" "}
-                                          {item.meta.credits}
-                                        </p>
-                                        <p class="mt-1 leading-relaxed">
-                                          {item.meta.description}
-                                        </p>
-                                      </div>
-                                    </span>
-                                  )}
+                                  <span class="group/tooltip relative ml-1 inline-flex items-center gap-1 align-middle">
+                                    <span>{item.title}</span>
+                                    {item.meta && (
+                                      <>
+                                        <button
+                                          type="button"
+                                          class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+                                          aria-label={`View course details for ${item.meta.code}`}
+                                          aria-describedby={`course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
+                                        >
+                                          i
+                                        </button>
+                                        <div
+                                          id={`course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
+                                          role="tooltip"
+                                          class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-xs text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100 sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)]"
+                                        >
+                                          <p class="font-semibold text-vhcc-navy wrap-break-word">
+                                            {item.meta.code}: {item.meta.title}
+                                          </p>
+                                          <p class="mt-1 text-slate-700 wrap-break-word">
+                                            <span class="font-semibold">
+                                              Credits:
+                                            </span>{" "}
+                                            {item.meta.credits}
+                                          </p>
+                                          <p class="mt-1 leading-relaxed wrap-break-word">
+                                            {item.meta.description}
+                                          </p>
+                                        </div>
+                                      </>
+                                    )}
+                                  </span>
                                 </li>
                               ))}
                             </ul>
@@ -370,16 +372,16 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                 <div
                                   id={`course-tip-${termIndex}-${rowIndex}`}
                                   role="tooltip"
-                                  class="pointer-events-none invisible absolute left-0 top-full z-20 mt-2 w-80 max-w-[calc(100vw-4rem)] rounded-md border border-slate-300 bg-white p-3 text-xs text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100"
+                                  class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-xs text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100 sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)]"
                                 >
-                                  <p class="font-semibold text-vhcc-navy">
+                                  <p class="font-semibold text-vhcc-navy wrap-break-word">
                                     {row.meta.code}: {row.meta.title}
                                   </p>
-                                  <p class="mt-1 text-slate-700">
+                                  <p class="mt-1 text-slate-700 wrap-break-word">
                                     <span class="font-semibold">Credits:</span>{" "}
                                     {row.meta.credits}
                                   </p>
-                                  <p class="mt-1 leading-relaxed">
+                                  <p class="mt-1 leading-relaxed wrap-break-word">
                                     {row.meta.description}
                                   </p>
                                 </div>
