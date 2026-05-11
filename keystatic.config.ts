@@ -6,6 +6,19 @@ const markdocComponents = {
     label: "Line Break",
     schema: {},
   }),
+  coursetooltip: inline({
+    label: "Course Tooltip",
+    schema: {
+      code: fields.relationship({
+        label: "Course",
+        collection: "courses_2026",
+      }),
+      label: fields.text({
+        label: "Display label",
+        description: "Optional label text instead of course code.",
+      }),
+    },
+  }),
   programofstudy: block({
     label: "Program of Study",
     schema: {
@@ -17,6 +30,28 @@ const markdocComponents = {
         label: "Show total credits",
         defaultValue: true,
       }),
+      notes: fields.array(
+        fields.object({
+          number: fields.integer({
+            label: "Note number",
+            validation: { min: 1 },
+          }),
+          text: fields.text({
+            label: "Note text",
+            multiline: true,
+          }),
+        }),
+        {
+          label: "Program notes",
+          itemLabel: (props) => {
+            const number = props.fields.number.value;
+            const text = props.fields.text.value;
+            if (number) return `Note ${number}`;
+            if (text) return `Note: ${String(text).slice(0, 24)}`;
+            return "Note";
+          },
+        },
+      ),
       terms: fields.array(
         fields.object({
           termLabel: fields.text({

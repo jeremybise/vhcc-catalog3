@@ -1,0 +1,103 @@
+---
+import { getCollection } from "astro:content";
+
+interface Props {
+  code: string;
+  label?: string;
+  title?: string;
+  credits?: string;
+  description?: string;
+}
+
+const { code, label, title, credits, description } = Astro.props;
+
+const normalizedCode = code.trim();
+
+let resolvedTitle = title ?? "";
+let resolvedCredits = credits ?? "";
+let resolvedDescription = description ?? "";
+
+if (!resolvedTitle || !resolvedDescription) {
+  const pathnameParts = Astro.url.pathname.split("/").filter(Boolean);
+  const year = pathnameParts[0] ?? "";
+
+  const courses = await getCollection("courses");
+  const yearCourses = courses.filter((entry) =>
+    entry.id.startsWith(`${year}/courses/`),
+  );
+
+  const codeKey = normalizedCode.toLowerCase().replace(/\s+/g, "-");
+  const fallbackKey = normalizedCode.toLowerCase();
+  const resolved =
+    yearCourses.find(
+      (entry) => entry.data.code.toLowerCase() === fallbackKey,
+    ) ||
+    yearCourses.find((entry) => entry.data.code.toLowerCase() === codeKey) ||
+    yearCourses.find(
+      (entry) => (entry.id.split("/").pop() ?? "").toLowerCase() === codeKey,
+    );
+
+  if (resolved) {
+    resolvedTitle = resolvedTitle || resolved.data.title;
+    resolvedCredits = resolvedCredits || (resolved.data.credits ?? "");
+    if (!resolvedDescription) {
+      const firstParagraph = (resolved.body || "")
+        .split(/\n\s*\n/)
+        .map((chunk) => chunk.trim())
+        .find((chunk) => chunk.length > 0);
+      resolvedDescription =
+        firstParagraph
+          ?.replace(/\[(.*?)\]\((.*?)\)/g, "$1")
+          .replace(/[*_`~>#]/g, "")
+          .trim() || "No description available.";
+    }
+  }
+}
+
+const displayLabel = label || normalizedCode;
+const hasDetails = Boolean(
+  resolvedTitle || resolvedCredits || resolvedDescription,
+);
+---
+
+<span
+  class="group/tooltip relative inline-flex items-center gap-1 align-middle"
+>
+  <span class="underline decoration-dotted underline-offset-2"
+    >{displayLabel}</span
+  >
+  {
+    hasDetails && (
+      <>
+        <button
+          type="button"
+          class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+          aria-label={`View course details for ${normalizedCode}`}
+          aria-describedby={`course-tip-inline-${normalizedCode.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+        >
+          i
+        </button>
+        <div
+          id={`course-tip-inline-${normalizedCode.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+          role="tooltip"
+          class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-xs text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100 sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)]"
+        >
+          <p class="font-semibold text-vhcc-navy wrap-break-word">
+            {normalizedCode}
+            {resolvedTitle ? `: ${resolvedTitle}` : ""}
+          </p>
+          {resolvedCredits && (
+            <p class="mt-1 text-slate-700 wrap-break-word">
+              <span class="font-semibold">Credits:</span> {resolvedCredits}
+            </p>
+          )}
+          {resolvedDescription && (
+            <p class="mt-1 leading-relaxed wrap-break-word">
+              {resolvedDescription}
+            </p>
+          )}
+        </div>
+      </>
+    )
+  }
+</span>

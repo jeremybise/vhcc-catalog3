@@ -12,7 +12,15 @@ export default defineMarkdocConfig({
       attributes: {
         title: { type: String },
         showTotals: { type: Boolean },
+        notes: { type: Array },
         terms: { type: Array },
+      },
+    },
+    coursetooltip: {
+      render: component("./src/components/CourseTooltip.astro"),
+      attributes: {
+        code: { type: String },
+        label: { type: String },
       },
     },
     sectiontoc: {
