@@ -81,7 +81,7 @@ const markdocComponents = {
               titleOverride: fields.text({
                 label: "Title override",
                 description:
-                  "Optional custom title text for this row instead of the selected course title.",
+                  "Optional custom title text for this row instead of the selected course title. Use [1], [2], etc. to link to program notes.",
               }),
               creditsOverride: fields.text({
                 label: "Credits override",

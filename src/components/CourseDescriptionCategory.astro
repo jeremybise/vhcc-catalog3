@@ -1,0 +1,51 @@
+---
+import { getCollection, render } from "astro:content";
+
+interface Props {
+  year: string;
+  category: string;
+}
+
+const { year, category } = Astro.props;
+
+const allCourses = await getCollection("courses");
+const categoryCourses = allCourses
+  .filter(
+    (c) => c.id.startsWith(`${year}/courses/`) && c.data.category === category,
+  )
+  .sort((a, b) => a.data.code.localeCompare(b.data.code));
+
+const renderedCourses = await Promise.all(
+  categoryCourses.map(async (course) => {
+    const { Content } = await render(course);
+    return { course, Content };
+  }),
+);
+
+/** Replace the first hyphen in a course code with a space: "ACC-212" → "ACC 212" */
+const displayCode = (code: string) => code.replace("-", " ");
+---
+
+{
+  renderedCourses.map(({ course, Content }) => (
+    <div class="course-entry">
+      <h2>
+        {displayCode(course.data.code)} - {course.data.title}
+      </h2>
+      <p>
+        <strong>Credits</strong>: {course.data.credits}
+      </p>
+      {course.data.prerequisiteNote && (
+        <p>
+          <em>{course.data.prerequisiteNote}</em>
+        </p>
+      )}
+      {course.data.corequisiteNote && (
+        <p>
+          <em>{course.data.corequisiteNote}</em>
+        </p>
+      )}
+      <Content />
+    </div>
+  ))
+}

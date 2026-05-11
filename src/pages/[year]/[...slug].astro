@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import CatalogLayout from "../../layouts/CatalogLayout.astro";
+import CourseDescriptionCategory from "../../components/CourseDescriptionCategory.astro";
 
 export async function getStaticPaths() {
   const allEntries = await getCollection("catalog");
@@ -123,7 +124,39 @@ const nextPage =
   currentIndex >= 0 && currentIndex < orderedPages.length - 1
     ? orderedPages[currentIndex + 1]
     : null;
-const tocHeadings = headings.filter((heading) => heading.depth >= 2);
+// Detect course-descriptions leaf pages and generate headings from course data
+const isCourseDescriptionsLeaf =
+  currentSection === "course-descriptions" &&
+  currentSlug !== "course-descriptions";
+const courseDescCategory = isCourseDescriptionsLeaf
+  ? (currentSlug.split("/")[1] ?? null)
+  : null;
+
+const slugify = (text: string) =>
+  text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-");
+
+let tocHeadings = headings.filter((heading) => heading.depth >= 2);
+
+if (isCourseDescriptionsLeaf && courseDescCategory) {
+  const allCourses = await getCollection("courses");
+  const categoryCourses = allCourses
+    .filter(
+      (c) =>
+        c.id.startsWith(`${year}/courses/`) &&
+        c.data.category === courseDescCategory,
+    )
+    .sort((a, b) => a.data.code.localeCompare(b.data.code));
+  tocHeadings = categoryCourses.map((c) => {
+    const displayCode = c.data.code.replace("-", " ");
+    const headingText = `${displayCode} - ${c.data.title}`;
+    return { depth: 2, slug: slugify(headingText), text: headingText };
+  });
+}
 
 // Build breadcrumbs: always include the section, plus the page title if this is a leaf page
 const currentSidebarSection = sidebar.find((s) => s.slug === currentSection);
@@ -156,5 +189,11 @@ const breadcrumbs = isLeafPage
   {breadcrumbs}
 >
   <h1>{entry.data.title}</h1>
-  <Content />
+  {
+    isCourseDescriptionsLeaf && courseDescCategory ? (
+      <CourseDescriptionCategory year={year} category={courseDescCategory} />
+    ) : (
+      <Content />
+    )
+  }
 </CatalogLayout>

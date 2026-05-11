@@ -41,13 +41,9 @@ if (!resolvedTitle || !resolvedDescription) {
     resolvedTitle = resolvedTitle || resolved.data.title;
     resolvedCredits = resolvedCredits || (resolved.data.credits ?? "");
     if (!resolvedDescription) {
-      const firstParagraph = (resolved.body || "")
-        .split(/\n\s*\n/)
-        .map((chunk) => chunk.trim())
-        .find((chunk) => chunk.length > 0);
       resolvedDescription =
-        firstParagraph
-          ?.replace(/\[(.*?)\]\((.*?)\)/g, "$1")
+        (resolved.body || "")
+          .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
           .replace(/[*_`~>#]/g, "")
           .trim() || "No description available.";
     }
@@ -80,7 +76,7 @@ const hasDetails = Boolean(
         <div
           id={`course-tip-inline-${normalizedCode.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
           role="tooltip"
-          class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-xs text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100 sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)]"
+          class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100 sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)]"
         >
           <p class="font-semibold text-vhcc-navy wrap-break-word">
             {normalizedCode}

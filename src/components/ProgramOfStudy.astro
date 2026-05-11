@@ -11,9 +11,12 @@ interface CourseMeta {
   description: string;
 }
 
+type FootnotePart =
+  | { kind: "text"; text: string }
+  | { kind: "footnote"; footnote: string };
+
 interface FootnoteText {
-  text: string;
-  footnote?: string;
+  parts: FootnotePart[];
 }
 
 interface ProgramRowInput {
@@ -141,22 +144,30 @@ const stripMarkdown = (value: string) =>
     .trim();
 
 const getCourseDescription = (entry: (typeof yearCourses)[number]) => {
-  const firstParagraph = (entry.body || "")
-    .split(/\n\s*\n/)
-    .map((chunk) => chunk.trim())
-    .find((chunk) => chunk.length > 0);
-  if (!firstParagraph) return "No description available.";
-  return stripMarkdown(firstParagraph);
+  const body = stripMarkdown(entry.body || "");
+  if (!body) return "No description available.";
+  return body;
 };
 
-const splitTrailingFootnote = (value: string): FootnoteText => {
-  // Treat trailing digits attached to text as a footnote marker, e.g. "Course4".
-  // Do not transform values where digits are separated by whitespace (e.g. "Course 4").
-  const match = value.match(/^(.*?)(\d+)$/);
-  if (!match) return { text: value };
-  const base = match[1] ?? "";
-  if (/\s$/.test(base)) return { text: value };
-  return { text: base, footnote: match[2] };
+const splitNoteLinks = (value: string): FootnoteText => {
+  const parts: FootnotePart[] = [];
+  const noteLinkRegex = /\[(\d+)\]/g;
+  let lastIndex = 0;
+
+  for (const match of value.matchAll(noteLinkRegex)) {
+    const start = match.index ?? 0;
+    if (start > lastIndex) {
+      parts.push({ kind: "text", text: value.slice(lastIndex, start) });
+    }
+    parts.push({ kind: "footnote", footnote: match[1] || "" });
+    lastIndex = start + match[0].length;
+  }
+
+  if (lastIndex < value.length || parts.length === 0) {
+    parts.push({ kind: "text", text: value.slice(lastIndex) });
+  }
+
+  return { parts };
 };
 
 const normalizedNotes = notes
@@ -284,7 +295,7 @@ const processedTerms = terms.map((term) => {
         label: row.optionLabel || "Choose one",
         options: optionItems.map((item) => ({
           code: item.code,
-          title: splitTrailingFootnote(item.title),
+          title: splitNoteLinks(item.title),
           meta: item.meta,
         })),
         creditsText:
@@ -307,7 +318,7 @@ const processedTerms = terms.map((term) => {
     return {
       kind: "course",
       code,
-      title: splitTrailingFootnote(courseTitle),
+      title: splitNoteLinks(courseTitle),
       creditsText,
       meta: entry
         ? {
@@ -388,28 +399,38 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                   <span class="font-medium">{item.code}</span>
                                   {": "}
                                   <span class="group/tooltip relative ml-1 inline-flex items-center gap-1 align-middle">
-                                    <span>
-                                      {item.title.text}
-                                      {item.title.footnote &&
-                                        (noteMap.has(item.title.footnote) ? (
-                                          <sup class="ml-0.5 text-[0.7em] align-super">
-                                            <a
-                                              id={noteRefId(
-                                                `${termIndex}-${rowIndex}-${optionIndex}`,
-                                                item.title.footnote,
-                                              )}
-                                              href={`#${noteId(item.title.footnote)}`}
-                                              class="text-vhcc-blue hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
-                                              aria-label={`Jump to note ${item.title.footnote}`}
-                                            >
-                                              {item.title.footnote}
-                                            </a>
-                                          </sup>
-                                        ) : (
-                                          <sup class="ml-0.5 text-[0.7em] align-super">
-                                            {item.title.footnote}
-                                          </sup>
-                                        ))}
+                                    <span
+                                      class={
+                                        item.meta
+                                          ? "underline decoration-dotted underline-offset-2"
+                                          : undefined
+                                      }
+                                    >
+                                      {item.title.parts.map(
+                                        (part, partIndex) => {
+                                          if (part.kind === "text")
+                                            return part.text;
+                                          return noteMap.has(part.footnote) ? (
+                                            <sup class="ml-0.5 text-[0.7em] align-super">
+                                              <a
+                                                id={noteRefId(
+                                                  `${termIndex}-${rowIndex}-${optionIndex}-${partIndex}`,
+                                                  part.footnote,
+                                                )}
+                                                href={`#${noteId(part.footnote)}`}
+                                                class="text-vhcc-blue hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+                                                aria-label={`Jump to note ${part.footnote}`}
+                                              >
+                                                {part.footnote}
+                                              </a>
+                                            </sup>
+                                          ) : (
+                                            <sup class="ml-0.5 text-[0.7em] align-super">
+                                              {part.footnote}
+                                            </sup>
+                                          );
+                                        },
+                                      )}
                                     </span>
                                     {item.meta && (
                                       <>
@@ -424,7 +445,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                         <div
                                           id={`course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
                                           role="tooltip"
-                                          class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-xs text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100 sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)]"
+                                          class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100 sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)]"
                                         >
                                           <p class="font-semibold text-vhcc-navy wrap-break-word">
                                             {item.meta.code}: {item.meta.title}
@@ -460,28 +481,35 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                         </td>
                         <td class="border-b border-slate-100 px-3 py-2 text-gray-800 align-top wrap-break-word">
                           <div class="group/tooltip relative inline-flex items-center gap-1">
-                            <span>
-                              {row.title.text}
-                              {row.title.footnote &&
-                                (noteMap.has(row.title.footnote) ? (
+                            <span
+                              class={
+                                row.meta
+                                  ? "underline decoration-dotted underline-offset-2"
+                                  : undefined
+                              }
+                            >
+                              {row.title.parts.map((part, partIndex) => {
+                                if (part.kind === "text") return part.text;
+                                return noteMap.has(part.footnote) ? (
                                   <sup class="ml-0.5 text-[0.7em] align-super">
                                     <a
                                       id={noteRefId(
-                                        `${termIndex}-${rowIndex}`,
-                                        row.title.footnote,
+                                        `${termIndex}-${rowIndex}-${partIndex}`,
+                                        part.footnote,
                                       )}
-                                      href={`#${noteId(row.title.footnote)}`}
+                                      href={`#${noteId(part.footnote)}`}
                                       class="text-vhcc-blue hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
-                                      aria-label={`Jump to note ${row.title.footnote}`}
+                                      aria-label={`Jump to note ${part.footnote}`}
                                     >
-                                      {row.title.footnote}
+                                      {part.footnote}
                                     </a>
                                   </sup>
                                 ) : (
                                   <sup class="ml-0.5 text-[0.7em] align-super">
-                                    {row.title.footnote}
+                                    {part.footnote}
                                   </sup>
-                                ))}
+                                );
+                              })}
                             </span>
                             {row.meta && (
                               <>
@@ -496,7 +524,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                 <div
                                   id={`course-tip-${termIndex}-${rowIndex}`}
                                   role="tooltip"
-                                  class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-xs text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100 sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)]"
+                                  class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity group-hover/tooltip:visible group-hover/tooltip:opacity-100 group-focus-within/tooltip:visible group-focus-within/tooltip:opacity-100 sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)]"
                                 >
                                   <p class="font-semibold text-vhcc-navy wrap-break-word">
                                     {row.meta.code}: {row.meta.title}
@@ -552,7 +580,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
   {
     notesWithParts.length > 0 && (
       <section class="mt-4 text-base text-gray-700" aria-label="Program notes">
-        <p class="font-semibold text-vhcc-navy">Notes:</p>
+        <p class="font-semibold text-vhcc-navy">Program Footnotes:</p>
         <ol class="mt-2 list-decimal space-y-1 pl-6 marker:text-gray-500">
           {notesWithParts.map((note) => (
             <li
