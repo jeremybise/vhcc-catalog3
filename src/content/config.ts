@@ -50,6 +50,8 @@ const catalogYears = defineCollection({
   }),
   schema: z.object({
     title: z.string(),
+    /** Mark this catalog year as archived so a banner is displayed. */
+    archived: z.boolean().optional().default(false),
   }),
 });
 

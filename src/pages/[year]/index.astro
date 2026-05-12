@@ -107,12 +107,26 @@ const nextPage =
       ? orderedPages[currentIndex + 1]
       : null;
 const tocHeadings = headings.filter((heading) => heading.depth >= 2);
+
+const isArchived = yearIndex.data.archived ?? false;
+// The current catalog is the latest non-archived year.
+const currentYear = yearEntries2
+  .filter((e) => !(e.data.archived ?? false))
+  .map((e) => e.id.split("/")[0])
+  .filter(Boolean)
+  .sort((a, b) => {
+    const aStart = Number.parseInt(a!.split("-")[0] ?? a!, 10);
+    const bStart = Number.parseInt(b!.split("-")[0] ?? b!, 10);
+    return bStart - aStart;
+  })[0];
 ---
 
 <CatalogLayout
   title={yearIndex.data.title}
   {year}
   {availableYears}
+  {isArchived}
+  currentYear={currentYear}
   {sidebar}
   {currentHref}
   currentSection=""

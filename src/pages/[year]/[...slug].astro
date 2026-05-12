@@ -32,6 +32,20 @@ const { Content, headings } = await render(entry);
 
 // Build sidebar data: all entries for this year, grouped by section
 const allEntries = await getCollection("catalog");
+const allYearEntries = await getCollection("catalogYears");
+const yearIndexEntry = allYearEntries.find(
+  (e) => e.id === year || e.id.startsWith(`${year}/`),
+);
+const isArchived = yearIndexEntry?.data.archived ?? false;
+const currentYear = allYearEntries
+  .filter((e) => !(e.data.archived ?? false))
+  .map((e) => e.id.split("/")[0])
+  .filter(Boolean)
+  .sort((a, b) => {
+    const aStart = Number.parseInt(a!.split("-")[0] ?? a!, 10);
+    const bStart = Number.parseInt(b!.split("-")[0] ?? b!, 10);
+    return bStart - aStart;
+  })[0];
 const availableYears = [
   ...new Set(allEntries.map((e) => e.id.split("/")[0])),
 ].sort((a, b) => {
@@ -180,6 +194,8 @@ const breadcrumbs = isLeafPage
   title={entry.data.title}
   {year}
   {availableYears}
+  {isArchived}
+  currentYear={currentYear}
   {sidebar}
   {currentHref}
   {currentSection}
