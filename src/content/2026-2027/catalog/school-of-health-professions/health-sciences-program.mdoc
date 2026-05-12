@@ -25,53 +25,58 @@ This program is designed to prepare students to transfer to four-year colleges a
 
 **Admission Requirements**: The applicant must meet general requirements for admission to the College including any developmental work. Students who intend to transfer should verify specific program requirements with their four-year institution.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Associate of Science (AS) in Health Sciences"
+	notes=[
+		{ number: 1, text: "See UCGS Block II, parts A & B. Cannot be a literature course." },
+		{ number: 2, text: "Approved Science Courses- BIO 101, BIO 102, CHM 111, CHM 112, CHM 241/245, CHM 242/246, PHY 201, PHY 202, PHY 241, or PHY 242." },
+		{ number: 3, text: "Approved Electives - HLT 106, HLT 110, HLT 206, HLT 228, HLT 230, ITE 119, ITE 152, MTH 161, MTH 162, MTH 245, MTH 263; student is advised to consult with a faculty advisor to select the course best fit for the intended transfer destination." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "ENG-111" },
+				{ codeOverride: "ART/HUM/MUS", titleOverride: "ART/HUM/MUS from UCGS[1]", creditsOverride: "3" },
+				{ rowType: "options", optionLabel: "Math", minChoices: 1, maxChoices: 1, options: ["MTH-161", "MTH-245", "MTH-263"] },
+				{ rowType: "options", optionLabel: "Science", minChoices: 1, maxChoices: 1, options: ["BIO-101", "CHM-111"] }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ENG-112" },
+				{ rowType: "options", optionLabel: "Social/Behavioral Science", minChoices: 1, maxChoices: 1, options: ["PSY-200", "SOC-200"] },
+				{ codeOverride: "SCI", titleOverride: "Approved Science Course[2]", creditsOverride: "3" },
+				{ rowType: "options", optionLabel: "SCI or HLT", minChoices: 1, maxChoices: 1, options: ["HLT-143"] },
+				{ rowType: "options", optionLabel: "Science", minChoices: 1, maxChoices: 1, options: ["BIO-102", "CHM-112"] }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ rowType: "options", optionLabel: "History", minChoices: 1, maxChoices: 1, options: ["HIS-121", "HIS-122"] },
+				{ course: "BIO-141" },
+				{ codeOverride: "SCI", titleOverride: "Approved Science Course[2]", creditsOverride: "3" },
+				{ codeOverride: "SCI", titleOverride: "Approved Science Course[2]", creditsOverride: "3" },
+				{ rowType: "options", optionLabel: "Lit/Ethics", minChoices: 1, maxChoices: 1, options: ["ENG-245", "ENG-246", "PHI-220"] }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "CST-100" },
+				{ codeOverride: "EEE", titleOverride: "Approved Elective[3]", creditsOverride: "3" },
+				{ course: "BIO-142" },
+				{ codeOverride: "EEE", titleOverride: "Approved Elective[3]", creditsOverride: "3" },
+				{ course: "BIO-150" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to College Success | 1 |
-| ENG 111 | College Composition I | 3 |
-| ART/HUM/MUS | ART/HUM/MUS from UCGS1 | 3 |
-| MTH 161, MTH 245 or MTH 263 | Precalculus I, Statistics I, or Calculus I | 3 |
-| BIO 101 or CHM 111 | General Biology I or General Chemistry I | 4 |
-| | **Total** | 14 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 112 | College Composition II | 3 |
-| PSY 200 or SOC 200 | Introduction to Psychology or Introduction to Sociology | 3 |
-| SCI | Approved Science Course2 | 3 |
-| SCI or HLT 143 | Approved Science Course2 or Medical Terminology | 3 |
-| BIO 102 or CHM 112 | General Biology II or General Chemistry II | 4 |
-| | **Total** | 16 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HIS 121 or HIS 122 | United States History to 1877 or United States History Since 1865 | 3 |
-| BIO 141 | Human Anatomy and Physiology I | 4 |
-| SCI | Approved Science Course2 | 3 |
-| SCI | Approved Science Course2 | 3 |
-| ENG 245, ENG 246, or PHI 220 | British Literature, American Literature, or Ethics & Society | 3 |
-| | **Total** | 16 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| CST 100 | Principles of Public Speaking | 3 |
-| EEE | Approved Elective3 | 3 |
-| BIO 142 | Human Anatomy and Physiology II | 4 |
-| EEE | Approved Elective3 | 3 |
-| BIO 150 | Microbiology for Health Sciences | 4 |
-| | **Total** | 17 |
-
-**Total Minimum Credits: 63**
-
-Notes:
+### Notes
 
 Students should consult with their advisor to select the most appropriate Approved Elective for their chosen career goals. Some electives are four credits.
 
@@ -85,11 +90,6 @@ To Enroll in MTH 263 Calculus I students may complete MTH 161/162 sequence or MT
 
 · complete an advanced math course in trigonometry with at least a B in that course
 
- 1. See UCGS Block II, parts A & B. Cannot be a literature course.
-
- 2. Approved Science Courses- BIO 101, BIO 102, CHM 111, CHM 112, CHM 241/245, CHM 242/246, PHY 201, PHY 202, PHY 241, or PHY 242.
-
- 3. Approved Electives - HLT 106, HLT 110, HLT 206, HLT 228, HLT 230, ITE 119, ITE 152, MTH 161, MTH 162, MTH 245, MTH 263; student is advised to consult with a faculty advisor to select the course best fit for the intended transfer destination.
 
 ## Associate of Science (AS) in Health Sciences – Major in Kinesiology
 
@@ -101,53 +101,56 @@ This program is designed to prepare students to transfer to four-year colleges a
 
 **Admission Requirements**: The applicant must meet general requirements for admission to the College including any developmental work. Students who intend to transfer should verify specific program requirements with their four-year institution.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Associate of Science (AS) in Health Sciences – Major in Kinesiology"
+	notes=[
+		{ number: 1, text: "See UCGS Block II, parts A & B. Cannot be a literature course." },
+		{ number: 2, text: "Students may take BIO 151 and HLT 106 OR may take HLT 230 only to satisfy requirements." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "ENG-111" },
+				{ codeOverride: "ART/HUM/MUS", titleOverride: "ART/HUM/MUS from UCGS[1]", creditsOverride: "3" },
+				{ rowType: "options", optionLabel: "Math", minChoices: 1, maxChoices: 1, options: ["MTH-245", "MTH-263"] },
+				{ course: "CHM-111" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ENG-112" },
+				{ course: "PSY-200" },
+				{ course: "HLT-143" },
+				{ course: "CHM-112" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ rowType: "options", optionLabel: "History", minChoices: 1, maxChoices: 1, options: ["HIS-121", "HIS-122"] },
+				{ course: "BIO-141" },
+				{ course: "HLT-206" },
+				{ rowType: "options", optionLabel: "Science", minChoices: 1, maxChoices: 1, options: ["BIO-101", "PHY-241"] },
+				{ rowType: "options", optionLabel: "Lit", minChoices: 1, maxChoices: 1, options: ["ENG-245", "ENG-246"] }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "CST-100" },
+				{ course: "BIO-150" },
+				{ course: "BIO-142" },
+				{ codeOverride: "BIO-151/HLT-106", titleOverride: "Human Gross Anatomy I / First Aid and Safety[2]", creditsOverride: "3" },
+				{ rowType: "options", optionLabel: "Science", minChoices: 1, maxChoices: 1, options: ["BIO-102", "PHY-242"] }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to College Success | 1 |
-| ENG 111 | College Composition I | 3 |
-| ART/HUM/MUS | ART/HUM/MUS from UCGS1 | 3 |
-| MTH 245 or MTH 263 | Statistics I or Calculus I | 3 |
-| CHM 111 | General Chemistry I | 4 |
-| | **Total** | 14 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG112 | College Composition II | 3 |
-| PSY 200 | Introduction to Psychology | 3 |
-| HLT 143 | Medical Terminology | 3 |
-| CHM 112 | General Chemistry II | 4 |
-| | **Total** | 13 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HIS 121 or HIS 122 | United States History to 1877 or United States History Since 1865 | 3 |
-| BIO 141 | Human Anatomy and Physiology I | 4 |
-| HLT 206 | Introduction to Kinesiology | 3 |
-| BIO 101 or PHY 241 | General Biology I or University Physics I | 4 |
-| ENG 245 or ENG 246 | British Literature or American Literature | 3 |
-| | **Total** | 17 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| CST 100 | Principles of Public Speaking | 3 |
-| BIO 150 | Microbiology for Health Sciences | 4 |
-| BIO 142 | Human Anatomy and Physiology II | 4 |
-| BIO 151 | Human Gross Anatomy I2 | 1 |
-| HLT 106 | First Aid and Safety2 | 2 |
-| BIO 102 or PHY 242 | General Biology II or University Physics II | 4 |
-| | **Total** | 18 |
-
-**Total Minimum Credits: 62**
-
-Notes:
+### Notes
 
 Students should consult with their advisor to select the most appropriate Approved Elective for their chosen career goals. Some electives are four credits.
 
@@ -161,9 +164,6 @@ To Enroll in MTH 263 Calculus I students may complete MTH 161/162 sequence or MT
 
 · complete an advanced math course in trigonometry with at least a B in that course
 
- 1. See UCGS Block II, parts A & B. Cannot be a literature course.
-
- 2. Students may take BIO 151 and HLT 106 OR may take HLT 230 only to satisfy requirements.
 
 ## Associate of Science (AS) in Health Sciences – Major in Public Health
 
@@ -175,53 +175,58 @@ This program curriculum is designed for students seeking to pursue a transfer de
 
 **Admission Requirements**: The applicant must meet general requirements for admission to the College including any developmental work. Students who intend to transfer should verify specific program requirements with their four-year institution.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Associate of Science (AS) in Health Sciences – Major in Public Health"
+	notes=[
+		{ number: 1, text: "See UCGS Block II, parts A & B. Cannot be a literature course." },
+		{ number: 2, text: "Approved Science Courses - BIO 101, BIO 102, CHM 111, CHM 112, CHM 241/245, CHM 242/246, PHY 201, PHY 202, PHY 241, or PHY 242." },
+		{ number: 3, text: "Approved Electives: Students are advised to consult with their faculty advisor at VHCC to select the course which offers the best fit for the intended transfer destination. Students may use recommended courses such as ITE 152, ITE 119, UCGS, and/or the AA or AS General Education Electives list to fulfill these credits." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "ENG-111" },
+				{ codeOverride: "ART/HUM/MUS", titleOverride: "ART/HUM/MUS from UCGS[1]", creditsOverride: "3" },
+				{ rowType: "options", optionLabel: "Math", minChoices: 1, maxChoices: 1, options: ["MTH-245", "MTH-263"] },
+				{ course: "BIO-101" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ENG-112" },
+				{ course: "SOC-200" },
+				{ course: "HLT-143" },
+				{ codeOverride: "SCI or EEE", titleOverride: "Approved Science Course[2] or Approved Elective[3]", creditsOverride: "3" },
+				{ course: "BIO-102" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "ENG-112" },
+				{ course: "SOC-200" },
+				{ course: "HLT-143" },
+				{ codeOverride: "SCI or EEE", titleOverride: "Approved Science Course[2] or Approved Elective[3]", creditsOverride: "3" },
+				{ course: "BIO-102" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "CST-100" },
+				{ course: "HLT-110" },
+				{ course: "BIO-142" },
+				{ rowType: "options", optionLabel: "Social Science", minChoices: 1, maxChoices: 1, options: ["PSY-230", "SOC-200"] },
+				{ course: "BIO-150" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to College Success | 1 |
-| ENG 111 | College Composition I | 3 |
-| ART/HUM/MUS | ART/HUM/MUS from UCGS1 | 3 |
-| MTH 245 or MTH 263 | Statistics I or Calculus I | 3 |
-| BIO 101 | General Biology I | 4 |
-| | **Total** | 14 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 112 | College Composition II | 3 |
-| SOC 200 | Introduction to Sociology | 3 |
-| HLT 143 | Medical Terminology | 3 |
-| SCI or EEE | Approved Science Course2 or Approved Elective3 | 3 |
-| BIO 102 | General Biology II | 4 |
-| | **Total** | 16 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 112 | College Composition II | 3 |
-| SOC 200 | Introduction to Sociology | 3 |
-| HLT 143 | Medical Terminology | 3 |
-| SCI or EEE | Approved Science Course2 or Approved Elective3 | 3 |
-| BIO 102 | General Biology II | 4 |
-| | **Total** | 16 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| CST 100 | Principles of Public Speaking | 3 |
-| HLT 110 | Personal and Community Health | 3 |
-| BIO 142 | Human Anatomy and Physiology II | 4 |
-| PSY 230 or SOC 200 | Developmental Psychology or Introduction to Sociology | 3 |
-| BIO 150 | Microbiology for Health Sciences | 4 |
-| | **Total** | 17 |
-
-**Total Minimum Credits: 63**
-
-Notes:
+### Notes
 
 Students should consult with their advisor to select the most appropriate Approved Elective for their chosen career goals. Some electives are four credits.
 
@@ -235,11 +240,6 @@ To Enroll in MTH 263 Calculus I students may complete MTH 161/162 sequence or MT
 
 · complete an advanced math course in trigonometry with at least a B in that course
 
- 1. See UCGS Block II, parts A & B. Cannot be a literature course.
-
- 2. Approved Science Courses - BIO 101, BIO 102, CHM 111, CHM 112, CHM 241/245, CHM 242/246, PHY 201, PHY 202, PHY 241, or PHY 242.
-
- 3. Approved Electives: Students are advised to consult with their faculty advisor at VHCC to select the course which offers the best fit for the intended transfer destination. Students may use recommended courses such as ITE 152, ITE 119, UCGS, and/or the AA or AS General Education Electives list to fulfill these credits.
 
 ## Certificate (C) in Health Sciences
 
@@ -251,45 +251,32 @@ The growth and development of health professions as well as the changes in healt
 
 **Admission Requirements**: The applicant must meet general requirements for admission to the College including any developmental work. Students who complete the Health Sciences certificate must still apply to their selected health program and meet the specific program criteria.
 
-### First Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 111 | College Composition I | 3 |
-| BIO 141 | Human Anatomy and Physiology I | 4 |
-| SDV 101 | Orientation to College Success | 1 |
-| PSY 230 | Developmental Psychology | 3 |
-| EEE | Degree-related Elective1 | 3 |
-| HLT 105 | Cardiopulmonary Resuscitation | 1 |
-| | **Total** | 15 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 112 | College Composition II | 3 |
-| BIO 142 | Human Anatomy and Physiology II | 4 |
-| EEE | Degree-related Elective1 | 3-4 |
-| EEE | Degree-related Elective1 | 3-4 |
-| HUM | Humanities Elective | 3 |
-| | **Total** | 16-18 |
-
-**Total Minimum Credits: 31-33**
-
-Notes:
-
- 1. Degree-related electives:
-
-BIO 145 (intended for students pursuing PNE and EMS programs only; will not substitute for BIO 141 and BIO 142), BIO 150, EMS 111, EMS 120, HCT 101, HCT 102, HLT 105, HLT 143, MDL 105, MTH 154, MTH 155, NUR 135, HLT 140, SPA 163
-
-Students planning to pursue PN Program should take HLT 143 and BIO 145 (OR BIO 141 and BIO 142).
-
-Students planning to pursue RAD should take MTH 154 and HLT 143; students should see an advisor.
-
-Students planning to pursue Associates Degree in Nursing (ADN) should take HLT 143, BIO 150 and NUR 135; students should see an advisor.
-
-Students planning to pursue CNA should take HCT 101 and HCT 102; students should see an advisor.
-
-Students planning to pursue Phlebotomy CSC should take MDL 105, BIO 145, and HLT 140. See faculty advisor prior to registering for MDL 105.
-
-Students pursuing other health programs should see an advisor.
+{% programofstudy
+	title="Certificate (C) in Health Sciences"
+	notes=[
+		{ number: 1, text: "Degree-related electives: BIO 145 (intended for students pursuing PNE and EMS programs only; will not substitute for BIO 141 and BIO 142), BIO 150, EMS 111, EMS 120, HCT 101, HCT 102, HLT 105, HLT 143, MDL 105, MTH 154, MTH 155, NUR 135, HLT 140, SPA 163. Students planning to pursue PN Program should take HLT 143 and BIO 145 (OR BIO 141 and BIO 142). Students planning to pursue RAD should take MTH 154 and HLT 143; students should see an advisor. Students planning to pursue Associates Degree in Nursing (ADN) should take HLT 143, BIO 150 and NUR 135; students should see an advisor. Students planning to pursue CNA should take HCT 101 and HCT 102; students should see an advisor. Students planning to pursue Phlebotomy CSC should take MDL 105, BIO 145, and HLT 140. See faculty advisor prior to registering for MDL 105. Students pursuing other health programs should see an advisor." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "ENG-111" },
+				{ course: "BIO-141" },
+				{ course: "SDV-101" },
+				{ course: "PSY-230" },
+				{ codeOverride: "EEE", titleOverride: "Degree-related Elective[1]", creditsOverride: "3" },
+				{ course: "HLT-105" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ENG-112" },
+				{ course: "BIO-142" },
+				{ codeOverride: "EEE", titleOverride: "Degree-related Elective[1]", creditsOverride: "3-4" },
+				{ codeOverride: "EEE", titleOverride: "Degree-related Elective[1]", creditsOverride: "3-4" },
+				{ codeOverride: "HUM", titleOverride: "Humanities Elective", creditsOverride: "3" }
+			]
+		}
+	]
+/%}

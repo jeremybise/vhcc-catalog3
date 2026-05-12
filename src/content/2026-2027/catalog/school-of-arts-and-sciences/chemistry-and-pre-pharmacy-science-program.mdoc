@@ -7,9 +7,7 @@ The Associate of Science (AS) degree in Science – Major in Chemistry is design
 
 **Program Chair**: Sandy Davis • [sdavis@vhcc.edu](mailto:sdavis@vhcc.edu) • 276-739-2464
 
-[Associate of Science in Science – Major in Chemistry](#_Associate_of_Science)
-
-[Career Studies Certificate in Pre-Pharmacy Science](#_Career_Studies_Certificate)
+---
 
 ## Associate of Science (AS) in Science with a Major in Chemistry
 
@@ -21,53 +19,69 @@ In addition to the admission requirements established for the college, entry int
 
 Although the major emphasis in this curriculum is mathematics, the biological sciences, and the physical sciences, the curriculum also includes courses in humanities and social sciences. Electives are provided so that the student can select the appropriate courses for the pre-professional or scientific program as required in the first two years of the four-year college or university. In order to help prepare for upper division (junior class) standing at a four-year institution, the student usually must complete a program at the community college which is comparable in length and courses to the first two years of the program at the four-year institution. Upon satisfactory completion of the four-semester program described, the graduate will be awarded the Associate of Science Degree in Science with a Major in Chemistry.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "Approved Courses – {% coursetooltip code=\"BIO-141\" label=\"BIO 141\" /%}, {% coursetooltip code=\"BIO-142\" label=\"BIO 142\" /%}, {% coursetooltip code=\"BIO-150\" label=\"BIO 150\" /%}, {% coursetooltip code=\"CSC-221\" label=\"CSC 221\" /%}, or {% coursetooltip code=\"MTH-161\" label=\"MTH 161\" /%} or higher." },
+		{ number: 2, text: "See UCGS Block II, parts A & B. Cannot be a literature course." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "ENG-111" },
+				{ course: "CST-100" },
+				{ course: "MTH-263" },
+				{ course: "CHM-111" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ENG-112" },
+				{ course: "CHM-112" },
+				{ course: "MTH-245" },
+				{
+					rowType: "options",
+					optionLabel: "Select one history course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["HIS-121", "HIS-122"]
+				},
+				{ course: "ECO-202" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ codeOverride: "EEE", titleOverride: "Approved Course[1]", creditsOverride: "3" },
+				{ course: "CHM-241" },
+				{ course: "CHM-245" },
+				{ course: "PHY-241" },
+				{
+					rowType: "options",
+					optionLabel: "Select one literature course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-245", "ENG-246"]
+				}
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ codeOverride: "EEE", titleOverride: "Approved Course[1]", creditsOverride: "3" },
+				{ codeOverride: "ART/HUM/MUS", titleOverride: "ART/HUM/MUS from UCGS[2]", creditsOverride: "3" },
+				{ course: "CHM-242" },
+				{ course: "CHM-246" },
+				{ course: "PHY-242" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to College Success | 1 |
-| ENG 111 | College Composition I | 3 |
-| CST 100 | Principles of Public Speaking | 3 |
-| MTH 263 | Calculus I | 4 |
-| CHM 111 | General Chemistry I | 4 |
-| | **Total** | 15 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 112 | College Composition II | 3 |
-| CHM 112 | General Chemistry II | 4 |
-| MTH 245 | Statistics I | 3 |
-| HIS 121 or HIS 122 | United States History to 1877 or United States History Since 1865 | 3 |
-| ECO 202 | Principles of Microeconomics | 3 |
-| | **Total** | 16 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| EEE | Approved Course1 | 3 |
-| CHM 241 | Organic Chemistry I | 3 |
-| CHM 245 | Organic Chemistry Lab I | 2 |
-| PHY 241 | University Physics I | 4 |
-| ENG 245 or ENG 246 | British Literature or American Literature | 3 |
-| | **Total** | 15 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| EEE | Approved Course1 | 3 |
-| ART/HUM/MUS | ART/HUM/MUS from UCGS2 | 3 |
-| CHM 242 | Organic Chemistry II | 3 |
-| CHM 246 | Organic Chemistry Lab II | 2 |
-| PHY 242 | University Physics II | 4 |
-| | **Total** | 15 |
-
-**Total Minimum Credits: 61**
-
-Notes:
+### Notes
 
 \* Students should consult with their advisor to select the most appropriate Approved Elective for their chosen career goals. Some electives are four credits.
 
@@ -81,36 +95,40 @@ To Enroll in MTH 263 Calculus I students may complete MTH 161/162 sequence or MT
 
 · complete an advanced math course in trigonometry with at least a B in that course
 
- 1. Approved Courses – BIO 141, BIO 142, BIO 150, CSC 221, or MTH 161 or higher.
-
- 2. See UCGS Block II, parts A & B. Cannot be a literature course.
-
 ## Career Studies Certificate (CSC) in Pre-Pharmacy Science
 
 Two semesters; one year
 
 The Career Studies Certificate in Pre-pharmacy Science is designed to provide access to additional scientific course credit necessary to prepare for university transfer in the field.
 
-**First Semester**
+{% programofstudy
+	title="Course of Study"
+	terms=[
+		{
+			termLabel: "First Semester",
+			rows: [
+				{ course: "BIO-141" },
+				{ course: "BIO-150" },
+				{ course: "BIO-101" }
+			]
+		},
+		{
+			termLabel: "Second Semester",
+			rows: [
+				{
+					rowType: "options",
+					optionLabel: "Select one course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["HLT-261", "HLT-106"]
+				},
+				{ course: "BIO-142" },
+				{ course: "BIO-102" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| BIO 141 | Human Anatomy & Physiology I | 4 |
-| BIO 150 | Microbiology for Health Sciences | 4 |
-| BIO 101 | General Biology I | 4 |
-| | **Total** | 12 |
-
-**Second Semester**
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HLT 261 or HLT 106 | Basic Pharmacy I or First Aid and Safety | 2-3 |
-| BIO 142 | Human Anatomy & Physiology II | 4 |
-| BIO 102 | General Biology II | 4 |
-| | **Total** | 10-11 |
-
-**Total Minimum Credits: 22-23**
-
-Notes:
+### Notes
 
 Students are urged to work closely with Professor Sandy Davis while working on this Career Studies Certificate. Students are urged to acquaint themselves with the requirements of the major department in the college or university to which transfer is contemplated; and further, to consult with their counselors and advisors at VHCC in planning their academic program and electives.

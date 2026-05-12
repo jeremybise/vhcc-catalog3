@@ -33,65 +33,70 @@ Due to the kind of working professional this degree program attracts, this degre
 
 **Notes on Transfer**: Associate of Applied Science Degree programs are designed primarily to provide occupational competence for employment entry. Though the courses can transfer to baccalaureate institutions, they are not designed for transfer.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "ENG 111 is a Passport Transfer course. Lecture 3 hours per week." },
+		{ number: 2, text: "ENG 115 is not intended to transfer." },
+		{ number: 3, text: "Pre-requisite for HIM 163." },
+		{ number: 4, text: "Students will have completed and/or be enrolled in HIM 253 and/or HIM 254 to enroll in this class." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "AST-176" },
+				{
+					rowType: "options",
+					optionLabel: "Select one English course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-111", "ENG-115"]
+				},
+				{ course: "HIM-113", titleOverride: "Medical Terminology and Disease Processes[3]" },
+				{ course: "HIM-151" },
+				{ course: "ITE-152" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "AST-260" },
+				{ course: "HIM-163" },
+				{ course: "HIM-226" },
+				{ course: "HIM-253" },
+				{ course: "MTH-132" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "AST-195" },
+				{ course: "BUS-100" },
+				{ course: "HIM-260" },
+				{ course: "HIM-254" },
+				{ codeOverride: "SOC EEE", titleOverride: "Social/Behavioral Elective", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "CST-126" },
+				{ course: "HIM-231" },
+				{ course: "HIM-293", titleOverride: "Studies in Examination Preparation[4]" },
+				{ course: "HIT-149" },
+				{ course: "ITE-140" },
+				{ codeOverride: "HUM EEE", titleOverride: "Humanities Elective", creditsOverride: "3" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to Health Information Management | 1 |
-| AST 176 | Medical Office /Unit Management | 3 |
-| ENG 111 or ENG 115 | College Composition I 1or Technical Writing2 | 3 |
-| HIM 113 | Medical Terminology and Disease Processes3 | 3 |
-| HIM 151 | Reimbursement Issues in Medical Practice Management | 2 |
-| ITE 152 | Introduction to Digital and Information Literacy and Computer Applications | 3 |
-| | **Total** | 15 |
+### Notes
 
-### Second Semester (Spring)
+Students are urged to work closely with their academic advisor when choosing electives and finding an internship. Additional approved humanities and social science electives are listed under [General Education Courses](#general-education-courses).
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| AST 260 | Presentation Software (PowerPoint, Zoom) | 3 |
-| HIM 163 | Anatomy and Physiology for Administrative Health Professionals | 3 |
-| HIM 226 | Legal Aspects of Health Record Documentation | 2 |
-| HIM 253 | Health Records Coding | 4 |
-| MTH 132 | Business Mathematics | 3 |
-| | **Total** | 15 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| AST 195 | Topics In Customer Service | 2 |
-| BUS 100 | Introduction to Business | 3 |
-| HIM 260 | Pharmacology for Health Information Technology | 3 |
-| HIM 254 | Advanced Coding and Reimbursement | 4 |
-| SOC EEE | Social/Behavioral Elective | 3 |
-| | **Total** | 15 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| CST 126 | Interpersonal Communication | 3 |
-| HIM 231 | Health Records Applications I | 3 |
-| HIM 293 | Studies in Examination Preparation4 | 1 |
-| HIT 149 | [Introduction to Medical Practice Management](https://courses.vccs.edu/courses/HIT149-IntroductiontoMedicalPraticeManagement) | 2 |
-| ITE 140 | Spreadsheeting for Business | 3 |
-| HUM EEE | Humanities Elective | 3 |
-| | **Total** | 15 |
-
-**Total Minimum Credits: 60**
-
-Notes:
-
- 1. This is a Passport Transfer course. Lecture 3 hours per week
-
- 2. Not intended to transfer
-
- 3. Pre-requisite for HIM 163
-
- 4. Students will have completed and/or be enrolled in HIM 253 and/or HIM 254 to enroll in this class.
-
-Students are urged to work closely with their academic advisor when choosing electives and finding an internship. Additional approved humanities and social science electives are listed under General Education Courses.
 
 ## Career Studies Certificate (CSC) in Medical Coding Specialist
 
@@ -111,36 +116,37 @@ Students completing the program will have the opportunity to earn the following 
 
 **Note on the Medical Coding Curriculum:** Because ICD-9 was replaced by ICD-10-CM in 2015, Virginia Highlands Community College teaches the ICD-10-CM curriculum in its Medical Coding program. The transition to ICD-10 was coordinated by the Centers for Medicare & Medicaid Services (CMS) in the Department of Health and Human Services (HHS) and was made mandatory throughout the country at that time, because the new coding system greatly increased the specificity in identifying health conditions and billing accuracy, as a result. Any reference to ICD-9 in course descriptions should be disregarded. VHCC prepares its students to pass the current ICD-10 standards of the Certified Professional Coder – Apprentice (CPC-A) examination.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "Prerequisite: HIM 113." },
+		{ number: 2, text: "Students will have completed and/or be enrolled in HIM 253 and/or HIM 254 to enroll in this class." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "ITE-152" },
+				{ course: "HIM-113" },
+				{ course: "HIM-151" },
+				{ course: "HIM-226" },
+				{ course: "HIM-253" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "AST-176" },
+				{ course: "HIM-163", titleOverride: "Anatomy and Physiology for Administrative Health Professionals[1]" },
+				{ course: "HIM-231" },
+				{ course: "HIM-254" },
+				{ course: "HIM-293", titleOverride: "Studies in Examination Preparation[2]" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to Health Information Management | 1 |
-| ITE 152 | Introduction to Digital and Information Literacy and Computer Applications | 3 |
-| HIM 113 | Medical Terminology & Disease Processes I | 3 |
-| HIM 151 | Reimbursement Issues in Medical Practice Management | 2 |
-| HIM 226 | Legal Aspects of Health Record Documentation | 2 |
-| HIM 253 | Health Records Coding | 4 |
-| | **Total** | 15 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| AST 176 | Medical Office/Unit Management | 3 |
-| HIM 163 | Anatomy and Physiology for Administrative Health Professionals1 | 3 |
-| HIM 231 | Health Records Applications 1 | 3 |
-| HIM 254 | Advanced Coding and Reimbursement | 4 |
-| HIM 293 | Studies in Examination Preparation | 1 |
-| | **Total** | 14 |
-
-**Total Minimum Credits: 29**
-
-Notes:
-
- 1. Prerequisite- HIM 113.
-
- 2. Students will have completed and/or be enrolled in HIM 253 and/or HIM 254 to enroll in this class.
 
 ## Associate of Applied Science (AAS) in Office Management
 
@@ -162,75 +168,68 @@ Due to the kind of working professional this degree program attracts, this degre
 
 **Notes on Transfer**: Associate of Applied Science Degree programs are designed primarily to provide occupational competence for employment entry. Though the courses can transfer to baccalaureate institutions, they are not designed for transfer.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "Students who pass a keyboarding exemption exam can be granted credit for this course. Please see the Program Chair for more information." },
+		{ number: 2, text: "Prerequisite: ITE 119." },
+		{ number: 3, text: "Prerequisite: AST 137, AST 238, and BUS 100." },
+		{ number: 4, text: "Requires approval by the Program Advisor." },
+		{ number: 5, text: "Approved Program Electives: AST 176 Medical Office/Unit Management, BUS 205 Human Resources Management, BUS 240 Introduction to Business Law, BUS 274 Entrepreneurship, LGL 110 Introduction to Law and the Legal Assistant, MKT 201 Introduction to Marketing." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "AST-195" },
+				{ course: "AST-230", titleOverride: "Introduction to Office Technology[1]" },
+				{ course: "BUS-100" },
+				{ course: "ENG-111" },
+				{
+					rowType: "options",
+					optionLabel: "Select one IT literacy course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ITE-119", "ITE-152"]
+				}
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "AST-107" },
+				{ course: "AST-205" },
+				{ course: "AST-238", titleOverride: "Word Processing Advanced Operations[2]" },
+				{ codeOverride: "SSE", titleOverride: "Social Science Elective", creditsOverride: "3" },
+				{ course: "MTH-132" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "AST-137" },
+				{ course: "AST-260" },
+				{ course: "ITE-140" },
+				{ codeOverride: "EEE", titleOverride: "Approved Program Elective[5]", creditsOverride: "3" },
+				{ codeOverride: "CEE", titleOverride: "Communications Elective", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "AST-243", titleOverride: "Office Administration I[3]" },
+				{ course: "AST-290", titleOverride: "Coordinated Internship[4]" },
+				{ codeOverride: "EEE", titleOverride: "Approved Program Elective[5]", creditsOverride: "3" },
+				{ course: "ACC-215" },
+				{ codeOverride: "EEE", titleOverride: "Humanities Elective", creditsOverride: "3" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to College Success | 1 |
-| AST 195 | Topics in Customer Service Course | 2 |
-| AST 230 | Introduction to Office Technology1 | 3 |
-| BUS 100 | Introduction to Business | 3 |
-| ENG 111 | College Composition I | 3 |
-| ITE 119 or ITE 152 | Information Literacy or Introduction to Digital & Information Literacy & Computer Applications | 3 |
-| | **Total** | 15 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| AST 107 | Editing/Proofreading Skills | 3 |
-| AST 205 | Business Communications | 3 |
-| AST 238 | Word Processing Advanced Operations2 | 2 |
-| SSE | Social Science Elective | 3 |
-| MTH 132 | Business Mathematics | 3 |
-| | **Total** | 14 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| AST 137 | Records Management | 3 |
-| AST 260 | Presentation Software (PowerPoint, Zoom) | 3 |
-| ITE 140 | Spreadsheeting for Business | 3 |
-| EEE | Approved Program Elective5 | 3 |
-| CEE | Communications Elective | 3 |
-| | **Total** | 15 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| AST 243 | Office Administration I3 | 3 |
-| AST 290 | Coordinated Internship4 | 3 |
-| EEE | Approved Program Elective5 | 3 |
-| ACC 215 | Computerized Accounting | 4 |
-| EEE | Humanities Elective | 3 |
-| | **Total** | 16 |
-
-**Total Minimum Credits: 60**
-
-Notes:
-
- 1. Students who pass a keyboarding exemption exam can be granted credit for this course. Please see the Program Chair for more information.
-
- 2. Prerequisite – ITE 119.
-
- 3. Prerequisite- AST 137, AST 238, and BUS 100.
-
- 4. Requires approval by the Program Advisor.
-
- 5. Approved Program Electives: AST 176 Medical Office/Unit Management
-
-BUS 205 Human Resources Management
-
-BUS 240 Introduction to Business Law
-
-BUS 274 Entrepreneurship
-
-LGL 110 Introduction to Law and the Legal Assistant
-
-MKT 201 Introduction to Marketing
+### Notes
 
 Students are urged to work closely with their academic advisor when choosing electives and finding an internship.
 
-Additional approved humanities and social science electives are listed under [General Education Courses](#_General_Education_Courses).
+Additional approved humanities and social science electives are listed under [General Education Courses](#general-education-courses).

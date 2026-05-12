@@ -17,60 +17,78 @@ With the rapid development in business and industry in Virginia, there is a grea
 
 **Course of Study Requirements**: The modern business world demands that its employees be knowledgeable in fields over and beyond business technology. Thus, this curriculum requires courses in the humanities, natural sciences, and social sciences in addition to the principles of economics and principles of accounting usually required in the first two years of a baccalaureate business curriculum. The curriculum also includes other business courses, as well as computer and math courses designed to prepare the student for the upper level business courses at a four-year college or university. In order to help prepare for upper division (junior class) standing at a four-year college or university, the student usually must complete a program at the community college which is comparable in length and courses to the first two years of the program at the four-year college or university. Upon completion of the four-semester curriculum listed, the graduate will be awarded the Associate of Science Degree in Business.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "See UCGS Block II, parts A & B. Cannot be a literature course." },
+		{ number: 2, text: "BUS 200 Principles of Management, BUS 274 Entrepreneurship, ITE 140 Spreadsheeting for Business, or MKT 201 Introduction to Marketing." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "ENG-111" },
+				{ codeOverride: "ART/HUM/MUS", titleOverride: "ART/HUM/MUS from UCGS[1]", creditsOverride: "3" },
+				{ course: "MTH-161" },
+				{ course: "ECO-202" },
+				{ course: "BUS-100" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ENG-112" },
+				{ course: "MTH-245" },
+				{ course: "ECO-201" },
+				{ course: "ITE-152" },
+				{ codeOverride: "BUS EEE", titleOverride: "Approved Business Elective[2]", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{
+					rowType: "options",
+					optionLabel: "Select one history course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["HIS-121", "HIS-122"]
+				},
+				{
+					rowType: "options",
+					optionLabel: "Select one science course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["BIO-101", "CHM-111"]
+				},
+				{ course: "ACC-211" },
+				{ course: "BUS-240" },
+				{ codeOverride: "BUS EEE", titleOverride: "Approved Business Elective[2]", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "CST-100" },
+				{ course: "ACC-212" },
+				{ codeOverride: "MTH-261 or BUS EEE", titleOverride: "Applied Calculus I or Approved Business Elective[2]", creditsOverride: "3" },
+				{
+					rowType: "options",
+					optionLabel: "Select one literature course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-245", "ENG-246"]
+				},
+				{ codeOverride: "BUS EEE", titleOverride: "Approved Business Elective[2]", creditsOverride: "3" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to College Success | 1 |
-| ENG 111 | College Composition I | 3 |
-| ART/HUM/MUS | ART/HUM/MUS from UCGS1 | 3 |
-| MTH 161 | Precalculus I | 3 |
-| ECO 202 | Principles of Microeconomics | 3 |
-| BUS 100 | Introduction to Business | 3 |
-| | **Total** | 16 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 112 | College Composition II | 3 |
-| MTH 245 | Statistics I | 3 |
-| ECO 201 | Principles of Macroeconomics | 3 |
-| ITE 152 | Introduction to Digital and Information Literacy and Computer Applications | 3 |
-| BUS EEE | Approved Business Elective2 | 3 |
-| | **Total** | 15 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HIS 121 or HIS 122 | United States History to 1877 or United States History Since 1865 | 3 |
-| BIO 101 or CHM 111 | General Biology I or General Chemistry I | 4 |
-| ACC 211 | Principles of Accounting I | 3 |
-| BUS 240 | Introduction to Business Law | 3 |
-| BUS EEE | Approved Business Elective2 | 3 |
-| | **Total** | 16 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| CST 100 | Principles of Public Speaking | 3 |
-| ACC 212 | Principles of Accounting II | 3 |
-| MTH 261 or BUS EEE | Applied Calculus I or Approved Business Elective2 | 3 |
-| ENG 245 or ENG 246 | British Literature or American Literature | 3 |
-| BUS EEE | Approved Business Elective2 | 3 |
-| | **Total** | 15 |
-
-**Total Minimum Credits: 62**
-
-Notes:
+### Notes
 
 Students are urged to acquaint themselves with the requirements of the major department in the college or university to which transfer is contemplated; and further, students are urged to consult with their counselors and advisors at VHCC in planning their academic program and electives.
-
- 1. See UCGS Block II, parts A & B. Cannot be a literature course.
-
- 2. BUS 200 Principles of Management, BUS 274 Entrepreneurship, ITE 140 Spreadsheeting for Business, or MKT 201 Introduction to Marketing.
 
 ## Associate of Applied Science (AAS) in Accounting
 
@@ -86,57 +104,66 @@ With the rapid development of business and industry in Virginia, there is a grea
 
 **Notes on Transfer**: Associate of Applied Science Degree programs are designed primarily to provide occupational competence for employment entry. Though the courses can transfer to baccalaureate institutions at the discretion of the admitting institution, they are not designed for transfer.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "Prerequisite MTH 132." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "ENG-111" },
+				{ course: "ACC-211" },
+				{ course: "MTH-132" },
+				{ course: "BUS-100" },
+				{
+					rowType: "options",
+					optionLabel: "Select one computer course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ITE-119", "ITE-152"]
+				}
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ACC-212" },
+				{ course: "BUS-200" },
+				{ course: "ITE-140" },
+				{ course: "ACC-215" },
+				{ codeOverride: "EEE", titleOverride: "Humanities Elective", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "ACC-221" },
+				{ course: "ACC-231" },
+				{ course: "BUS-240" },
+				{ course: "CST-100" },
+				{ course: "ACC-261" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "ACC-222" },
+				{ course: "PSY-200" },
+				{ course: "FIN-215" },
+				{ course: "BUS-225", titleOverride: "Applied Business Statistics[1]" },
+				{ course: "SDV-106" },
+				{ codeOverride: "EEE", titleOverride: "General Education Elective", creditsOverride: "3" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to College Success | 1 |
-| ENG 111 | College Composition I | 3 |
-| ACC 211 | Principles of Accounting I | 3 |
-| MTH 132 | Business Mathematics | 3 |
-| BUS 100 | Introduction to Business | 3 |
-| ITE 119 or ITE 152 | Information Literacy or Introduction to Digital and Information Literacy and Computer Applications | 3 |
-| | **Total** | 16 |
+### Notes
 
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ACC 212 | Principles of Accounting II | 3 |
-| BUS 200 | Principles of Management | 3 |
-| ITE 140 | Spreadsheeting for Business | 3 |
-| ACC 215 | Computerized Accounting | 4 |
-| EEE | Humanities Elective | 3 |
-| | **Total** | 16 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ACC 221 | Intermediate Accounting I | 4 |
-| ACC 231 | Cost Accounting I | 3 |
-| BUS 240 | Introduction to Business Law | 3 |
-| CST 100 | Principles of Public Speaking | 3 |
-| ACC 261 | Principles of Federal Taxation I | 3 |
-| | **Total** | 16 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ACC 222 | Intermediate Accounting II | 4 |
-| PSY 200 | Principles of Psychology | 3 |
-| FIN 215 | Financial Management | 3 |
-| BUS 225 | Applied Business Statistics1 | 3 |
-| SDV 106 | Preparation for Employment | 1 |
-| EEE | General Education Elective | 3 |
-| | **Total** | 17 |
-
-**Total Minimum Credits: 65**
-
-Notes: 1. Prerequisite MTH 132.
-
-Additional approved humanities and social science electives are listed under [General Education Courses](#_General_Education_Courses).
+Additional approved humanities and social science electives are listed under [General Education Courses](#general-education-courses).
 
 ## Certificate (C) in Accounting and Information Systems Technology
 
@@ -150,30 +177,39 @@ This certificate program in Accounting and Information Systems Technology is des
 
 **Course of Study Requirements**: Upon successful completion of the curriculum, the student will be awarded a Certificate in Accounting and Information Systems Technology.
 
-### First Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ACC 211 | Principles of Accounting I | 3 |
-| ITE 119 or ITE 152 | Information Literacy or Introduction to Digital and Information Literacy and Computer Applications | 3 |
-| MTH 132 | Business Mathematics | 3 |
-| ENG 111 | College Composition I | 3 |
-| BUS 100 | Introduction to Business | 3 |
-| SDV 101 | Orientation to College Success | 1 |
-| | **Total** | 16 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ACC 212 | Principles of Accounting II | 3 |
-| ACC 215 | Computerized Accounting | 4 |
-| BUS 240 | Introduction to Business Law | 3 |
-| ITE 140 | Spreadsheeting for Business | 3 |
-| CST 100 | Principles of Public Speaking | 3 |
-| | **Total** | 16 |
-
-**Total Minimum Credits: 32**
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "ACC-211" },
+				{
+					rowType: "options",
+					optionLabel: "Select one computer course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ITE-119", "ITE-152"]
+				},
+				{ course: "MTH-132" },
+				{ course: "ENG-111" },
+				{ course: "BUS-100" },
+				{ course: "SDV-101" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ACC-212" },
+				{ course: "ACC-215" },
+				{ course: "BUS-240" },
+				{ course: "ITE-140" },
+				{ course: "CST-100" }
+			]
+		}
+	]
+/%}
 
 ## Associate of Applied Science (AAS) in Management
 
@@ -189,60 +225,68 @@ With the rapid development of business and industry in Virginia, there is a grea
 
 **Notes on Transfer**: Associate of Applied Science Degree programs are designed to provide occupational competence for employment entry. Though the courses can transfer to baccalaureate institutions at the discretion of the admitting institution, they are not designed for transfer.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "Prerequisite MTH 132." },
+		{ number: 2, text: "Any ACC, BUS, MKT, FIN, ECO course, AST 205, or any degree-related course as approved by the Program Chair." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "ACC-211" },
+				{ course: "ENG-111" },
+				{ course: "BUS-100" },
+				{ course: "MTH-132" },
+				{
+					rowType: "options",
+					optionLabel: "Select one computer course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ITE-119", "ITE-152"]
+				},
+				{ course: "SDV-101" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ACC-212" },
+				{ course: "BUS-200" },
+				{ course: "CST-100" },
+				{ course: "ITE-140" },
+				{ course: "ECO-201" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "BUS-240" },
+				{ course: "BUS-205" },
+				{ course: "MKT-201" },
+				{ course: "ECO-202" },
+				{ codeOverride: "EEE", titleOverride: "Degree Related Elective[2]", creditsOverride: "3" },
+				{ codeOverride: "EEE", titleOverride: "Humanities Elective", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "BUS-274" },
+				{ course: "FIN-215" },
+				{ course: "PSY-120" },
+				{ course: "BUS-225", titleOverride: "Applied Business Statistics[1]" },
+				{ course: "SDV-106" },
+				{ course: "BUS-290" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ACC 211 | Principles of Accounting | 3 |
-| ENG 111 | College Composition I | 3 |
-| BUS 100 | Introduction to Business | 3 |
-| MTH 132 | Business Mathematics | 3 |
-| ITE 119 or ITE 152 | Information Literacy or Introduction to Digital and Information Literacy and Computer Applications | 3 |
-| SDV 101 | Orientation to College Success | 1 |
-| | **Total** | 16 |
+### Notes
 
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ACC 212 | Principles of Accounting II | 3 |
-| BUS 200 | Principles of Management | 3 |
-| CST 100 | Principles of Public Speaking | 3 |
-| ITE 140 | Spreadsheeting for Business | 3 |
-| ECO 201 | Principles of Macroeconomics | 3 |
-| | **Total** | 15 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| BUS 240 | Introduction to Business Law | 3 |
-| BUS 205 | Human Resource Management | 3 |
-| MKT 201 | Introduction to Marketing | 3 |
-| ECO 202 | Principles of Microeconomics | 3 |
-| EEE | Degree Related Elective2 | 3 |
-| EEE | Humanities Elective | 3 |
-| | **Total** | 18 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| BUS 274 | Foundations of Entrepreneurship | 3 |
-| FIN 215 | Financial Management | 3 |
-| PSY 120 | Human Relations | 3 |
-| BUS 225 | Applied Business Statistics1 | 3 |
-| SDV 106 | Preparation for Employment | 1 |
-| BUS 290 | Coordinated Internship | 3 |
-| | **Total** | 16 |
-
-**Total Minimum Credits: 65**
-
-Notes: 1. Prerequisite MTH 132.
-
-2. Any ACC, BUS, MKT, FIN, ECO course, AST 205, or any degree-related course as approved by the Program Chair.
-
-Additional approved humanities and social science electives are listed under [General Education Courses](#_General_Education_Courses).
+Additional approved humanities and social science electives are listed under [General Education Courses](#general-education-courses).
 
 ## Career Studies Certificate (CSC) in Small Business Management (Entrepreneurship)
 
@@ -250,50 +294,24 @@ One semester
 
 The Small Business Management (Entrepreneurship) Career Studies Certificate is designed to support all of the College’s students seeking careers that often involve contract employment and/or entrepreneurial ventures. The certificate can be completed in as little as one additional semester after students complete their current programs and enables students to secure much-needed business knowledge before they try to start a business on their own. The flexible Approved Program Elective enables students to address whatever missing skills they know they need to achieve their entrepreneurial goals.
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ACC 215 | Computerized Accounting | 4 |
-| BUS 274 | Foundations of Entrepreneurship | 3 |
-| CST 126 | Interpersonal Communication | 3 |
-| MKT 160 | Marketing for Small Business | 3 |
-| EEE | Approved Program Elective(s)1 | 3-4 |
-| | **Total** | 16-17 |
-
-**Total Minimum Credits: 16-17**
-
-Notes:
-
-1Students are encouraged to choose one of the Approved Program Electives below or work with their Academic Advisor to choose another course:
-
-BUS 140 Grant Writing
-
-BUS 205 Human Resource Management
-
-BUS 240 Introduction to Business Law
-
-HUM 246 Creative Thinking
-
-ITE 119 Information Literacy
-
-ITE 140 Spreadsheeting for Business
-
-ITE 152 Introduction to Digital and Information Literacy and Computer Applications
-
-MKT 216 Retail Management
-
-Students may also work with their Academic Advisors to choose a combination of the courses below that fulfill the 3-credit hour Approved Program Elective requirement:
-
-AST 195 Topics in Customer Service (2 credits)
-
-SAF 127 Industrial Safety (2 credits)
-
-SAF 130 Industrial Safety (1 credit)
-
-HLT 105 Cardiopulmonary Resuscitation (1 credit)
-
-HLT 106 First Aid and Safety (2 credits)
-
-SDV 106 Preparation for Employment (1 credit)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "Approved Program Electives: BUS 140 Grant Writing, BUS 205 Human Resource Management, BUS 240 Introduction to Business Law, HUM 246 Creative Thinking, ITE 119 Information Literacy, ITE 140 Spreadsheeting for Business, ITE 152 Introduction to Digital and Information Literacy and Computer Applications, MKT 216 Retail Management. Students may also choose a combination of shorter courses: AST 195 Topics in Customer Service (2 credits), SAF 127 Industrial Safety (2 credits), SAF 130 Industrial Safety (1 credit), HLT 105 Cardiopulmonary Resuscitation (1 credit), HLT 106 First Aid and Safety (2 credits), SDV 106 Preparation for Employment (1 credit)." }
+	]
+	terms=[
+		{
+			termLabel: "Courses",
+			rows: [
+				{ course: "ACC-215" },
+				{ course: "BUS-274" },
+				{ course: "CST-126" },
+				{ course: "MKT-160" },
+				{ codeOverride: "EEE", titleOverride: "Approved Program Elective(s)[1]", creditsOverride: "3-4" }
+			]
+		}
+	]
+/%}
 
 ## Career Studies Certificate (CSC) in Retail Management
 
@@ -307,38 +325,55 @@ Designed for the retail industry, the Career Studies Certificate in Retail Manag
 
 **Course of Study Requirements**: The curriculum will include technical, industrial, and behavioral management courses that will prepare students for future success in a retail management career. Upon completion of the program, students are awarded the Career Studies Certificate in Retail Management.
 
-### First Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ITE 119 or ITE 152 | Information Literacy or Introduction to Digital and Information Literacy and Computer Applications | 3 |
-| MKT 201 | Introduction to Marketing | 3 |
-| AST 205 | Business Communication | 3 |
-| BUS 205 | Human Resource Management | 3 |
-| | **Total** | 12 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| BUS 200 | Principles of Management | 3 |
-| BUS 201 | Organizational Behavior | 3 |
-| FIN 215 | Financial Management | 3 |
-| MKT 216 | Retail Management | 3 |
-| | **Total** | 12 |
-
-**Total Minimum Credits: 24**
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{
+					rowType: "options",
+					optionLabel: "Select one computer course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ITE-119", "ITE-152"]
+				},
+				{ course: "MKT-201" },
+				{ course: "AST-205" },
+				{ course: "BUS-205" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "BUS-200" },
+				{ course: "BUS-201" },
+				{ course: "FIN-215" },
+				{ course: "MKT-216" }
+			]
+		}
+	]
+/%}
 
 ## Career Studies Certificate (CSC) in Industrial Supervision
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| PSY 120 | Human Relations | 3 |
-| BUS 200 | Principles of Management | 3 |
-| BUS 240 | Introduction to Business Law | 3 |
-| CST 100 | Principles of Public Speaking | 3 |
-| MKT 201 | Introduction to Marketing | 3 |
-| SAF 127 | Industrial Safety | 2 |
-| | **Total** | 17 |
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "Courses",
+			rows: [
+				{ course: "PSY-120" },
+				{ course: "BUS-200" },
+				{ course: "BUS-240" },
+				{ course: "CST-100" },
+				{ course: "MKT-201" },
+				{ course: "SAF-127" }
+			]
+		}
+	]
+/%}
 
 **Total Minimum Credits: 17**

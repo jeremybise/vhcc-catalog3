@@ -7,9 +7,7 @@ The Associate of Science (AS) degree in General Studies and the Uniform Certific
 
 **Program Chair**: Hannah Vaughn • [hvaughn@vhcc.edu](mailto:hvaughn@vhcc.edu) • 276-739-2524
 
-[Associate of Science in General Studies](#_Associate_of_Science_2)
-
-[Uniform Certificate of General Studies (UCGS)](#_Uniform_Certificate_of)
+---
 
 ## Associate of Science (AS) in General Studies
 
@@ -21,59 +19,71 @@ In addition to the admission requirements established for the college, entry int
 
 The major emphasis in this curriculum is general preparation for university transfer. Electives are provided so that the student can select the appropriate courses for the university program as required in the first two years of the four-year college or university. In order to help prepare for upper division (junior class) standing at a four-year institution, the student usually must complete a program at the community college which is comparable in length and courses to the first two years of the program at the four-year institution. Upon satisfactory completion of the four-semester program described, the graduate will be awarded the Associate of Science (AS) Degree in General Studies.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "See UCGS Block II, parts A & B. Cannot be a literature course." },
+		{ number: 2, text: "Students are advised to consult with their faculty advisor at VHCC and use the UCGS and the AA or AS General Education Electives list to fulfil these credits." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "ENG-111" },
+				{ codeOverride: "ART/HUM/MUS", titleOverride: "ART/HUM/MUS from UCGS[1]", creditsOverride: "3" },
+				{ codeOverride: "MTH", titleOverride: "Approved Mathematics Course[2]", creditsOverride: "3" },
+				{ codeOverride: "EEE", titleOverride: "Transfer Elective[2]", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ENG-112" },
+				{ codeOverride: "MTH", titleOverride: "Approved Mathematics Course[2]", creditsOverride: "3" },
+				{ codeOverride: "EEE", titleOverride: "Transfer Elective[2]", creditsOverride: "3" },
+				{ codeOverride: "EEE", titleOverride: "Transfer Elective[2]", creditsOverride: "3" },
+				{ codeOverride: "EEE", titleOverride: "Transfer Elective[2]", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "HIS-121" },
+				{ codeOverride: "SCI", titleOverride: "BIO, CHM, GOL, or PHY from UCGS", creditsOverride: "4" },
+				{ codeOverride: "EEE", titleOverride: "Transfer Elective[2]", creditsOverride: "3" },
+				{ codeOverride: "EEE", titleOverride: "Transfer Elective[2]", creditsOverride: "3" },
+				{
+					rowType: "options",
+					optionLabel: "Select one literature course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-245", "ENG-246"]
+				}
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "CST-100" },
+				{ course: "HIS-122" },
+				{ codeOverride: "SCI", titleOverride: "BIO, CHM, GOL, or PHY from UCGS", creditsOverride: "4" },
+				{
+					rowType: "options",
+					optionLabel: "Select one social science course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["PSY-200", "SOC-200"]
+				},
+				{ codeOverride: "EEE", titleOverride: "Transfer Elective[2]", creditsOverride: "3" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to College Success | 1 |
-| ENG 111 | College Composition I | 3 |
-| ART/HUM/MUS | ART/HUM/MUS from UCGS1 | 3 |
-| MTH | Approved Mathematics Course2 | 3 |
-| EEE | Transfer Elective2 | 3 |
-| | **Total** | 13 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 112 | College Composition II | 3 |
-| MTH | Approved Mathematics Course2 | 3 |
-| EEE | Transfer Elective2 | 3 |
-| EEE | Transfer Elective2 | 3 |
-| EEE | Transfer Elective2 | 3 |
-| | **Total** | 15 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HIS 121 | United States History to 1877 | 3 |
-| SCI | BIO, CHM, GOL, PHY from UCGS | 4 |
-| EEE | Transfer Elective2 | 3 |
-| EEE | Transfer Elective2 | 3 |
-| ENG 245 or ENG 246 | British Literature or American Literature | 3 |
-| | **Total** | 16 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| CST 100 | Principles of Public Speaking | 3 |
-| HIS 122 | United States History Since 1865 | 3 |
-| SCI | BIO, CHM, GOL, PHY from UCGS | 4 |
-| PSY 200 or SOC 200 | Principles of Psychology or Introduction to Sociology | 3 |
-| EEE | Transfer Elective2 | 3 |
-| | **Total** | 16 |
-
-**Total Minimum Credits: 60**
-
-Notes:
+### Notes
 
 Students are urged to acquaint themselves with the requirements of the major department in the college or university to which transfer is contemplated; and further, **students are urged to consult with their counselors and advisors at VHCC in planning their academic program and electives**.
-
- 1. See UCGS Block II, parts A & B. Cannot be a literature course.
-
- 2. Students are advised to consult with their faculty advisor at VHCC and use the UCGS and the AA or AS General Education Electives list to fulfil these credits.
 
 ## Uniform Certificate of General Studies (UCGS)
 
@@ -81,26 +91,28 @@ Two semesters; one year
 
 The Uniform Certificate of General Studies (UCGS) is a one-year college program in which all courses are transferable and satisfy lower-division general education requirements at any Virginia public institution of higher education. The Passport is a component of the UCGS and is therefore a subset of courses in the UCGS. The UCGS consists of seven course blocks. To satisfy the UCGS students are required to complete the appropriate number of courses in each block as described below. Student course selection should be carefully considered since the UCGS program is not designed to capture the complexities of individual programs of study at the four-year institutions. Students should be advised to take the UCGS course that best suits their intended program of study at the four-year institution. Only classes completed after May 2020 apply toward UCGS completion. The UCGS credential may be awarded starting spring 2022. The UCGS Course Roster for the Virginia Community College System (VCCS) approved Uniform Certificate of General Studies Course Roster (Feb 6, 2024) is found on [page 44](#UCGS) of this academic catalog. In order to earn the UCGS, students must earn a “C” or better in each course taken.
 
-**First Semester**
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 111 | College Composition I | 3 |
-| MTH | MTH course from the UCGS Course Roster | 3 |
-| HIS | HIS course from the UCGS Course Roster | 3 |
-| HUM/ART/LIT | HUM/ART/LIT course from the UCGS Course Roster | 3 |
-| SCI | Natural Science course from the UCGS Course Roster | 4 |
-| | **Total** | 16 |
-
-**Second Semester**
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 112 | College Composition II | 3 |
-| SSE | Social Science course from the UCGS Course Roster | 3 |
-| EEE | Specialized General Education course from the UCGS Course Roster | 3-4 |
-| EEE | Specialized General Education course from the UCGS Course Roster | 3-4 |
-| HUM/ART/LIT | HUM/ART/LIT course from the UCGS Course Roster | 3 |
-| | **Total** | 15-17 |
-
-**Total Minimum Credits: 31-33**
+{% programofstudy
+	title="Course of Study"
+	terms=[
+		{
+			termLabel: "First Semester",
+			rows: [
+				{ course: "ENG-111" },
+				{ codeOverride: "MTH", titleOverride: "MTH course from the UCGS Course Roster", creditsOverride: "3" },
+				{ codeOverride: "HIS", titleOverride: "HIS course from the UCGS Course Roster", creditsOverride: "3" },
+				{ codeOverride: "HUM/ART/LIT", titleOverride: "HUM/ART/LIT course from the UCGS Course Roster", creditsOverride: "3" },
+				{ codeOverride: "SCI", titleOverride: "Natural Science course from the UCGS Course Roster", creditsOverride: "4" }
+			]
+		},
+		{
+			termLabel: "Second Semester",
+			rows: [
+				{ course: "ENG-112" },
+				{ codeOverride: "SSE", titleOverride: "Social Science course from the UCGS Course Roster", creditsOverride: "3" },
+				{ codeOverride: "EEE", titleOverride: "Specialized General Education course from the UCGS Course Roster", creditsOverride: "3-4" },
+				{ codeOverride: "EEE", titleOverride: "Specialized General Education course from the UCGS Course Roster", creditsOverride: "3-4" },
+				{ codeOverride: "HUM/ART/LIT", titleOverride: "HUM/ART/LIT course from the UCGS Course Roster", creditsOverride: "3" }
+			]
+		}
+	]
+/%}

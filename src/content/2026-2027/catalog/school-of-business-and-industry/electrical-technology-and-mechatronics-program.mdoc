@@ -57,66 +57,72 @@ The Associate of Applied Science Degree in Electrical Technology is designed to 
 
 **Course of Study Requirements**: The Electrical Technology Degree is a two-year program with two-thirds of the program content in electrical and mechanical courses, and the remaining one-third consists of math, social sciences, English, humanities, and physical education. Course content will include the theoretical concepts and practical applications as they pertain to industry needs. The graduate will be awarded the Associate of Applied Science in Electrical Technology upon satisfactory completion of the two-year program.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "ITE 115, ITE 119, or ITE 152 are acceptable substitutes." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "DRF-161" },
+				{ course: "ELE-157" },
+				{ course: "ELE-111" },
+				{
+					rowType: "options",
+					optionLabel: "Select one English course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-111", "ENG-115"]
+				},
+				{ course: "SDV-101" },
+				{ course: "SAF-130" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "MTH-111" },
+				{ codeOverride: "ELE-112", titleOverride: "Home Electric Power II", creditsOverride: "3" },
+				{ course: "ELE-141" },
+				{ course: "ITE-100", titleOverride: "Introduction to Information Systems[1]" },
+				{ course: "ELE-131" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "ELE-233" },
+				{ course: "ELE-245" },
+				{ course: "ELE-225" },
+				{ course: "BUS-100" },
+				{ codeOverride: "HUM EEE", titleOverride: "Humanities Elective", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "ELE-234" },
+				{ course: "ELE-240" },
+				{ codeOverride: "PED", titleOverride: "Physical Education", creditsOverride: "1" },
+				{ course: "ELE-175" },
+				{ course: "PSY-120" }
+			]
+		},
+		{
+			termLabel: "Fifth Semester (Summer)",
+			rows: [
+				{ course: "ELE-132" },
+				{ course: "MEC-161" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| DRF 161 | Blueprint Reading | 2 |
-| ELE 157 | Electricity Fundamentals | 6 |
-| ELE 111 | Home Electric Power I | 3 |
-| ENG 111 or ENG 115 | College Composition I or Technical Writing | 3 |
-| SDV 101 | Orientation to College Success | 1 |
-| SAF 130 | Industrial Safety – OSHA 10 | 1 |
-| | **Total** | 16 |
+### Notes
 
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| MTH 111 | Basic Technical Mathematics | 3 |
-| ELE 112 | Home Electric Power II | 3 |
-| ELE 141 | DC & AC Machines | 4 |
-| ITE 100 | Introduction to Information System1 | 3 |
-| ELE 131 | National Electrical Code I | 3 |
-| | **Total** | 16 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 233 | Programmable Logic Controllers I | 3 |
-| ELE 245 | Industrial Wiring | 3 |
-| ELE 225 | Electrical Control Systems | 4 |
-| BUS 100 | Introduction to Business | 3 |
-| HUM EEE | Humanities Elective | 3 |
-| | **Total** | 16 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 234 | Programmable Logic Controllers II | 3 |
-| ELE 240 | Advanced Programmable Logic Controllers | 3 |
-| PED | Physical Education | 1 |
-| ELE 175 | Industrial Solid State Devices & Circuits | 3 |
-| PSY 120 | Human Relations | 3 |
-| | **Total** | 13 |
-
-### Fifth Semester (Summer)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 132 | National Electric Code II | 3 |
-| MEC 161 | Basic Fluid Mechanics - Hydraulics/Pneumatics | 3 |
-| | **Total** | 6 |
-
-**Total Minimum Credits: 67**
-
-Notes:
-
- 1. ITE 115, ITE 119, or ITE 152 are acceptable substitutes.
-
-Additional approved humanities and social science electives are listed under [General Education Courses](#_General_Education_Courses).
+Additional approved humanities and social science electives are listed under [General Education Courses](#general-education-courses).
 
 ## Career Studies Certificate (CSC) in Practical Electrical Technician
 
@@ -124,25 +130,28 @@ Two semesters; one year
 
 This program is designed to prepare the student for full-time employment as an electrician’s helper, immediately upon completion of the program. A student who completes the program is capable of performing the job skills normally expected of beginning electricians, working with a licensed electrician.
 
-### First Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 111 | Home Electric Power I | 3 |
-| ELE 157 | Electricity Fundamentals | 6 |
-| SAF 130 | Industrial Safety – OSHA 10 | 1 |
-| | **Total** | 10 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 112 | Home Electric Power II | 3 |
-| ELE 131 | National Electric Code I | 3 |
-| ELE 141 | DC and AC machines | 4 |
-| | **Total** | 10 |
-
-**Total Minimum Credits: 20**
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "ELE-111" },
+				{ course: "ELE-157" },
+				{ course: "SAF-130" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ codeOverride: "ELE-112", titleOverride: "Home Electric Power II", creditsOverride: "3" },
+				{ course: "ELE-131" },
+				{ course: "ELE-141" }
+			]
+		}
+	]
+/%}
 
 ## Career Studies Certificate (CSC) in Advanced Practical Electrical Technician
 
@@ -152,34 +161,36 @@ This program is designed to prepare students for employment upon graduation as e
 
 Students must complete the Practical Electrical Technician Career Studies Certificate prior to enrollment in the Advanced Practical Electrical Technician Career Studies Certificate unless the Program Chair grants approval.
 
-### First Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 233 | Programmable Logic Controller Systems I | 3 |
-| ELE 225 | Electrical Control Systems | 4 |
-| ELE 245 | Industrial Wiring | 3 |
-| | **Total** | 10 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ITE 100 | Intro. Information Systems or Fundamentals of Computer Technology | 3 |
-| ELE 175 | Industrial Solid State Devices and Circuits | 3 |
-| ELE 234 | Programmable Logic Controller Systems II | 3 |
-| ELE 240 | Advanced Programmable Logic controller | 3 |
-| | **Total** | 12 |
-
-### Third Semester (Summer)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 132 | National Electric Code II | 3 |
-| MEC 161 | Basic Fluid Mechanics-Hydraulics/Pneumatics | 3 |
-| | **Total** | 6 |
-
-**Total Minimum Credits: 28**
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "ELE-233" },
+				{ course: "ELE-225" },
+				{ course: "ELE-245" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ITE-100" },
+				{ course: "ELE-175" },
+				{ course: "ELE-234" },
+				{ course: "ELE-240" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Summer)",
+			rows: [
+				{ course: "ELE-132" },
+				{ course: "MEC-161" }
+			]
+		}
+	]
+/%}
 
 ## Associate of Applied Science (AAS) in Electrical Technology – Specialization in Mechatronics
 
@@ -193,68 +204,72 @@ The Associate of Applied Science Degree in Electrical Technology specialization 
 
 **Course of Study Requirements**: The Mechatronics Degree is a two-year program with two-thirds of the program content in electrical, mechanical and automation courses, and the remaining one-third consists of math, social sciences, English, humanities, and physical education. Course content will include the theoretical concepts and practical applications as they pertain to industry needs. The graduate will be awarded the Associate of Applied Science in Mechatronics Technology upon satisfactory completion of the two-year program.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "ITE 115, ITE 119, or ITE 152 are acceptable substitutes." },
+		{ number: 2, text: "PSY 120 will not satisfy the social science elective requirement." },
+		{ number: 3, text: "BUS 100 will not satisfy the general education elective requirement." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "ELE-157" },
+				{ course: "MEC-140" },
+				{
+					rowType: "options",
+					optionLabel: "Select one English course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-111", "ENG-115"]
+				},
+				{ course: "SDV-101" },
+				{ course: "SAF-130" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "MTH-111" },
+				{ course: "ELE-141" },
+				{ course: "ITE-100", titleOverride: "Introduction to Information Systems[1]" },
+				{ course: "IND-243" },
+				{ codeOverride: "HUM EEE", titleOverride: "Humanities Elective", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "ELE-233" },
+				{ course: "ELE-245" },
+				{ course: "ELE-225" },
+				{ codeOverride: "SSE", titleOverride: "Social Science Elective[2]", creditsOverride: "3" },
+				{ codeOverride: "EEE", titleOverride: "General Education Elective[3]", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "ELE-234" },
+				{ course: "ELE-240" },
+				{ course: "INS-232" },
+				{ course: "ELE-175" }
+			]
+		},
+		{
+			termLabel: "Fifth Semester (Summer)",
+			rows: [
+				{ course: "ELE-132" },
+				{ course: "MEC-161" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 157 | Electricity Fundamentals | 6 |
-| MEC 140 | Intro to Mechatronics | 3 |
-| ENG 111 or ENG 115 | College Composition I or Technical Writing | 3 |
-| SDV 101 | Orientation to College Success | 1 |
-| SAF 130 | Industrial Safety – OSHA 10 | 1 |
-| | **Total** | 14 |
+### Notes
 
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| MTH 111 | Basic Technical Mathematics | 3 |
-| ELE 141 | DC & AC Machines | 4 |
-| ITE 100 | Introduction to Information System1 | 3 |
-| IND 243 | Principles and Applications of Mechatronics | 3 |
-| HUM EEE | Humanities Elective | 3 |
-| | **Total** | 16 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 233 | Programmable Logic Controllers I | 3 |
-| ELE 245 | Industrial Wiring | 3 |
-| ELE 225 | Electrical Control Systems | 4 |
-| SSE | Social Science Elective2 | 3 |
-| EEE | General Education Elective3 | 3 |
-| | **Total** | 16 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 234 | Programmable Logic Controllers II | 3 |
-| ELE 240 | Advance Programmable Logic Controllers | 3 |
-| INS 232 | Systems Troubleshooting | 3 |
-| ELE 175 | Industrial Solid State Devices & Circuits | 3 |
-| | **Total** | 12 |
-
-### Fifth Semester (Summer)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 132 | National Electric Code II | 3 |
-| MEC 161 | Basic Fluid Mechanics - Hydraulics/Pneumatics | 3 |
-| | **Total** | 6 |
-
-**Total Minimum Credits: 64**
-
-Notes:
-
- 1. ITE 115, ITE 119, or ITE 152 are acceptable substitutes.
-
- 2. PSY 120 will **not** satisfy the social science elective requirement.
-
- 3. BUS 100 will **not** satisfy the general education elective requirement.
-
-Additional approved humanities and social science electives are listed under [General Education Courses](#_General_Education_Courses).
+Additional approved humanities and social science electives are listed under [General Education Courses](#general-education-courses).
 
 ## Career Studies Certificate (CSC) in Applied Mechatronics
 
@@ -262,25 +277,28 @@ Two semesters; one year
 
 This program is intended for students with an electrical background. Those who complete the program have the skills to work as a Mechatronics Entry Level Maintenance Technician’s Helper or Industrial Machine Operator.
 
-### First Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 157 | Electricity Fundamentals | 6 |
-| MEC 140 | Introduction to Mechatronics | 3 |
-| SAF 130 | Industrial Safety – OSHA 10 | 1 |
-| | **Total** | 10 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| IND 243 | Principles and Applications of Mechatronics | 3 |
-| ITE 100/ETR 166 | Introduction to Information Systems | 3 |
-| ELE 141 | DC and AC Machines | 4 |
-| | **Total** | 10 |
-
-**Total Minimum Credits: 20**
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "ELE-157" },
+				{ course: "MEC-140" },
+				{ course: "SAF-130" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "IND-243" },
+				{ codeOverride: "ITE-100/ETR-166", titleOverride: "Introduction to Information Systems", creditsOverride: "3" },
+				{ course: "ELE-141" }
+			]
+		}
+	]
+/%}
 
 ## Career Studies Certificate (CSC) in Advanced Mechatronics
 
@@ -290,34 +308,36 @@ This program is intended for students with electrical and/or automation backgrou
 
 Students must complete the Applied Mechatronics Career Studies Certificate prior to enrollment in the Advanced Mechatronics Career Studies Certificate unless the Program Coordinator grants approval.
 
-### First Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 225 | Electrical Control Systems | 4 |
-| ELE 233 | Programmable Logic Controllers I | 3 |
-| ELE 245 | Industrial Wiring | 3 |
-| | **Total** | 10 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| INS 232 | Systems Troubleshooting | 3 |
-| ELE 175 | Industrial Solid State Devices and Circuits | 3 |
-| ELE 234 | Programmable Logic Controllers II | 3 |
-| ELE 240 | Advanced Programmable Logic Controllers | 3 |
-| | **Total** | 12 |
-
-### Third Semester (Summer)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 132 | National Electric Code II | 3 |
-| MEC 161 | Basic Fluid Mechanics-Hydraulics/Pneumatics | 3 |
-| | **Total** | 6 |
-
-**Total Minimum Credits: 28**
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "ELE-225" },
+				{ course: "ELE-233" },
+				{ course: "ELE-245" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "INS-232" },
+				{ course: "ELE-175" },
+				{ course: "ELE-234" },
+				{ course: "ELE-240" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Summer)",
+			rows: [
+				{ course: "ELE-132" },
+				{ course: "MEC-161" }
+			]
+		}
+	]
+/%}
 
 ## Certificate (C) in Electricity
 
@@ -333,29 +353,44 @@ The Certificate program in Electricity is designed to prepare the student for fu
 
 **Virginia Tradesman Certification Program**: Students who seek the Journeyman or Master levels of certification may, with appropriate documentation, help meet the practical experience requirement through the Cooperative Education Program.
 
-### First Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 111 or 115 | College Composition I or Technical Writing | 3 |
-| ECO 201 or ECO 202 | Principles of Macroeconomics or Principles of Microeconomics | 3 |
-| ELE 111 | Home Electric Power I | 3 |
-| ELE 157 | Electricity Fundamentals | 6 |
-| SAF 130 | Industrial Safety – OSHA 10 | 1 |
-| SDV 101 | Orientation to College Success | 1 |
-| | **Total** | 17 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| MTH 111 | Basic Technical Mathematics | 3 |
-| ELE 141 | DC & AC Machines | 4 |
-| ELE 112 | Home Electric Power II | 3 |
-| ELE 131 | National Electric Code I | 3 |
-| | **Total** | 13 |
-
-**Total Minimum Credits: 30**
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{
+					rowType: "options",
+					optionLabel: "Select one English course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-111", "ENG-115"]
+				},
+				{
+					rowType: "options",
+					optionLabel: "Select one economics course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ECO-201", "ECO-202"]
+				},
+				{ course: "ELE-111" },
+				{ course: "ELE-157" },
+				{ course: "SAF-130" },
+				{ course: "SDV-101" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "MTH-111" },
+				{ course: "ELE-141" },
+				{ codeOverride: "ELE-112", titleOverride: "Home Electric Power II", creditsOverride: "3" },
+				{ course: "ELE-131" }
+			]
+		}
+	]
+/%}
 
 ## Associate of Applied Science (AAS) in Electrical Technology – Specialization in Energy Technology
 
@@ -371,62 +406,78 @@ Direct enrollment guidelines using either multiple measures or informed placemen
 
 **Course of Study Requirements**: The Electrical Technology Degree is a two-year program with two-thirds of the program content in electrical and mechanical courses, and the remaining one-third consists of math, social sciences, English, humanities, and physical education. The graduate will be awarded the Associate of Applied Science in Electrical Technology upon satisfactory completion of the two-year program. Course content will include the theoretical concepts and practical applications as they pertain to industry needs.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "ITE 115, ITE 119, or ITE 152 are acceptable substitutes." },
+		{ number: 2, text: "Recommended Humanities Elective." },
+		{ number: 3, text: "Recommended General Education Elective." },
+		{ number: 4, text: "Recommended Social Science Elective." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{
+					rowType: "options",
+					optionLabel: "Select one English course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-111", "ENG-115"]
+				},
+				{ course: "DRF-161" },
+				{ course: "ELE-111" },
+				{ course: "ELE-157" },
+				{ course: "SAF-130" },
+				{ course: "SDV-101" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ITE-100", titleOverride: "Introduction to Information Systems[1]" },
+				{ course: "MTH-111" },
+				{ course: "ELE-141" },
+				{ codeOverride: "ELE-112", titleOverride: "Home Electric Power II", creditsOverride: "3" },
+				{ course: "ELE-131" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "ENE-100" },
+				{
+					rowType: "options",
+					optionLabel: "Recommended Humanities Elective[2]",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["MUS-121", "REL-230"]
+				},
+				{ course: "ELE-176" },
+				{ course: "ELE-245" },
+				{ course: "BUS-100", titleOverride: "Introduction to Business[3]" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "ELE-177" },
+				{ course: "ELE-175" },
+				{ course: "ENE-200" },
+				{ course: "ELE-132" },
+				{ codeOverride: "PED", titleOverride: "Physical Education", creditsOverride: "1" },
+				{
+					rowType: "options",
+					optionLabel: "Recommended Social Science Elective[4]",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ECO-201", "PSY-120"]
+				}
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 111 or 115 | College Composition I or Technical Writing | 3 |
-| DRF 161 | Blueprint Reading | 2 |
-| ELE 111 | Home Electric Power I | 3 |
-| ELE 157 | Electricity Fundamentals | 6 |
-| SAF 130 | Industrial Safety – OSHA 10 | 1 |
-| SDV 101 | Orientation to College Success | 1 |
-| | **Total** | 16 |
+### Notes
 
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ITE 100 | Introduction to Information Systems1 | 3 |
-| MTH 111 | Basic Technical Mathematics | 3 |
-| ELE 141 | DC & AC Machines | 4 |
-| ELE 112 | Home Electric Power II | 3 |
-| ELE 131 | National Electrical Code I | 3 |
-| | **Total** | 16 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENE 100 | Conventional and Alternate Energy Applications | 4 |
-| MUS 121 or REL 230 | Music Appreciation I or Religions of the World2 | 3 |
-| ELE 176 | Introduction to Alternative Energy Including Hybrid Systems | 3 |
-| ELE 245 | Industrial Wiring | 3 |
-| BUS 100 | Introduction to Business3 | 3 |
-| | **Total** | 16 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ELE 177 | Photovoltaic Energy Systems | 4 |
-| ELE 175 | Industrial Solid State Devices & Circuits | 3 |
-| ENE 200 | Power Monitoring | 4 |
-| ELE 132 | National Electrical Code II | 3 |
-| PED | Physical Education | 1 |
-| ECO 201 or PSY 120 | Principles of Macroeconomics or Human Relations4 | 3 |
-| | **Total** | 18 |
-
-**Total Minimum Credits: 66**
-
-Notes:
-
- 1. ITE 115, ITE 119, or ITE 152 are acceptable substitutes.
-
- 2. Recommended Humanities Elective
-
- 3. Recommended General Education Elective
-
- 4. Recommended Social Science Elective
-
-Additional approved humanities and social science electives are listed under [General Education Courses](#_General_Education_Courses).
+Additional approved humanities and social science electives are listed under [General Education Courses](#general-education-courses).

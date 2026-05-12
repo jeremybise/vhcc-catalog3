@@ -7,6 +7,8 @@ The Associate of Science (AS) degree in Computer Science is designed to prepare 
 
 **Program Chair**: Dr. James Baker • [jbaker@vhcc.edu](mailto:jbaker@vhcc.edu) • 276-739-2415
 
+---
+
 ## Associate of Science (AS) in Computer Science
 
 Four semesters; two years
@@ -17,57 +19,92 @@ In addition to the admission requirements established for the college, entry int
 
 Although the major emphasis in this curriculum is computer science, the curriculum also includes courses in humanities and social sciences. Electives are provided so that the student can select the appropriate courses for the pre-professional or scientific program as required in the first two years of the four-year college or university. In order to help prepare for upper division (junior class) standing at a four-year institution, the student usually must complete a program at the community college which is comparable in length and courses to the first two years of the program at the four-year institution. Upon satisfactory completion of the four-semester program described, the graduate will be awarded the Associate of Science Degree in Computer Science.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "See UCGS Block III." },
+		{ number: 2, text: "See UCGS Block II, parts A & B. Cannot be a literature course." },
+		{ number: 3, text: "See UCGS Block IV." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "ENG-111" },
+				{
+					rowType: "options",
+					optionLabel: "Select one history course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["HIS-121", "HIS-122"]
+				},
+				{ codeOverride: "SSE", titleOverride: "Social or Behavioral Science Elective from UCGS[1]", creditsOverride: "3" },
+				{
+					rowType: "options",
+					optionLabel: "Select one mathematics course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["MTH-161", "MTH-263"]
+				},
+				{ course: "CSC-221" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ENG-112" },
+				{ codeOverride: "ART/HUM/MUS", titleOverride: "ART/HUM/MUS from UCGS[2]", creditsOverride: "3" },
+				{
+					rowType: "options",
+					optionLabel: "Select one mathematics course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["MTH-162", "MTH-264"]
+				},
+				{ course: "CST-100" },
+				{ codeOverride: "SCI", titleOverride: "BIO, CHM, GOL, PHY from UCGS[3]", creditsOverride: "4" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "CSC-222" },
+				{
+					rowType: "options",
+					optionLabel: "Select one mathematics course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["MTH-263", "MTH-265"]
+				},
+				{ codeOverride: "CSC-208/MTH-288", titleOverride: "Introduction to Discrete Structures/Discrete Mathematics", creditsOverride: "3" },
+				{
+					rowType: "options",
+					optionLabel: "Select one literature course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-245", "ENG-246"]
+				}
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "CSC-205" },
+				{
+					rowType: "options",
+					optionLabel: "Select one mathematics course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["MTH-264", "MTH-266"]
+				},
+				{ course: "CSC-223" },
+				{ codeOverride: "SCI", titleOverride: "BIO, CHM, GOL, PHY from UCGS[3]", creditsOverride: "4" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to College Success | 1 |
-| ENG 111 | College Composition I | 3 |
-| HIS 121 or HIS 122 | United States History to 1877 or United States History Since 1865 | 3 |
-| SSE | Social or Behavioral Science Elective from UCGS1 | 3 |
-| MTH 161 or MTH 263 | Precalculus I or Calculus I | 3-4 |
-| CSC 221 | Introduction to Problem Solving and Programming | 3 |
-| | **Total** | 16-17 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 112 | College Composition II | 3 |
-| ART/HUM/MUS | ART/HUM/MUS from UCGS2 | 3 |
-| MTH 162 or MTH 264 | Precalculus II or Calculus II | 3-4 |
-| CST 100 | Principles of Public Speaking | 3 |
-| SCI | BIO, CHM, GOL, PHY from UCGS3 | 4 |
-| | **Total** | 16-17 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| CSC 222 | Object-oriented Programming | 4 |
-| MTH 263 or MTH 265 | Calculus I or Calculus III | 4 |
-| CSC 208/MTH 288 | Introduction to Discrete Structures/Discrete Mathematics | 3 |
-| ENG 245 or ENG 246 | British Literature or American Literature | 3 |
-| | **Total** | 14 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| CSC 205 | Computer Organization | 3 |
-| MTH 264 or MTH 266 | Calculus II or Linear Algebra | 3-4 |
-| CSC 223 | Data Structures and Analysis of Algorithms | 4 |
-| SCI | BIO, CHM, GOL, PHY from UCGS3 | 4 |
-| | **Total** | 14-15 |
-
-**Total Minimum Credits: 60-63**
-
-Notes:
+### Notes
 
 Students are urged to acquaint themselves with the requirements of the major department in the college or university to which transfer is contemplated; and further, students are urged to consult with their counselors and advisors at VHCC in planning their academic program and electives.
-
- 1. See UCGS Block III.
-
- 2. See UCGS Block II, parts A & B. Cannot be a literature course.
-
- 3. See UCGS Block IV.

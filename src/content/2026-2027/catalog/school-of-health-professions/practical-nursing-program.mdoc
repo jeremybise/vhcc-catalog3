@@ -229,46 +229,42 @@ According to the VCCS Policy 5.6.3 and VHCC Policy 5.7.4 “A student will norma
 | HLT 143 | Medical Terminology | 3 |
 | | **Total** | 7 |
 
-### First Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to College Success2 | 1 |
-| PNE 143 | Applied Nursing Skills | 1 |
-| PNE 161 | Nursing in Health Changes I | 6 |
-| PNE 173 | Pharmacology for Practical Nurses | 2 |
-| HLT 105 | Cardiopulmonary Resuscitation3 | 1 |
-| NUR 135 | Drug Dosage Calculations4 | 2 |
-| | **Total** | 13 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| PSY 230 | Developmental Psychology | 3 |
-| PNE 162 | Nursing in Health Changes II | 10 |
-| PNE 136 | Care of Maternal, Newborn, & Pediatric Patients | 4 |
-| | **Total** | 17 |
-
-### Third Semester (Summer)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 111 | College Composition I | 3 |
-| PNE 163 | Nursing In Health Changes III | 9 |
-| PNE 145 | Trends in Practical Nursing | 1 |
-| PNE 158 | Mental Health & Psychiatric Nursing | 2 |
-| | **Total** | 15 |
-
-**Total Minimum Credits: 45**
-
-Notes:
-
- 1. BIO 141 and 142 are acceptable course substitutes recommended for progression to the LPN to RN Program (Track 2 or Track 4 of the Associate in Applied Science in Nursing degree program).
-
- 2. HLT 140 is an acceptable substitution for SDV
-101. Students may choose to take either HLT 140 or SDV 101 to satisfy the requirements for the Practical Nursing program.
-
- 3. Students who have an active, unexpired BLS CPR certification card issued by the American Heart Association may request credit by previous experience for HLT 105.
-
- 4. NUR 135 may be taken prior to admission to the PN program.
+{% programofstudy
+	title="Certificate (C) in Practical Nursing"
+	notes=[
+		{ number: 1, text: "BIO 141 and 142 are acceptable course substitutes recommended for progression to the LPN to RN Program (Track 2 or Track 4 of the Associate in Applied Science in Nursing degree program)." },
+		{ number: 2, text: "HLT 140 is an acceptable substitution for SDV 101. Students may choose to take either HLT 140 or SDV 101 to satisfy the requirements for the Practical Nursing program." },
+		{ number: 3, text: "Students who have an active, unexpired BLS CPR certification card issued by the American Heart Association may request credit by previous experience for HLT 105." },
+		{ number: 4, text: "NUR 135 may be taken prior to admission to the PN program." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ titleOverride: "Orientation to College Success[2]", course: "SDV-101" },
+				{ course: "PNE-143" },
+				{ course: "PNE-161" },
+				{ course: "PNE-173" },
+				{ titleOverride: "Cardiopulmonary Resuscitation[3]", course: "HLT-105" },
+				{ titleOverride: "Drug Dosage Calculations[4]", course: "NUR-135" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "PSY-230" },
+				{ course: "PNE-162" },
+				{ course: "PNE-136" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Summer)",
+			rows: [
+				{ course: "ENG-111" },
+				{ course: "PNE-163" },
+				{ course: "PNE-145" },
+				{ course: "PNE-158" }
+			]
+		}
+	]
+/%}

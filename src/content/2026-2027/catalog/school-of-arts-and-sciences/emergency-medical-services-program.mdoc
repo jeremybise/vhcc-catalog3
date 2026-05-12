@@ -7,6 +7,8 @@ The Associate of Applied Science (AS) degree in Emergency Medical Services is de
 
 **Program Chair (VHCC)**: Barbara Manuel • [bmanuel@vhcc.edu](mailto:bmanuel@vhcc.edu) • 276-739-2432
 
+---
+
 ## Associate of Applied Science (AAS) in Emergency Medical Services Technology – Paramedic
 
 Five semesters; two years
@@ -89,82 +91,75 @@ The purchase of items such as uniforms, liability insurance, and other accessori
 
 Please see the CoAEMSP Outcomes Summary, [sw.edu/health-technology/wp-content/uploads/CoAEMSP-Outcomes-Summary.pdf](https://sw.edu/health-technology/wp-content/uploads/CoAEMSP-Outcomes-Summary.pdf)for program pass rates, retention, and job placement.
 
-### First Semester (Summer)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| EMS 100 | CPR for Healthcare Providers1 | 1 |
-| EMS 111 | Emergency Medical Technician | 7 |
-| EMS 120 | EMT – Basic Clinical | 1 |
-| BIO 145 | Human Anatomy & Physiology for Health Sciences2 | 4 |
-| | **Total** | 13 |
-
-### Second Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 100 | College Success Skills3 | 1 |
-| EMS 123 | EMS Clinical Preparation | 1 |
-| EMS 180 | Advanced EMS Foundations | 1 |
-| EMS 181 | Advanced Airway & Shock Management | 1 |
-| EMS 182 | Advanced Airway & Shock Management Lab | 1 |
-| EMS 183 | Advanced Medical Care | 2 |
-| EMS 184 | Advanced Medical Care Lab | 1 |
-| EMS 185 | Advanced Trauma Care | 2 |
-| EMS 186 | Advanced Trauma Care Lab | 1 |
-| EMS 170 | ALS Internship I | 1 |
-| | **Total** | 12 |
-
-### Third Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| EMS 221 | Paramedic Cardiovascular Care | 3 |
-| EMS 222 | Paramedic Cardiovascular Care Lab | 1 |
-| EMS 223 | Paramedic Patient Care I | 3 |
-| EMS 224 | Paramedic Patient Care I Lab | 1 |
-| EMS 241 | Paramedic Internship I | 2 |
-| ENG 111 | College Composition I | 3 |
-| PSY 230 | Developmental Psychology4 | 3 |
-| | **Total** | 16 |
-
-### Fourth Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| EMS 225 | Paramedic Patient Care I | 5 |
-| EMS 226 | Paramedic Patient Care I Lab | 2 |
-| EMS 246 | Paramedic Internship I | 2 |
-| EEE | General Education Elective5 | 3 |
-| | **Total** | 12 |
-
-### Fifth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| EMS 210 | EMS Operations | 1 |
-| EMS 212 | Leadership and Professional Development | 1 |
-| EMS 165 | Advanced Cardiac Life Support | 1 |
-| EMS 163 | Prehospital Trauma Life Support | 1 |
-| EMS 167 | Emergency Pediatric Care6 | 1 |
-| EMS 164 | Advanced Medical Life Support | 1 |
-| EMS 216 | Paramedic Review | 1 |
-| EMS 249 | Paramedic Capstone Internship | 2 |
-| HUM | Humanities Elective | 3 |
-| | **Total** | 12 |
-
-**Total Minimum Credits: 65**
-
-Notes:
-
- 1. HLT 105 is an approved substitute.
-
- 2. Taking both BIO 141 and BIO 142 are an approved substitute for BIO 145. Please note that students who complete BIO 141 and BIO 142 are exempt from completing the General Education Elective (3 credits) in the 4th semester (see note 5 below).
-
- 3. SDV 101 is an approved substitute.
-
- 4. PSY 200, PSY 205, SOC 247, and SOC 268 are approved substitutes for PSY 230.
-
- 5. The general education elective must be a course in one of the general education categories – communication, humanities/fine arts, social/behavioral sciences, or natural sciences/mathematics. Students who complete BIO 141 and BIO 142 in lieu of BIO 145 are exempt from the general education elective.
-
- 6. EMS 169 (PALS) is an approved substitute.
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "{% coursetooltip code=\"HLT-105\" label=\"HLT 105\" /%} is an approved substitute." },
+		{ number: 2, text: "Taking both {% coursetooltip code=\"BIO-141\" label=\"BIO 141\" /%} and {% coursetooltip code=\"BIO-142\" label=\"BIO 142\" /%} are an approved substitute for {% coursetooltip code=\"BIO-145\" label=\"BIO 145\" /%}. Please note that students who complete BIO 141 and BIO 142 are exempt from completing the General Education Elective (3 credits) in the 4th semester (see note 5 below)." },
+		{ number: 3, text: "{% coursetooltip code=\"SDV-101\" label=\"SDV 101\" /%} is an approved substitute." },
+		{ number: 4, text: "{% coursetooltip code=\"PSY-200\" label=\"PSY 200\" /%}, {% coursetooltip code=\"PSY-205\" label=\"PSY 205\" /%}, {% coursetooltip code=\"SOC-247\" label=\"SOC 247\" /%}, and {% coursetooltip code=\"SOC-268\" label=\"SOC 268\" /%} are approved substitutes for {% coursetooltip code=\"PSY-230\" label=\"PSY 230\" /%}." },
+		{ number: 5, text: "The general education elective must be a course in one of the general education categories – communication, humanities/fine arts, social/behavioral sciences, or natural sciences/mathematics. Students who complete BIO 141 and BIO 142 in lieu of BIO 145 are exempt from the general education elective." },
+		{ number: 6, text: "{% coursetooltip code=\"EMS-169\" label=\"EMS 169\" /%} (PALS) is an approved substitute." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Summer)",
+			rows: [
+				{ codeOverride: "EMS-100", titleOverride: "CPR for Healthcare Providers[1]", creditsOverride: "1" },
+				{ course: "EMS-111" },
+				{ course: "EMS-120" },
+				{ codeOverride: "BIO-145", titleOverride: "Human Anatomy & Physiology for Health Sciences[2]", creditsOverride: "4" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Fall)",
+			rows: [
+				{ codeOverride: "SDV-100", titleOverride: "College Success Skills[3]", creditsOverride: "1" },
+				{ course: "EMS-123" },
+				{ course: "EMS-180" },
+				{ course: "EMS-181" },
+				{ course: "EMS-182" },
+				{ course: "EMS-183" },
+				{ course: "EMS-184" },
+				{ course: "EMS-185" },
+				{ course: "EMS-186" },
+				{ course: "EMS-170" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Spring)",
+			rows: [
+				{ course: "EMS-221" },
+				{ course: "EMS-222" },
+				{ course: "EMS-223" },
+				{ course: "EMS-224" },
+				{ codeOverride: "EMS-241", titleOverride: "Paramedic Internship I", creditsOverride: "2" },
+				{ course: "ENG-111" },
+				{ codeOverride: "PSY-230", titleOverride: "Developmental Psychology[4]", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Fall)",
+			rows: [
+				{ course: "EMS-225" },
+				{ course: "EMS-226" },
+				{ course: "EMS-246" },
+				{ codeOverride: "EEE", titleOverride: "General Education Elective[5]", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Fifth Semester (Spring)",
+			rows: [
+				{ course: "EMS-210" },
+				{ course: "EMS-212" },
+				{ course: "EMS-165" },
+				{ course: "EMS-163" },
+				{ codeOverride: "EMS-167", titleOverride: "Emergency Pediatric Care[6]", creditsOverride: "1" },
+				{ course: "EMS-164" },
+				{ course: "EMS-216" },
+				{ course: "EMS-249" },
+				{ codeOverride: "HUM", titleOverride: "Humanities Elective", creditsOverride: "3" }
+			]
+		}
+	]
+/%}

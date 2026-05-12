@@ -21,57 +21,78 @@ Horticulture and Agriculture together are the number one industry in the Commonw
 
 Four semesters; two years
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[
+		{ number: 1, text: "Approved Horticulture and Agriculture Courses: AGR 141, AGR 142, AGR 143, AGR 231, HRT 100, HRT 115, HRT 134, HRT 205, HRT 207, HRT 226, HRT 247, or HRT 275." },
+		{ number: 2, text: "See UCGS Block II, parts A & B. Cannot be a literature course." }
+	]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "SDV-101" },
+				{ course: "ENG-111" },
+				{
+					rowType: "options",
+					optionLabel: "Select one history course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["HIS-121", "HIS-122"]
+				},
+				{ codeOverride: "HRT/AGR", titleOverride: "Approved Horticulture or Agriculture Course[1]", creditsOverride: "3" },
+				{ course: "MTH-161" },
+				{ course: "BIO-101" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "ENG-112" },
+				{ course: "BIO-102" },
+				{
+					rowType: "options",
+					optionLabel: "Select one math course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["MTH-162", "MTH-261"]
+				},
+				{ course: "ECO-201" },
+				{ codeOverride: "HRT/AGR", titleOverride: "Approved Horticulture or Agriculture Course[1]", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "CHM-111" },
+				{ course: "BIO-215" },
+				{ codeOverride: "HRT/AGR", titleOverride: "Approved Horticulture or Agriculture Course[1]", creditsOverride: "4" },
+				{
+					rowType: "options",
+					optionLabel: "Select one literature course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-245", "ENG-246"]
+				}
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "ECO-202" },
+				{ codeOverride: "ART/HUM/MUS", titleOverride: "ART/HUM/MUS from UCGS[2]", creditsOverride: "3" },
+				{ course: "CHM-112" },
+				{ codeOverride: "HRT/AGR", titleOverride: "Approved Horticulture or Agriculture Course[1]", creditsOverride: "3" },
+				{ codeOverride: "HRT/AGR", titleOverride: "Approved Horticulture or Agriculture Course[1]", creditsOverride: "3" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| SDV 101 | Orientation to College Success | 1 |
-| ENG 111 | College Composition I | 3 |
-| HIS 121 or HIS 122 | United States History to 1877 or United States History Since 1865 | 3 |
-| HRT or AGR | Approved Horticulture or Agriculture Course1 | 3 |
-| MTH 161 | Precalculus I | 3 |
-| BIO 101 | General Biology I | 3 |
-| | **Total** | 16 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ENG 112 | College Composition II | 3 |
-| BIO 102 | General Biology II | 4 |
-| MTH 162 or MTH 261 | Precalculus II or Applied Calculus I | 3 |
-| ECO 201 | Principles of Macroeconomics | 3 |
-| HRT or AGR | Approved Horticulture or Agriculture Course1 | 3 |
-| | **Total** | 16 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| CHM 111 | General Chemistry I | 4 |
-| BIO 215 | Plant Life of Virginia | 3 |
-| HRT or AGR | Approved Horticulture or Agriculture Course1 | 4 |
-| ENG 245 or ENG 246 | British Literature or American Literature | 3 |
-| | **Total** | 14 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| ECO 202 | Principles of Microeconomics | 3 |
-| ART/HUM/MUS | ART/HUM/MUS from UCGS2 | 3 |
-| CHM 112 | General Chemistry II | 4 |
-| HRT or AGR | Approved Horticulture or Agriculture Course1 | 3 |
-| HRT or AGR | Approved Horticulture or Agriculture Course1 | 3 |
-| | **Total** | 16 |
-
-**Total Minimum Credits: 62**
-
-Notes:
+### Notes
 
 Students are urged to acquaint themselves with the requirements of the major department in the college or university to which transfer is contemplated; and further, students are urged to consult with their counselors and advisors at VHCC in planning their academic program and electives.
 
- 1. Approved Horticulture and Agriculture Courses – AGR 141, AGR 142, AGR 143, AGR 231, HRT 100, HRT 115, HRT 134, HRT 205, HRT 207, HRT 226, HRT 247, or HRT 275See UCGS Block II, parts A & B. Cannot be a literature course.
 
 ## Associate of Applied Science (AAS) in Horticulture Technology
 
@@ -83,66 +104,73 @@ Horticulture is one of the fastest growing sectors of the Agricultural & Natural
 
 **Admission Requirements**: The curriculum is designed to integrate courses from all sectors of the industry and related areas, general education, and electives. Students are advised to follow the curriculum as outlined in the College catalog and consult with their faculty advisor or counselor in planning their programs and selecting electives. A program-specific SDV 101 section that is taught by the program coordinator is available, and students are strongly encouraged to enroll in this section during the first semester. Students planning to transfer should explore opportunities with their faculty advisor or counselor.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "HRT-100" },
+				{ course: "HRT-205" },
+				{ course: "BIO-215" },
+				{
+					rowType: "options",
+					optionLabel: "Select one English course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-111", "ENG-115"]
+				},
+				{ course: "HRT-207" },
+				{ course: "SDV-101" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "HRT-119" },
+				{ course: "HRT-134" },
+				{ codeOverride: "HRT EEE", titleOverride: "Horticulture Elective", creditsOverride: "3" },
+				{ course: "HRT-115" },
+				{ codeOverride: "HUM EEE", titleOverride: "Humanities Elective", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Summer Semester",
+			rows: [
+				{ course: "HRT-197" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "HRT-259" },
+				{ codeOverride: "EEE", titleOverride: "Social Science Elective", creditsOverride: "3" },
+				{ course: "HRT-295" },
+				{ course: "BIO-101" },
+				{ course: "MTH-111" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ codeOverride: "CST EEE", titleOverride: "Communications Elective", creditsOverride: "3" },
+				{ codeOverride: "HRT EEE", titleOverride: "Horticulture Elective", creditsOverride: "3" },
+				{ codeOverride: "HRT EEE", titleOverride: "Horticulture Elective", creditsOverride: "3" },
+				{ course: "HRT-226" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HRT 100 | Intro. to Horticulture | 3 |
-| HRT 205 | Soils | 3 |
-| BIO 215 | Plant Life of Virginia | 3 |
-| ENG 111 OR 115 | College Composition I or Technical Writing | 3 |
-| HRT 207 | Plant Pest Management\* | 3 |
-| SDV 101 | Orientation to College Success | 1 |
-| | **Total** | 16 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HRT 119 | Irrigation Systems for Turf & Ornamentals | 3 |
-| HRT 134 | Four Season Food Production | 3 |
-| HRT EEE | Horticulture Elective | 3 |
-| HRT 115 | Plant Propagation | 3 |
-| HUM EEE | Humanities Elective | 3 |
-| | **Total** | 15 |
-
-### Summer Semester
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HRT 197 | Cooperative Education | 3 |
-| | **Total** | 3 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HRT 259 | Arboriculture\* | 3 |
-| EEE | Social Science Elective | 3 |
-| HRT 295 | Topics in Cannabis Cultivation | 3 |
-| BIO 101 | General Biology I | 4 |
-| MTH 111 | Applied Technical Mathematics | 3 |
-| | **Total** | 16 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| CST EEE | Communications Elective | 3 |
-| HRT EEE | Horticulture Elective | 3 |
-| HRT EEE | Horticulture Elective | 3 |
-| HRT 226 | Greenhouse Management | 3 |
-| | **Total** | 12 |
-
-**Total Minimum Credits: 62**
-
-Notes:
+### Notes
 
 \* Denotes a course with an industry-recognized credential.
 
-Students are urged to the advisor for this degree when making elective selections.
+Students are urged to consult with the advisor for this degree when making elective selections.
 
-Additional approved humanities and social science electives are listed under [General Education Courses](#_General_Education_Courses).
+Additional approved humanities and social science electives are listed under [General Education Courses](#general-education-courses).
+
 
 ## Associate of Applied Science (AAS) in Horticulture Technology – Specialization in Business and Entrepreneurship
 
@@ -154,67 +182,74 @@ The Horticulture Industry is one of the fastest growing industries in the VHCC s
 
 **Course of Study Requirements**: The curriculum is designed to integrate courses in nursery management, greenhouse management, turf management and related areas, general education, and electives. Students are advised to follow the curriculum as outlined in the College catalog and consult with their faculty advisor or counselor in planning their programs and selecting electives. Students planning to transfer should explore opportunities with their faculty advisor or counselor. Upon satisfactory completion of the four-semester curriculum, the student will be awarded an Associate of Applied Science Degree in Horticulture Technology – Specialization in Business and Entrepreneurship.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "HRT-100" },
+				{ course: "BUS-100" },
+				{ codeOverride: "EEE", titleOverride: "Social Science Elective", creditsOverride: "3" },
+				{
+					rowType: "options",
+					optionLabel: "Select one English course",
+					minChoices: 1,
+					maxChoices: 1,
+					options: ["ENG-111", "ENG-115"]
+				},
+				{ course: "HRT-207" },
+				{ course: "SDV-101" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "HRT-225" },
+				{ course: "HRT-134" },
+				{ codeOverride: "BUS EEE", titleOverride: "Business / Entrepreneurship Elective", creditsOverride: "3" },
+				{ course: "HRT-115" },
+				{ codeOverride: "HRT EEE", titleOverride: "Horticulture Elective", creditsOverride: "3" }
+			]
+		},
+		{
+			termLabel: "Summer Semester",
+			rows: [
+				{ course: "HRT-197" }
+			]
+		},
+		{
+			termLabel: "Third Semester (Fall)",
+			rows: [
+				{ course: "BIO-215" },
+				{ codeOverride: "CST EEE", titleOverride: "Communications Elective", creditsOverride: "3" },
+				{ course: "HRT-259" },
+				{ course: "BIO-101" },
+				{ course: "MTH-111" }
+			]
+		},
+		{
+			termLabel: "Fourth Semester (Spring)",
+			rows: [
+				{ course: "MKT-201" },
+				{ codeOverride: "HRT EEE", titleOverride: "Horticulture Elective", creditsOverride: "3" },
+				{ codeOverride: "HRT EEE", titleOverride: "Horticulture Elective", creditsOverride: "3" },
+				{ course: "HRT-285" },
+				{ codeOverride: "EEE", titleOverride: "Humanities Elective", creditsOverride: "3" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HRT 100 | Intro. to Horticulture | 3 |
-| BUS 100 | Introduction to Business | 3 |
-| EEE | Social Science Elective | 3 |
-| ENG 111 OR 115 | College Composition I or Technical Writing | 3 |
-| HRT 207 | Plant Pest Management\* | 3 |
-| SDV 101 | Orientation to College Success | 1 |
-| | **Total** | 16 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HRT 225 | Nursery & Garden Center Management | 3 |
-| HRT 134 | Four Season Food Production | 3 |
-| BUS EEE | Business / Entrepreneurship Elective | 3 |
-| HRT 115 | Plant Propagation | 3 |
-| HRT EEE | Horticulture Elective | 3 |
-| | **Total** | 15 |
-
-### Summer Semester
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HRT 197 | Cooperative Education | 3 |
-| | **Total** | 3 |
-
-### Third Semester (Fall)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| BIO 215 | Plant Life of Virginia | 3 |
-| CST EEE | Communications Elective | 3 |
-| HRT 259 | Arboriculture | 3 |
-| BIO 101 | General Biology I | 4 |
-| MTH 111 | Applied Technical Mathematics | 3 |
-| | **Total** | 16 |
-
-### Fourth Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| MKT 201 | Introduction to Marketing | 3 |
-| HRT EEE | Horticulture Elective | 3 |
-| HRT EEE | Horticulture Elective | 3 |
-| HRT 285 | Management of a Horticultural Business | 3 |
-| EEE | Humanities Electives | 3 |
-| | **Total** | 15 |
-
-**Total Minimum Credits: 65**
-
-Notes:
+### Notes
 
 \* Denotes a course with an industry-recognized credential.
 
-Students are urged to the advisor for this degree when making elective selections.
+Students are urged to consult with the advisor for this degree when making elective selections.
 
-Additional approved humanities and social science electives are listed under [General Education Courses](#_General_Education_Courses).
+Additional approved humanities and social science electives are listed under [General Education Courses](#general-education-courses).
+
 
 ## Career Studies Certificate (CSC) in Agriculture Management
 
@@ -222,29 +257,33 @@ Two semesters; one year
 
 Students will develop skills directly applicable to agricultural production and management. This Career Studies Certificate will focus on introductory animal, plant, and soils science and technology.
 
-### First Semester (Fall)
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "First Semester (Fall)",
+			rows: [
+				{ course: "AGR-141" },
+				{ course: "AGR-142" },
+				{ course: "HRT-205" },
+				{ course: "HRT-207" }
+			]
+		},
+		{
+			termLabel: "Second Semester (Spring)",
+			rows: [
+				{ course: "AGR-143" },
+				{ course: "AGR-231" }
+			]
+		}
+	]
+/%}
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| AGR 141 | Introduction to Animal Science and Technology | 4 |
-| AGR 142 | Introduction to Plant Science and Technology | 3 |
-| HRT 205 | Soils | 3 |
-| HRT 207 | Plant Pest Management\* | 3 |
-| | **Total** | 13 |
-
-### Second Semester (Spring)
-
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| AGR 143 | Introduction to Agribusiness & Financial Management | 3 |
-| AGR 231 | Agribusiness Marketing, Risk Management, and Entrepreneurship | 3 |
-| | **Total** | 6 |
-
-**Total Minimum Credits: 19**
-
-Notes:
+### Notes
 
 \* Denotes a course with an industry-recognized credential.
+
 
 ## Career Studies Certificate (CSC) in Horticulture Production
 
@@ -252,18 +291,24 @@ One-two semesters (depending on electives)
 
 The certificate’s purpose is to provide the knowledge and skills needed for entry-level positions in horticulture. Also appropriate for personal growth and development.
 
-| **Course Number** | **Course Title** | **Credits** |
-| --- | --- | --- |
-| HRT 100 | Intro. To Horticulture | 3 |
-| BIO 215 | Plant Life of Virginia | 3 |
-| HRT 205 | Soils | 3 |
-| HRT 207 | Plant Pest Management\* | 3 |
-| HRT EEE | Horticulture Elective | 3 |
-| HRT EEE | Horticulture Elective | 3 |
-| | **Total** | 18 |
+{% programofstudy
+	title="Course of Study"
+	notes=[]
+	terms=[
+		{
+			termLabel: "Courses",
+			rows: [
+				{ course: "HRT-100" },
+				{ course: "BIO-215" },
+				{ course: "HRT-205" },
+				{ course: "HRT-207" },
+				{ codeOverride: "HRT EEE", titleOverride: "Horticulture Elective", creditsOverride: "3" },
+				{ codeOverride: "HRT EEE", titleOverride: "Horticulture Elective", creditsOverride: "3" }
+			]
+		}
+	]
+/%}
 
-**Total Minimum Credits: 18**
-
-Notes:
+### Notes
 
 \* Denotes a course with an industry-recognized credential.
