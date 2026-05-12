@@ -399,7 +399,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                   <span class="font-medium">{item.code}</span>
                                   {": "}
                                   <span
-                                    class="group/tooltip relative ml-1 inline-flex items-center gap-1 align-middle"
+                                    class="group/tooltip relative ml-1 align-middle"
                                     data-tooltip-container
                                   >
                                     <span
@@ -408,7 +408,9 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                           ? "cursor-pointer underline decoration-dotted underline-offset-2"
                                           : undefined
                                       }
-                                      data-tooltip-trigger={item.meta ? "true" : undefined}
+                                      data-tooltip-trigger={
+                                        item.meta ? "true" : undefined
+                                      }
                                       role={item.meta ? "button" : undefined}
                                       tabindex={item.meta ? "0" : undefined}
                                       aria-controls={
@@ -416,7 +418,9 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                           ? `course-tip-${termIndex}-${rowIndex}-${optionIndex}`
                                           : undefined
                                       }
-                                      aria-expanded={item.meta ? "false" : undefined}
+                                      aria-expanded={
+                                        item.meta ? "false" : undefined
+                                      }
                                     >
                                       {item.title.parts.map(
                                         (part, partIndex) => {
@@ -448,7 +452,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                       <>
                                         <button
                                           type="button"
-                                          class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue group-hover/tooltip:border-vhcc-blue group-hover/tooltip:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+                                          class="ml-1 inline-flex h-4 w-4 align-middle items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue group-hover/tooltip:border-vhcc-blue group-hover/tooltip:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
                                           data-tooltip-trigger
                                           aria-label={`View course details for ${item.meta.code}`}
                                           aria-controls={`course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
@@ -465,7 +469,8 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                         >
                                           <div class="flex items-start justify-between gap-2">
                                             <p class="font-semibold text-vhcc-navy wrap-break-word">
-                                              {item.meta.code}: {item.meta.title}
+                                              {item.meta.code}:{" "}
+                                              {item.meta.title}
                                             </p>
                                             <button
                                               type="button"
@@ -506,8 +511,8 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                           {row.code}
                         </td>
                         <td class="border-b border-slate-100 px-3 py-2 text-gray-800 align-top wrap-break-word">
-                          <div
-                            class="group/tooltip relative inline-flex items-center gap-1"
+                          <span
+                            class="group/tooltip relative"
                             data-tooltip-container
                           >
                             <span
@@ -516,11 +521,15 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                   ? "cursor-pointer underline decoration-dotted underline-offset-2"
                                   : undefined
                               }
-                              data-tooltip-trigger={row.meta ? "true" : undefined}
+                              data-tooltip-trigger={
+                                row.meta ? "true" : undefined
+                              }
                               role={row.meta ? "button" : undefined}
                               tabindex={row.meta ? "0" : undefined}
                               aria-controls={
-                                row.meta ? `course-tip-${termIndex}-${rowIndex}` : undefined
+                                row.meta
+                                  ? `course-tip-${termIndex}-${rowIndex}`
+                                  : undefined
                               }
                               aria-expanded={row.meta ? "false" : undefined}
                             >
@@ -551,7 +560,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                               <>
                                 <button
                                   type="button"
-                                  class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue group-hover/tooltip:border-vhcc-blue group-hover/tooltip:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+                                  class="ml-1 inline-flex h-4 w-4 align-middle items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue group-hover/tooltip:border-vhcc-blue group-hover/tooltip:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
                                   data-tooltip-trigger
                                   aria-label={`View course details for ${row.meta.code}`}
                                   aria-controls={`course-tip-${termIndex}-${rowIndex}`}
@@ -589,7 +598,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                 </div>
                               </>
                             )}
-                          </div>
+                          </span>
                         </td>
                         <td class="border-b border-slate-100 px-3 py-2 text-right text-gray-900 align-top">
                           {row.creditsText}
@@ -676,10 +685,12 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
     };
 
     const closeAll = (except) => {
-      document.querySelectorAll("[data-tooltip-container]").forEach((container) => {
-        if (except && container === except) return;
-        setOpen(container, false);
-      });
+      document
+        .querySelectorAll("[data-tooltip-container]")
+        .forEach((container) => {
+          if (except && container === except) return;
+          setOpen(container, false);
+        });
     };
 
     document.addEventListener("click", (event) => {
@@ -714,7 +725,10 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
       const target = event.target;
       if (!(target instanceof Element)) return;
 
-      if ((event.key === "Enter" || event.key === " ") && target.matches("[data-tooltip-trigger][role='button']")) {
+      if (
+        (event.key === "Enter" || event.key === " ") &&
+        target.matches("[data-tooltip-trigger][role='button']")
+      ) {
         event.preventDefault();
         target.click();
         return;
