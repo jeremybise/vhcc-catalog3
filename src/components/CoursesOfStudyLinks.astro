@@ -92,13 +92,15 @@ for (const meta of bucketMeta) {
 
       return (
         <section>
-          <h2 class="text-xl font-semibold text-vhcc-navy">{meta.title}</h2>
-          <ul class="mt-3 list-disc space-y-2 pl-6 text-gray-800">
+          <h2 class="text-xl font-semibold text-vhcc-navy dark:text-sky-300">
+            {meta.title}
+          </h2>
+          <ul class="mt-3 list-disc space-y-2 pl-6 text-gray-800 dark:text-gray-200">
             {items.map((item) => (
               <li>
                 <a
                   href={item.href}
-                  class="text-vhcc-blue underline decoration-vhcc-blue/40 underline-offset-2 hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+                  class="text-vhcc-blue underline decoration-vhcc-blue/40 underline-offset-2 hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:text-sky-400 dark:decoration-sky-400/40 dark:hover:text-sky-300"
                 >
                   {item.text}
                 </a>

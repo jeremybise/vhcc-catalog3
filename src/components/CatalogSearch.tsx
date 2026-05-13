@@ -210,9 +210,9 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
           />
 
           {/* Panel */}
-          <div className="relative w-full max-w-xl rounded-xl bg-white shadow-2xl ring-1 ring-black/10 flex flex-col max-h-[70vh]">
+          <div className="relative w-full max-w-xl rounded-xl bg-white shadow-2xl ring-1 ring-black/10 flex flex-col max-h-[70vh] dark:bg-gray-800 dark:ring-black/30">
             {/* Input row */}
-            <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200">
+            <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
               <svg
                 className="shrink-0 h-5 w-5 text-gray-400"
                 viewBox="0 0 20 20"
@@ -230,7 +230,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
                 placeholder={`Search ${currentYear} catalog…`}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="flex-1 bg-transparent text-base text-gray-900 placeholder:text-gray-400 outline-none"
+                className="flex-1 bg-transparent text-base text-gray-900 placeholder:text-gray-400 outline-none dark:text-gray-100 dark:placeholder:text-gray-500"
               />
               {query && (
                 <button
@@ -249,7 +249,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
               <button
                 type="button"
                 onClick={closeModal}
-                className="shrink-0 rounded-md border border-gray-200 px-1.5 py-0.5 text-xs text-gray-500 hover:bg-gray-100"
+                className="shrink-0 rounded-md border border-gray-200 px-1.5 py-0.5 text-xs text-gray-500 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
                 aria-label="Close search"
               >
                 Esc
@@ -259,7 +259,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
             {/* Status / results */}
             <div className="overflow-y-auto flex-1">
               {query && (
-                <div className="px-4 py-1.5 text-xs text-gray-400 border-b border-gray-100">
+                <div className="px-4 py-1.5 text-xs text-gray-400 border-b border-gray-100 dark:text-gray-500 dark:border-gray-700">
                   {isSearching
                     ? "Searching…"
                     : results.length > 0
@@ -269,7 +269,10 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
               )}
 
               {results.length > 0 ? (
-                <ul className="divide-y divide-gray-100" role="listbox">
+                <ul
+                  className="divide-y divide-gray-100 dark:divide-gray-700"
+                  role="listbox"
+                >
                   {results.map((result, index) => (
                     <li
                       key={result.id}
@@ -282,16 +285,16 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
                         onClick={closeModal}
                         className={`block px-4 py-3 transition-colors ${
                           index === selectedIndex
-                            ? "border-l-2 border-vhcc-blue bg-vhcc-blue/10"
-                            : "hover:bg-gray-50"
+                            ? "border-l-2 border-vhcc-blue bg-vhcc-blue/10 dark:bg-vhcc-blue/20"
+                            : "hover:bg-gray-50 dark:hover:bg-gray-700"
                         }`}
                         onMouseEnter={() => setSelectedIndex(index)}
                       >
-                        <p className="text-sm font-semibold text-gray-900">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                           {result.title}
                         </p>
                         <p
-                          className="mt-0.5 line-clamp-1 text-xs text-gray-500"
+                          className="mt-0.5 line-clamp-1 text-xs text-gray-500 dark:text-gray-400"
                           dangerouslySetInnerHTML={{ __html: result.excerpt }}
                         />
                       </a>
@@ -299,11 +302,11 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
                   ))}
                 </ul>
               ) : query && !isSearching ? (
-                <p className="px-4 py-10 text-center text-sm text-gray-500">
+                <p className="px-4 py-10 text-center text-sm text-gray-500 dark:text-gray-400">
                   No results found
                 </p>
               ) : !query ? (
-                <p className="px-4 py-10 text-center text-sm text-gray-400">
+                <p className="px-4 py-10 text-center text-sm text-gray-400 dark:text-gray-500">
                   Start typing to search the catalog…
                 </p>
               ) : null}
@@ -311,7 +314,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
 
             {/* Keyboard hint footer */}
             {results.length > 0 && (
-              <div className="shrink-0 flex gap-4 border-t border-gray-100 bg-gray-50 px-4 py-2 text-xs text-gray-400 rounded-b-xl">
+              <div className="shrink-0 flex gap-4 border-t border-gray-100 bg-gray-50 px-4 py-2 text-xs text-gray-400 rounded-b-xl dark:border-gray-700 dark:bg-gray-700/50 dark:text-gray-500">
                 <span>
                   <kbd className="font-semibold">↑↓</kbd> navigate
                 </span>

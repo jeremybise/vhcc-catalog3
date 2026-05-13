@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+@custom-variant dark (&:where(.dark, .dark *));
 @import "@fontsource/pt-sans/400.css";
 @import "@fontsource/pt-sans/700.css";
 @import "@fontsource/fira-sans-condensed/400.css";

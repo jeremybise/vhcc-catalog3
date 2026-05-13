@@ -20,8 +20,10 @@ const years = catalogYears
 
 <Layout title="Virginia Highlands Community College Catalog">
   <main class="mx-auto max-w-3xl px-6 py-12">
-    <h1 class="text-3xl font-semibold text-blue-900">College Catalogs</h1>
-    <p class="mt-3 text-gray-700">
+    <h1 class="text-3xl font-semibold text-blue-900 dark:text-sky-300">
+      College Catalogs
+    </h1>
+    <p class="mt-3 text-gray-700 dark:text-gray-300">
       Select a catalog year to view program, policy, and course information.
     </p>
 
@@ -31,7 +33,7 @@ const years = catalogYears
           <li>
             <a
               href={`/${item.year}`}
-              class="block rounded-lg border border-gray-200 bg-white px-4 py-3 font-medium text-blue-900 hover:border-blue-300 hover:bg-blue-50"
+              class="block rounded-lg border border-gray-200 bg-white px-4 py-3 font-medium text-blue-900 hover:border-blue-300 hover:bg-blue-50 dark:border-gray-700 dark:bg-gray-800 dark:text-sky-300 dark:hover:border-sky-600 dark:hover:bg-gray-700"
             >
               {item.title}
             </a>
@@ -40,9 +42,9 @@ const years = catalogYears
       }
     </ul>
 
-    <p class="mt-8 text-sm text-gray-600">
+    <p class="mt-8 text-sm text-gray-600 dark:text-gray-400">
       Need to edit content? Visit <a
-        class="text-blue-700 underline"
+        class="text-blue-700 underline dark:text-sky-400"
         href="/keystatic">Keystatic Admin</a
       >.
     </p>

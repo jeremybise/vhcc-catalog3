@@ -90,9 +90,41 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       .content-heading .heading-anchor svg {
         display: block;
       }
+
+      .dark .heading-anchor {
+        color: #94a3b8;
+      }
+      .dark .heading-anchor:hover,
+      .dark .heading-anchor:focus-visible {
+        color: #38bdf8;
+      }
+      .dark .prose h1 {
+        color: #7dd3fc;
+      }
+      .dark .prose a {
+        color: #38bdf8;
+      }
+      .dark .prose a:hover {
+        color: #7dd3fc;
+      }
     </style>
+    <script is:inline>
+      (function () {
+        try {
+          var stored = localStorage.getItem("vhcc-theme");
+          var prefersDark = window.matchMedia(
+            "(prefers-color-scheme: dark)",
+          ).matches;
+          if (stored === "dark" || (!stored && prefersDark)) {
+            document.documentElement.classList.add("dark");
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body class="bg-white text-gray-900 antialiased">
+  <body
+    class="bg-white text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100"
+  >
     <!-- Backdrop for course tooltips -->
     <div
       id="tooltip-backdrop"
@@ -102,7 +134,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
     </div>
     <a
       href="#main-content"
-      class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-vhcc-navy focus:ring-2 focus:ring-vhcc-blue"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-vhcc-navy focus:ring-2 focus:ring-vhcc-blue dark:focus:bg-gray-800 dark:focus:text-white"
     >
       Skip to main content
     </a>
@@ -142,6 +174,42 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       </select>
       <div class="ml-auto flex items-center gap-2">
         <CatalogSearch client:load currentYear={year} />
+        <button
+          id="theme-toggle"
+          type="button"
+          aria-label="Toggle dark mode"
+          class="flex items-center justify-center rounded-md p-1.5 text-white hover:bg-vhcc-blue/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue transition-colors"
+        >
+          <!-- Sun: shown in dark mode -->
+          <svg
+            class="hidden dark:block h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="12" cy="12" r="4"></circle>
+            <path
+              d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
+            ></path>
+          </svg>
+          <!-- Moon: shown in light mode -->
+          <svg
+            class="block dark:hidden h-5 w-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
         <details class="xl:hidden group">
           <summary
             class="list-none cursor-pointer rounded-md p-1.5 hover:bg-vhcc-blue/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue [&::-webkit-details-marker]:hidden"
@@ -173,17 +241,17 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
             </svg>
           </summary>
           <nav
-            class="fixed inset-x-0 z-20 overflow-y-auto border-t border-vhcc-navy/30 bg-white text-gray-900 shadow-xl"
+            class="fixed inset-x-0 z-20 overflow-y-auto border-t border-vhcc-navy/30 bg-white text-gray-900 shadow-xl dark:bg-gray-900 dark:text-gray-100 dark:border-vhcc-navy/50"
             style="top: var(--header-h, 52px); height: calc(100vh - var(--header-h, 52px))"
             aria-label="Mobile catalog navigation"
           >
             <ul class="py-3">
               {
                 sidebar.map((section) => (
-                  <li class="border-b border-gray-100 last:border-b-0">
+                  <li class="border-b border-gray-100 last:border-b-0 dark:border-gray-700">
                     <a
                       href={section.href}
-                      class="block px-4 py-3 text-base font-semibold text-vhcc-navy hover:bg-slate-100"
+                      class="block px-4 py-3 text-base font-semibold text-vhcc-navy hover:bg-slate-100 dark:text-sky-300 dark:hover:bg-gray-800"
                     >
                       {section.label}
                     </a>
@@ -199,8 +267,8 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                               class:list={[
                                 "block px-6 py-2 text-base",
                                 page.href === currentHref
-                                  ? "text-vhcc-navy font-semibold bg-slate-50"
-                                  : "text-gray-700 hover:text-vhcc-navy hover:bg-slate-50",
+                                  ? "text-vhcc-navy font-semibold bg-slate-50 dark:text-sky-300 dark:bg-gray-700"
+                                  : "text-gray-700 hover:text-vhcc-navy hover:bg-slate-50 dark:text-gray-300 dark:hover:text-white dark:hover:bg-gray-700",
                               ]}
                             >
                               {page.title}
@@ -222,7 +290,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       isArchived && (
         <div
           role="alert"
-          class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-amber-100 px-4 py-2.5 text-center text-sm text-amber-900 border-b border-amber-300"
+          class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-amber-100 px-4 py-2.5 text-center text-sm text-amber-900 border-b border-amber-300 dark:bg-amber-900/30 dark:text-amber-200 dark:border-amber-800"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -244,7 +312,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
           {currentYear && (
             <a
               href={`/${currentYear}`}
-              class="font-semibold underline hover:text-amber-700 transition-colors"
+              class="font-semibold underline hover:text-amber-700 transition-colors dark:hover:text-amber-300"
             >
               View the current {currentYear} catalog &rsaquo;
             </a>
@@ -256,7 +324,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
     <div class="flex min-h-[calc(100vh-52px)]">
       <!-- Sidebar -->
       <nav
-        class="hidden xl:block w-72 shrink-0 bg-gray-50 border-r border-gray-200 overflow-y-auto sticky top-13 h-[calc(100vh-52px)]"
+        class="hidden xl:block w-72 shrink-0 bg-gray-50 border-r border-gray-200 overflow-y-auto sticky top-13 h-[calc(100vh-52px)] dark:bg-gray-900 dark:border-gray-700"
         aria-label="Catalog navigation"
       >
         <ul class="py-2">
@@ -268,7 +336,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                     class="group"
                     open={section.slug === currentSection || undefined}
                   >
-                    <summary class="flex items-center justify-between px-4 py-2 text-sm font-semibold uppercase tracking-wide text-gray-600 cursor-pointer select-none hover:bg-slate-100 hover:text-vhcc-navy group-open:text-vhcc-navy list-none [&::-webkit-details-marker]:hidden">
+                    <summary class="flex items-center justify-between px-4 py-2 text-sm font-semibold uppercase tracking-wide text-gray-600 cursor-pointer select-none hover:bg-slate-100 hover:text-vhcc-navy group-open:text-vhcc-navy list-none [&::-webkit-details-marker]:hidden dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:group-open:text-white">
                       <span>{section.label}</span>
                       <svg
                         class="w-3.5 h-3.5 shrink-0 ml-1 transition-transform group-open:rotate-90"
@@ -293,8 +361,8 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                               class:list={[
                                 "block py-1.5 pr-4 pl-6 text-base transition-colors",
                                 isActive
-                                  ? "bg-vhcc-blue/15 text-vhcc-navy font-semibold border-l-2 border-vhcc-green pl-5.5"
-                                  : "text-gray-700 hover:bg-slate-100 hover:text-vhcc-navy",
+                                  ? "bg-vhcc-blue/15 text-vhcc-navy font-semibold border-l-2 border-vhcc-green pl-5.5 dark:bg-sky-400/20 dark:text-sky-300 dark:border-emerald-400"
+                                  : "text-gray-700 hover:bg-slate-100 hover:text-vhcc-navy dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-white",
                               ]}
                             >
                               {page.title}
@@ -313,8 +381,8 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                     class:list={[
                       "block px-4 py-2 text-sm font-semibold uppercase tracking-wide transition-colors",
                       section.href === currentHref
-                        ? "bg-vhcc-blue/15 text-vhcc-navy border-l-2 border-vhcc-green"
-                        : "text-gray-600 hover:bg-slate-100 hover:text-vhcc-navy",
+                        ? "bg-vhcc-blue/15 text-vhcc-navy border-l-2 border-vhcc-green dark:bg-sky-400/20 dark:text-sky-300 dark:border-emerald-400"
+                        : "text-gray-600 hover:bg-slate-100 hover:text-vhcc-navy dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white",
                     ]}
                   >
                     {section.label}
@@ -334,46 +402,52 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
               breadcrumbs.length > 0 && (
                 <nav
                   aria-label="Breadcrumb"
-                  class="mb-4 flex items-center gap-1.5 text-sm text-gray-500"
+                  class="mb-4 flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400"
                 >
                   <a
                     href={`/${year}`}
-                    class="text-vhcc-blue hover:text-vhcc-navy transition-colors"
+                    class="text-vhcc-blue hover:text-vhcc-navy transition-colors dark:hover:text-sky-300"
                   >
                     {year} Catalog
                   </a>
                   {breadcrumbs.slice(0, -1).map((crumb) => (
                     <>
-                      <span aria-hidden="true" class="text-gray-400">
+                      <span
+                        aria-hidden="true"
+                        class="text-gray-400 dark:text-gray-600"
+                      >
                         &#8250;
                       </span>
                       <a
                         href={crumb.href}
-                        class="text-vhcc-blue hover:text-vhcc-navy transition-colors"
+                        class="text-vhcc-blue hover:text-vhcc-navy transition-colors dark:hover:text-sky-300"
                       >
                         {crumb.label}
                       </a>
                     </>
                   ))}
-                  <span aria-hidden="true" class="text-gray-400">
+                  <span
+                    aria-hidden="true"
+                    class="text-gray-400 dark:text-gray-600"
+                  >
                     &#8250;
                   </span>
                 </nav>
               )
             }
             <article
-              class="prose prose-lg max-w-none prose-slate prose-headings:font-semibold prose-h1:text-5xl prose-h1:font-bold prose-h1:leading-tighter prose-h2:text-3xl prose-h3:text-xl prose-h1:text-vhcc-navy prose-a:text-vhcc-blue"
+              class="prose prose-lg max-w-none prose-slate prose-headings:font-semibold prose-h1:text-5xl prose-h1:font-bold prose-h1:leading-tighter prose-h2:text-3xl prose-h3:text-xl prose-h1:text-vhcc-navy prose-a:text-vhcc-blue dark:prose-invert"
               data-pagefind-body
             >
               <slot name="title" />
               {
                 tocHeadings.length > 0 && (
                   <nav
-                    class="not-prose mb-6 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3"
+                    class="not-prose mb-6 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800"
                     aria-label="On this page"
                   >
-                    <p class="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-vhcc-navy/85">
-                      <span class="h-1.5 w-1.5 rounded-full bg-vhcc-green" />
+                    <p class="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-vhcc-navy/85 dark:text-sky-300/85">
+                      <span class="h-1.5 w-1.5 rounded-full bg-vhcc-green dark:bg-emerald-400" />
                       What's on this page
                     </p>
                     <ul class="space-y-1 text-sm">
@@ -381,7 +455,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                         <li>
                           <a
                             href={`#${heading.slug}`}
-                            class="block rounded-md px-2 py-1 font-medium text-gray-700 transition-colors hover:bg-slate-100 hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+                            class="block rounded-md px-2 py-1 font-medium text-gray-700 transition-colors hover:bg-slate-100 hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
                           >
                             {heading.text}
                           </a>
@@ -397,15 +471,15 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
             {
               (prevPage || nextPage) && (
                 <nav
-                  class="mt-12 grid w-full max-w-2xl gap-3 border-t border-gray-200 pt-6 sm:grid-cols-2"
+                  class="mt-12 grid w-full max-w-2xl gap-3 border-t border-gray-200 pt-6 sm:grid-cols-2 dark:border-gray-700"
                   aria-label="Page navigation"
                 >
                   {prevPage ? (
                     <a
                       href={prevPage.href}
-                      class="group rounded-lg border border-slate-200 bg-white p-4 hover:border-vhcc-blue/60 hover:bg-slate-50"
+                      class="group rounded-lg border border-slate-200 bg-white p-4 hover:border-vhcc-blue/60 hover:bg-slate-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                     >
-                      <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                      <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                         Previous
                       </p>
                       <p class="mt-1 text-sm font-medium text-gray-900 group-hover:text-vhcc-navy">
@@ -418,9 +492,9 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                   {nextPage ? (
                     <a
                       href={nextPage.href}
-                      class="group rounded-lg border border-slate-200 bg-white p-4 text-right hover:border-vhcc-blue/60 hover:bg-slate-50"
+                      class="group rounded-lg border border-slate-200 bg-white p-4 text-right hover:border-vhcc-blue/60 hover:bg-slate-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
                     >
-                      <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+                      <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                         Next
                       </p>
                       <p class="mt-1 text-sm font-medium text-gray-900 group-hover:text-vhcc-navy">
@@ -504,6 +578,16 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         syncHeaderHeight();
         window.addEventListener("resize", syncHeaderHeight);
       })();
+    </script>
+    <script is:inline>
+      document
+        .getElementById("theme-toggle")
+        ?.addEventListener("click", function () {
+          var isDark = document.documentElement.classList.toggle("dark");
+          try {
+            localStorage.setItem("vhcc-theme", isDark ? "dark" : "light");
+          } catch (e) {}
+        });
     </script>
   </body>
 </html>
