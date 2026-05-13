@@ -22,8 +22,14 @@
 
 body {
   font-family: var(--font-body);
-  font-size: 1.0625rem;
+  font-size: 1rem;
   line-height: 1.6;
+}
+
+@media (min-width: 640px) {
+  body {
+    font-size: 1.0625rem;
+  }
 }
 
 h1,
