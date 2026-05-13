@@ -54,7 +54,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
     <style is:global>
       .content-heading {
         position: relative;
-        scroll-margin-top: 8rem;
+        scroll-margin-top: var(--scroll-offset, 9rem);
       }
 
       .heading-anchor {
@@ -99,7 +99,29 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         color: #38bdf8;
       }
 
-      /* Scroll wrapper injected by JS around each prose table */
+      /* Sticky title bar: relaxed when at top, compact with shadow when stuck */
+      #page-title-bar {
+        border-bottom: 1px solid transparent;
+      }
+      #page-title-bar h1 {
+        font-size: clamp(1.75rem, 4vw, 3rem);
+        transition: font-size 0.2s ease;
+      }
+      #page-title-bar[data-stuck] h1 {
+        font-size: clamp(1.25rem, 3vw, 2.25rem);
+      }
+      #page-title-bar[data-stuck] {
+        padding-top: 0.625rem;
+        padding-bottom: 0.625rem;
+        border-bottom-color: #e2e8f0;
+        box-shadow: 0 2px 8px -2px rgba(0,0,0,0.1);
+      }
+      .dark #page-title-bar[data-stuck] {
+        border-bottom-color: #374151;
+        box-shadow: 0 2px 8px -2px rgba(0,0,0,0.4);
+      }
+
+
       .prose-table-scroll {
         width: 100%;
         overflow-x: auto;
@@ -443,12 +465,15 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       </nav>
 
       <div class="flex-1 min-w-0 flex flex-col">
+        <!-- Sentinel: when this scrolls out of view, title bar is "stuck" -->
+        <div id="title-bar-sentinel" aria-hidden="true" style="height:1px;margin-bottom:-1px"></div>
         <!-- Sticky title bar (content column only, not over sidebar) -->
         <div
           id="page-title-bar"
-          class="sticky z-9 border-b border-gray-200 bg-white/95 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-3 dark:bg-gray-950/95 dark:border-gray-700"
+          class="sticky z-9 bg-white/95 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-6 transition-[padding,box-shadow,border-color] duration-200 dark:bg-gray-950/95"
           style="top: var(--header-h, 52px)"
         >
+          <div class="mx-auto w-full max-w-3xl">
           {
             breadcrumbs.length > 0 && (
               <nav
@@ -490,9 +515,10 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
             )
           }
           <div
-            class="[&_h1]:text-[clamp(1.25rem,3vw,2.25rem)] [&_h1]:font-bold [&_h1]:text-vhcc-navy [&_h1]:dark:text-white [&_h1]:m-0 [&_h1]:leading-snug"
+            class="[&_h1]:font-bold [&_h1]:text-vhcc-navy [&_h1]:dark:text-white [&_h1]:m-0 [&_h1]:leading-tight"
           >
             <slot name="title" />
+          </div>
           </div>
         </div>
 
@@ -634,28 +660,60 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
             });
         };
 
+        const initStickyTitleBar = () => {
+          const sentinel = document.getElementById("title-bar-sentinel");
+          const bar = document.getElementById("page-title-bar");
+          if (!sentinel || !bar) return;
+          const observer = new IntersectionObserver(
+            ([entry]) => {
+              if (!entry.isIntersecting) {
+                bar.setAttribute("data-stuck", "");
+              } else {
+                bar.removeAttribute("data-stuck");
+              }
+            },
+            { threshold: 0, rootMargin: `-${document.getElementById("site-header")?.offsetHeight ?? 52}px 0px 0px 0px` }
+          );
+          observer.observe(sentinel);
+        };
+
         if (document.readyState === "loading") {
           document.addEventListener("DOMContentLoaded", () => {
             addHeadingAnchors();
             wrapTables();
+            initStickyTitleBar();
           });
         } else {
           addHeadingAnchors();
           wrapTables();
+          initStickyTitleBar();
         }
       </script>
       <script>
         (function () {
           const header = document.getElementById("site-header");
-          function syncHeaderHeight() {
-            if (header)
+          const titleBar = document.getElementById("page-title-bar");
+          function syncOffsets() {
+            const headerH = header?.offsetHeight ?? 52;
+            document.documentElement.style.setProperty(
+              "--header-h",
+              headerH + "px",
+            );
+            // For scroll-margin-top: use the stuck (compact) title bar height
+            // measured while data-stuck is temporarily forced on
+            if (titleBar) {
+              const wasStuck = titleBar.hasAttribute("data-stuck");
+              if (!wasStuck) titleBar.setAttribute("data-stuck", "");
+              const titleBarH = titleBar.offsetHeight;
+              if (!wasStuck) titleBar.removeAttribute("data-stuck");
               document.documentElement.style.setProperty(
-                "--header-h",
-                header.offsetHeight + "px",
+                "--scroll-offset",
+                headerH + titleBarH + 8 + "px",
               );
+            }
           }
-          syncHeaderHeight();
-          window.addEventListener("resize", syncHeaderHeight);
+          syncOffsets();
+          window.addEventListener("resize", syncOffsets);
         })();
       </script>
       <script is:inline>

@@ -195,7 +195,8 @@ const hasDetails = Boolean(
       } else {
         const w = 320;
         let left = rect.left;
-        if (left + w > window.innerWidth - 16) left = window.innerWidth - w - 16;
+        if (left + w > window.innerWidth - 16)
+          left = window.innerWidth - w - 16;
         panel.style.cssText = `position:fixed;top:${rect.bottom + 6}px;left:${left}px;width:${w}px;bottom:auto;right:auto;z-index:50`;
       }
 
