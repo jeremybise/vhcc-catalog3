@@ -204,7 +204,7 @@ const breadcrumbs = isLeafPage
   {nextPage}
   {breadcrumbs}
 >
-  <h1>{entry.data.title}</h1>
+  <h1 slot="title">{entry.data.title}</h1>
   {
     isCourseDescriptionsLeaf && courseDescCategory ? (
       <CourseDescriptionCategory year={year} category={courseDescCategory} />
