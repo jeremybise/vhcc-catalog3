@@ -98,6 +98,22 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       .dark .heading-anchor:focus-visible {
         color: #38bdf8;
       }
+
+      /* Prevent wide tables from breaking page layout on narrow viewports.
+         Excludes component tables (which carry their own classes). */
+      .prose table:not([class]) {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        max-width: 100%;
+      }
+
+      /* Prevent long unbreakable strings (URLs, codes) from overflowing */
+      .prose {
+        overflow-wrap: break-word;
+        word-break: break-word;
+      }
+
       .dark .prose h1 {
         color: #7dd3fc;
       }
