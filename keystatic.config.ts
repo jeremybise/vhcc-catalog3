@@ -1,5 +1,6 @@
 import { config, fields, collection } from "@keystatic/core";
 import { block, inline } from "@keystatic/core/content-components";
+import { createElement as h } from "react";
 
 const markdocComponents = {
   br: inline({
@@ -21,6 +22,149 @@ const markdocComponents = {
   }),
   programofstudy: block({
     label: "Program of Study",
+    ContentView: ({ value }) => {
+      const { title, terms = [], notes = [] } = value;
+      return h(
+        "div",
+        {
+          style: {
+            fontFamily: "sans-serif",
+            fontSize: "13px",
+            lineHeight: "1.5",
+          },
+        },
+        h(
+          "strong",
+          { style: { display: "block", marginBottom: "6px" } },
+          title || "Program of Study",
+        ),
+        ...(terms.length === 0
+          ? [h("em", { style: { color: "#888" } }, "No terms added yet")]
+          : terms.map((term, i) =>
+              h(
+                "div",
+                { key: i, style: { marginBottom: "8px" } },
+                h(
+                  "div",
+                  {
+                    style: {
+                      fontWeight: "600",
+                      borderBottom: "1px solid currentColor",
+                      marginBottom: "3px",
+                      paddingBottom: "2px",
+                      opacity: 0.7,
+                    },
+                  },
+                  term.termLabel || `Semester ${i + 1}`,
+                ),
+                ...(term.rows ?? []).map((row, j) => {
+                  if (row.rowType === "note") {
+                    return h(
+                      "div",
+                      {
+                        key: j,
+                        style: {
+                          paddingLeft: "10px",
+                          fontStyle: "italic",
+                          opacity: 0.6,
+                          fontSize: "12px",
+                        },
+                      },
+                      String(row.note ?? "").slice(0, 80) || "Note",
+                    );
+                  }
+                  if (row.rowType === "options") {
+                    const codes = (row.options ?? [])
+                      .filter(Boolean)
+                      .join(", ");
+                    return h(
+                      "div",
+                      { key: j, style: { paddingLeft: "10px", opacity: 0.8 } },
+                      `${row.optionLabel || "Choose one"}: `,
+                      h("em", null, codes || "no options selected"),
+                    );
+                  }
+                  const code = row.course ?? row.codeOverride ?? "";
+                  return h(
+                    "div",
+                    {
+                      key: j,
+                      style: {
+                        paddingLeft: "10px",
+                        display: "flex",
+                        justifyContent: "space-between",
+                        gap: "8px",
+                      },
+                    },
+                    h(
+                      "span",
+                      null,
+                      code ||
+                        h(
+                          "em",
+                          { style: { opacity: 0.5 } },
+                          "no course selected",
+                        ),
+                    ),
+                    row.creditsOverride
+                      ? h(
+                          "span",
+                          { style: { opacity: 0.6, flexShrink: 0 } },
+                          row.creditsOverride,
+                        )
+                      : null,
+                  );
+                }),
+              ),
+            )),
+        ...(notes.length > 0
+          ? [
+              h(
+                "div",
+                {
+                  style: {
+                    marginTop: "10px",
+                    borderTop: "1px solid currentColor",
+                    paddingTop: "6px",
+                    opacity: 0.75,
+                  },
+                },
+                h(
+                  "div",
+                  { style: { fontWeight: "600", marginBottom: "4px" } },
+                  "Notes",
+                ),
+                ...notes.map((note, i) =>
+                  h(
+                    "div",
+                    {
+                      key: i,
+                      style: {
+                        display: "flex",
+                        gap: "6px",
+                        marginBottom: "2px",
+                      },
+                    },
+                    note.number != null
+                      ? h(
+                          "span",
+                          { style: { flexShrink: 0, fontWeight: "600" } },
+                          `${note.number}.`,
+                        )
+                      : null,
+                    h(
+                      "span",
+                      null,
+                      String(note.text ?? "").slice(0, 100) ||
+                        h("em", null, "empty note"),
+                    ),
+                  ),
+                ),
+              ),
+            ]
+          : []),
+      );
+    },
     schema: {
       title: fields.text({
         label: "Title",
@@ -194,6 +338,7 @@ export default config({
       path: "src/content/2026-2027/catalog/**",
       format: { contentField: "content" },
       columns: ["title"],
+      parseSlugForSort: (slug) => slug,
       schema: {
         title: fields.slug({ name: { label: "Title" } }),
         order: fields.number({
