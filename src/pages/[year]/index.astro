@@ -133,7 +133,9 @@ const currentYear = yearEntries2
   headings={tocHeadings}
   {prevPage}
   {nextPage}
+  breadcrumbs={[]}
 >
+  <h1 slot="title">{yearIndex.data.title}</h1>
   <Content />
 
   <nav class="not-prose mt-10" aria-label="Catalog sections">
