@@ -86,7 +86,7 @@ const hasDetails = Boolean(
           data-tooltip-panel
           data-tooltip-for={`course-tip-inline-${normalizedCode.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
           tabindex="-1"
-          class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-50 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-50 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+          class="pointer-events-none invisible fixed -left-[9999px] -top-[9999px] z-50 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
         >
           <div class="flex items-start justify-between gap-2">
             <p class="font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
@@ -123,8 +123,11 @@ const hasDetails = Boolean(
     if (window.__vhccTooltipInit) return;
     window.__vhccTooltipInit = true;
 
-    // Shared backdrop element (rendered in CatalogLayout)
     const backdrop = document.getElementById("tooltip-backdrop");
+
+    // Track the single currently-open panel and its container
+    let activePanel = null;
+    let activeContainer = null;
 
     const showBackdrop = () => {
       if (!backdrop) return;
@@ -137,7 +140,36 @@ const hasDetails = Boolean(
       backdrop.style.pointerEvents = "none";
     };
 
-    const setOpen = (container, open, triggerEl) => {
+    const closeActive = () => {
+      if (!activePanel || !activeContainer) return;
+      const panel = activePanel;
+      const container = activeContainer;
+      activePanel = null;
+      activeContainer = null;
+
+      panel.classList.add("invisible", "opacity-0", "pointer-events-none");
+      panel.classList.remove("visible", "opacity-100", "pointer-events-auto");
+
+      const returnTarget = panel._triggerEl;
+      panel._triggerEl = null;
+
+      if (panel._portalParent) {
+        panel._portalParent.insertBefore(panel, panel._portalNext || null);
+        panel.style.cssText = "position:fixed;left:-9999px;top:-9999px";
+        panel._portalParent = null;
+        panel._portalNext = null;
+      }
+
+      container.setAttribute("data-tooltip-open", "false");
+      container.querySelectorAll("[data-tooltip-trigger]").forEach((t) => {
+        t.setAttribute("aria-expanded", "false");
+      });
+
+      hideBackdrop();
+      if (returnTarget) returnTarget.focus();
+    };
+
+    const openTooltip = (container, triggerEl) => {
       const tooltipId = container.dataset.tooltipId;
       const panel =
         container.querySelector("[data-tooltip-panel]") ||
@@ -145,116 +177,80 @@ const hasDetails = Boolean(
           ? document.querySelector(`[data-tooltip-for="${tooltipId}"]`)
           : null);
       if (!panel) return;
-      const triggers = container.querySelectorAll("[data-tooltip-trigger]");
 
-      if (open) {
-        // Portal panel to body so it sits in root stacking context above the backdrop
-        const iBtn = container.querySelector("button[data-tooltip-trigger]");
-        const rect = iBtn
-          ? iBtn.getBoundingClientRect()
-          : container.getBoundingClientRect();
-        panel._portalParent = panel.parentElement;
-        panel._portalNext = panel.nextSibling;
-        panel._triggerEl = iBtn || triggerEl || null;
-        document.body.appendChild(panel);
-        const isMobile = window.innerWidth < 640;
-        if (isMobile) {
-          panel.style.cssText =
-            "position:fixed;left:12px;right:12px;bottom:12px;top:auto;width:auto;max-width:none;z-index:50";
-        } else {
-          const panelWidth = 320;
-          let left = rect.left;
-          if (left + panelWidth > window.innerWidth - 16)
-            left = window.innerWidth - panelWidth - 16;
-          panel.style.cssText = `position:fixed;top:${rect.bottom + 6}px;left:${left}px;width:${panelWidth}px;bottom:auto;right:auto;z-index:50`;
-        }
-        panel.classList.remove("invisible", "opacity-0", "pointer-events-none");
-        panel.classList.add("visible", "opacity-100", "pointer-events-auto");
-        showBackdrop();
-        const closeBtn = panel.querySelector("[data-tooltip-close]");
-        if (closeBtn) closeBtn.focus();
+      // Close any previously open tooltip first
+      if (activePanel && activePanel !== panel) closeActive();
+
+      const iBtn = container.querySelector("button[data-tooltip-trigger]");
+      const rect = (iBtn || triggerEl || container).getBoundingClientRect();
+
+      panel._portalParent = panel.parentElement;
+      panel._portalNext = panel.nextSibling;
+      panel._triggerEl = iBtn || triggerEl || null;
+      document.body.appendChild(panel);
+
+      if (window.innerWidth < 640) {
+        panel.style.cssText =
+          "position:fixed;left:12px;right:12px;bottom:12px;top:auto;width:auto;max-width:none;z-index:50";
       } else {
-        panel.classList.add("invisible", "opacity-0", "pointer-events-none");
-        panel.classList.remove("visible", "opacity-100", "pointer-events-auto");
-        const returnTarget = panel._triggerEl;
-        panel._triggerEl = null;
-        // Restore panel to original position in DOM
-        if (panel._portalParent) {
-          panel._portalParent.insertBefore(panel, panel._portalNext || null);
-          panel.style.cssText = "";
-          panel._portalParent = null;
-          panel._portalNext = null;
-        }
-        if (returnTarget) returnTarget.focus();
+        const w = 320;
+        let left = rect.left;
+        if (left + w > window.innerWidth - 16) left = window.innerWidth - w - 16;
+        panel.style.cssText = `position:fixed;top:${rect.bottom + 6}px;left:${left}px;width:${w}px;bottom:auto;right:auto;z-index:50`;
       }
-      container.setAttribute("data-tooltip-open", open ? "true" : "false");
-      triggers.forEach((trigger) => {
-        trigger.setAttribute("aria-expanded", open ? "true" : "false");
+
+      panel.classList.remove("invisible", "opacity-0", "pointer-events-none");
+      panel.classList.add("visible", "opacity-100", "pointer-events-auto");
+
+      activePanel = panel;
+      activeContainer = container;
+
+      container.setAttribute("data-tooltip-open", "true");
+      container.querySelectorAll("[data-tooltip-trigger]").forEach((t) => {
+        t.setAttribute("aria-expanded", "true");
       });
+
+      showBackdrop();
+      const closeBtn = panel.querySelector("[data-tooltip-close]");
+      if (closeBtn) closeBtn.focus();
     };
 
-    const closeAll = (except) => {
-      document
-        .querySelectorAll("[data-tooltip-container]")
-        .forEach((container) => {
-          if (except && container === except) return;
-          setOpen(container, false);
-        });
-      // Hide backdrop only if no tooltip remains open
-      const anyOpen = document.querySelector("[data-tooltip-open='true']");
-      if (!anyOpen) hideBackdrop();
-    };
-
-    if (backdrop) backdrop.addEventListener("click", () => closeAll());
+    // Backdrop click always closes
+    if (backdrop) backdrop.addEventListener("click", () => closeActive());
 
     document.addEventListener("click", (event) => {
       const target = event.target;
       if (!(target instanceof Element)) return;
 
-      const closeButton = target.closest("[data-tooltip-close]");
-      if (closeButton) {
-        // Panel may be portaled to body; find container via data attribute
-        const panel = closeButton.closest("[data-tooltip-panel]");
-        const containerId = panel?.dataset.tooltipFor;
-        const container = containerId
-          ? document.querySelector(
-              `[data-tooltip-container][data-tooltip-id='${containerId}']`,
-            )
-          : closeButton.closest("[data-tooltip-container]");
-        if (!container) return;
-        setOpen(container, false);
-        const anyOpen = document.querySelector("[data-tooltip-open='true']");
-        if (!anyOpen) hideBackdrop();
+      // Close button (× inside panel)
+      if (target.closest("[data-tooltip-close]")) {
+        closeActive();
         event.preventDefault();
         return;
       }
 
+      // Trigger button (toggle open/close)
       const trigger = target.closest("[data-tooltip-trigger]");
       if (trigger && !target.closest("a")) {
         const container = trigger.closest("[data-tooltip-container]");
         if (!container) return;
-        const isOpen = container.getAttribute("data-tooltip-open") === "true";
-        closeAll(container);
-        setOpen(container, !isOpen, !isOpen ? trigger : null);
-        if (isOpen) {
-          const anyOpen = document.querySelector("[data-tooltip-open='true']");
-          if (!anyOpen) hideBackdrop();
+        if (activeContainer === container) {
+          closeActive();
+        } else {
+          openTooltip(container, trigger);
         }
         event.preventDefault();
         return;
       }
 
-      const inTooltip = target.closest("[data-tooltip-container]");
-      if (!inTooltip) {
-        closeAll();
+      // Click outside: close if not inside the active panel
+      if (activePanel && !activePanel.contains(target)) {
+        closeActive();
       }
     });
 
     document.addEventListener("keydown", (event) => {
-      const target = event.target;
-      if (!(target instanceof Element)) return;
-
-      if (event.key === "Escape") closeAll();
+      if (event.key === "Escape") closeActive();
     });
   })();
 </script>
