@@ -646,7 +646,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
             <li
               id={noteId(String(note.number))}
               value={note.number}
-              class="scroll-mt-24"
+              class="[scroll-margin-top:var(--scroll-offset,9rem)]"
             >
               <span>
                 {note.parts.map((part) => {
