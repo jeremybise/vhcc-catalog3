@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { Image } from "astro:assets";
+import { Icon } from "astro-icon/components";
 import logo from "../assets/image007.png";
 import CatalogSearch from "../components/CatalogSearch";
 
@@ -147,7 +148,6 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       /* Header row */
       .prose table:not([class]) thead th {
         white-space: nowrap;
-        background-color: #e9eef5;
         border-bottom: 2px solid #cbd5e1 !important;
       }
 
@@ -158,7 +158,6 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
 
       /* Dark mode */
       .dark .prose table:not([class]) thead th {
-        background-color: #2d3748;
         border-bottom-color: #4a5568 !important;
       }
       .dark .prose table:not([class]) tbody tr:nth-child(even) td {
@@ -328,7 +327,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                   <li class="border-b border-gray-100 last:border-b-0 dark:border-gray-700">
                     <a
                       href={section.href}
-                      class="block px-4 py-3 text-base font-semibold text-vhcc-navy hover:bg-slate-100 dark:text-sky-300 dark:hover:bg-gray-800"
+                      class="block px-4 py-3 text-lg font-bold text-vhcc-navy hover:bg-slate-100 dark:text-sky-300 dark:hover:bg-gray-800"
                     >
                       {section.label}
                     </a>
@@ -405,7 +404,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         style="top: var(--header-h, 52px)"
         aria-label="Catalog navigation"
       >
-        <ul class="py-2">
+        <ul class="py-3 space-y-0.5">
           {
             sidebar.map((section) => (
               <li>
@@ -414,7 +413,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                     class="group"
                     open={section.slug === currentSection || undefined}
                   >
-                    <summary class="flex items-center justify-between px-4 py-2 text-sm font-semibold uppercase tracking-wide text-gray-600 cursor-pointer select-none hover:bg-slate-100 hover:text-vhcc-navy group-open:text-vhcc-navy list-none [&::-webkit-details-marker]:hidden dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:group-open:text-white">
+                    <summary class="flex items-center justify-between px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-slate-100 hover:text-vhcc-navy group-open:text-vhcc-navy list-none [&::-webkit-details-marker]:hidden dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:group-open:text-white">
                       <span>{section.label}</span>
                       <svg
                         class="w-3.5 h-3.5 shrink-0 ml-1 transition-transform group-open:rotate-90"
@@ -457,10 +456,10 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                       section.href === currentHref ? "page" : undefined
                     }
                     class:list={[
-                      "block px-4 py-2 text-sm font-semibold uppercase tracking-wide transition-colors",
+                      "block px-4 py-2.5 text-xs font-medium uppercase tracking-wider transition-colors",
                       section.href === currentHref
                         ? "bg-vhcc-blue/15 text-vhcc-navy border-l-2 border-vhcc-green dark:bg-sky-400/20 dark:text-sky-300 dark:border-emerald-400"
-                        : "text-gray-600 hover:bg-slate-100 hover:text-vhcc-navy dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white",
+                        : "text-gray-500 hover:bg-slate-100 hover:text-vhcc-navy dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white",
                     ]}
                   >
                     {section.label}
@@ -546,19 +545,18 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                 {
                   tocHeadings.length > 0 && (
                     <nav
-                      class="not-prose mb-6 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800"
+                      class="not-prose mb-8 border-l-2 border-slate-200 pl-4 dark:border-gray-700"
                       aria-label="On this page"
                     >
-                      <p class="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-vhcc-navy/85 dark:text-sky-300/85">
-                        <span class="h-1.5 w-1.5 rounded-full bg-vhcc-green dark:bg-emerald-400" />
+                      <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400">
                         What's on this page
                       </p>
-                      <ul class="space-y-1 text-sm">
+                      <ul class="space-y-1.5 text-sm">
                         {tocHeadings.map((heading) => (
                           <li>
                             <a
                               href={`#${heading.slug}`}
-                              class="block rounded-md px-2 py-1 font-medium text-gray-700 transition-colors hover:bg-slate-100 hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+                              class="font-medium text-gray-700 transition-colors hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue rounded-sm dark:text-gray-300 dark:hover:text-sky-300"
                             >
                               {heading.text}
                             </a>
@@ -580,12 +578,17 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                     {prevPage ? (
                       <a
                         href={prevPage.href}
-                        class="group rounded-lg border border-slate-200 bg-white p-4 hover:border-vhcc-blue/60 hover:bg-slate-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        class="group rounded-lg p-4 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:hover:bg-gray-800"
                       >
                         <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                           Previous
                         </p>
-                        <p class="mt-1 text-sm font-medium text-gray-900 group-hover:text-vhcc-navy dark:text-gray-100 dark:group-hover:text-white">
+                        <p class="mt-1 flex items-center gap-1.5 text-base font-semibold text-gray-900 group-hover:text-vhcc-blue dark:text-gray-100 dark:group-hover:text-sky-300">
+                          <Icon
+                            name="material-symbols:chevron-left"
+                            class="h-5 w-5 shrink-0 -ml-1 text-gray-400 transition-transform group-hover:-translate-x-0.5 group-hover:text-vhcc-blue dark:text-gray-500 dark:group-hover:text-sky-300"
+                            aria-hidden="true"
+                          />
                           {prevPage.title}
                         </p>
                       </a>
@@ -595,13 +598,18 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                     {nextPage ? (
                       <a
                         href={nextPage.href}
-                        class="group rounded-lg border border-slate-200 bg-white p-4 text-right hover:border-vhcc-blue/60 hover:bg-slate-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        class="group rounded-lg p-4 text-right transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:hover:bg-gray-800"
                       >
                         <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                           Next
                         </p>
-                        <p class="mt-1 text-sm font-medium text-gray-900 group-hover:text-vhcc-navy dark:text-gray-100 dark:group-hover:text-white">
+                        <p class="mt-1 flex items-center justify-end gap-1.5 text-base font-semibold text-gray-900 group-hover:text-vhcc-blue dark:text-gray-100 dark:group-hover:text-sky-300">
                           {nextPage.title}
+                          <Icon
+                            name="material-symbols:chevron-right"
+                            class="h-5 w-5 shrink-0 -mr-1 text-gray-400 transition-transform group-hover:translate-x-0.5 group-hover:text-vhcc-blue dark:text-gray-500 dark:group-hover:text-sky-300"
+                            aria-hidden="true"
+                          />
                         </p>
                       </a>
                     ) : (

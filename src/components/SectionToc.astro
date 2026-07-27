@@ -55,14 +55,14 @@ if (year && section) {
 {
   items.length > 0 ? (
     variant === "cards" ? (
-      <ul class="not-prose grid grid-cols-1 gap-3">
+      <ul class="not-prose grid grid-cols-1 gap-1">
         {items.map((item) => (
           <li>
             <a
               href={item.href}
-              class="group block h-full rounded-lg border border-slate-200 bg-white p-4 no-underline transition-colors hover:border-vhcc-blue/60 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+              class="group block h-full rounded-lg p-4 no-underline transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:hover:bg-gray-800"
             >
-              <span class="text-sm font-semibold leading-tight text-vhcc-navy group-hover:text-vhcc-blue dark:text-sky-300 dark:group-hover:text-sky-400">
+              <span class="text-base font-semibold leading-tight text-vhcc-navy group-hover:text-vhcc-blue dark:text-sky-300 dark:group-hover:text-sky-400">
                 {item.title}
               </span>
             </a>

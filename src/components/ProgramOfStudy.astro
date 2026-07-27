@@ -356,20 +356,20 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
       processedTerms.map((term, termIndex) => {
         return (
           <section>
-            <h4 class="mb-2 text-base font-semibold text-gray-900 dark:text-gray-100">
+            <h4 class="mb-3 text-lg font-bold text-vhcc-navy dark:text-sky-300">
               {term.termLabel}
             </h4>
-            <div class="rounded-lg border border-slate-200 dark:border-gray-600">
+            <div>
               <table class="w-full border-collapse bg-white text-base table-fixed dark:bg-gray-800">
                 <thead>
-                  <tr class="bg-slate-50 dark:bg-gray-700/50">
-                    <th class="w-1/4 border-b border-slate-200 px-3 py-2 text-left font-semibold text-gray-900 align-top dark:border-gray-600 dark:text-gray-100">
+                  <tr>
+                    <th class="w-1/4 border-b-2 border-slate-200 px-4 py-3 text-left text-sm font-medium text-gray-500 align-top dark:border-gray-600 dark:text-gray-400">
                       Course Number
                     </th>
-                    <th class="w-1/2 border-b border-slate-200 px-3 py-2 text-left font-semibold text-gray-900 align-top dark:border-gray-600 dark:text-gray-100">
+                    <th class="w-1/2 border-b-2 border-slate-200 px-4 py-3 text-left text-sm font-medium text-gray-500 align-top dark:border-gray-600 dark:text-gray-400">
                       Course Title
                     </th>
-                    <th class="w-1/4 border-b border-slate-200 px-3 py-2 text-right font-semibold text-gray-900 align-top dark:border-gray-600 dark:text-gray-100">
+                    <th class="w-1/4 border-b-2 border-slate-200 px-4 py-3 text-right text-sm font-medium text-gray-500 align-top dark:border-gray-600 dark:text-gray-400">
                       Credits
                     </th>
                   </tr>
@@ -381,7 +381,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                         <tr>
                           <td
                             colspan={3}
-                            class="border-b border-slate-100 px-3 py-2 text-gray-700 italic dark:border-gray-700 dark:text-gray-400"
+                            class="border-b border-slate-100 px-4 py-3 text-gray-700 italic dark:border-gray-700 dark:text-gray-400"
                           >
                             {row.note}
                           </td>
@@ -392,10 +392,10 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                     if (row.kind === "options") {
                       return (
                         <tr>
-                          <td class="border-b border-slate-100 px-3 py-2 font-medium text-gray-700 align-top wrap-break-word dark:border-gray-700 dark:text-gray-400">
+                          <td class="border-b border-slate-100 px-4 py-3 font-medium text-gray-700 align-top wrap-break-word dark:border-gray-700 dark:text-gray-400">
                             Option Group
                           </td>
-                          <td class="border-b border-slate-100 px-3 py-2 text-gray-800 align-top wrap-break-word dark:border-gray-700 dark:text-gray-200">
+                          <td class="border-b border-slate-100 px-4 py-3 text-gray-800 align-top wrap-break-word dark:border-gray-700 dark:text-gray-200">
                             <p class="font-medium text-gray-900 dark:text-gray-100">
                               {row.label}
                             </p>
@@ -412,7 +412,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                     <span
                                       class={
                                         item.meta
-                                          ? "group cursor-pointer underline decoration-dotted underline-offset-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+                                          ? "cursor-pointer underline decoration-dotted underline-offset-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
                                           : undefined
                                       }
                                       data-tooltip-trigger={
@@ -462,14 +462,6 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                           );
                                         },
                                       )}
-                                      {item.meta && (
-                                        <span
-                                          aria-hidden="true"
-                                          class="ml-1 inline-flex h-4 w-4 align-middle items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 group-hover:border-vhcc-blue group-hover:text-vhcc-blue group-focus-visible:border-vhcc-blue group-focus-visible:text-vhcc-blue dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:group-hover:border-sky-400 dark:group-hover:text-sky-400 dark:group-focus-visible:border-sky-400 dark:group-focus-visible:text-sky-400"
-                                        >
-                                          i
-                                        </span>
-                                      )}
                                     </span>
                                     {item.meta && (
                                       <div
@@ -479,7 +471,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                         data-tooltip-panel
                                         data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
                                         tabindex="-1"
-                                        class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                                        class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-lg bg-white p-4 text-sm text-slate-700 opacity-0 shadow-xl ring-1 ring-black/5 transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:bg-gray-800 dark:text-gray-200 dark:ring-white/10"
                                       >
                                         <div class="flex items-start justify-between gap-2">
                                           <p class="font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
@@ -511,7 +503,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                               ))}
                             </ul>
                           </td>
-                          <td class="border-b border-slate-100 px-3 py-2 text-right font-medium text-gray-900 align-top dark:border-gray-700 dark:text-gray-100">
+                          <td class="border-b border-slate-100 px-4 py-3 text-right font-medium text-gray-900 align-top dark:border-gray-700 dark:text-gray-100">
                             {row.creditsText}
                           </td>
                         </tr>
@@ -520,10 +512,10 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
 
                     return (
                       <tr>
-                        <td class="border-b border-slate-100 px-3 py-2 font-medium text-gray-700 align-top wrap-break-word dark:border-gray-700 dark:text-gray-300">
+                        <td class="border-b border-slate-100 px-4 py-3 font-medium text-gray-700 align-top wrap-break-word dark:border-gray-700 dark:text-gray-300">
                           {row.code}
                         </td>
-                        <td class="border-b border-slate-100 px-3 py-2 text-gray-800 align-top wrap-break-word dark:border-gray-700 dark:text-gray-200">
+                        <td class="border-b border-slate-100 px-4 py-3 text-gray-800 align-top wrap-break-word dark:border-gray-700 dark:text-gray-200">
                           <span
                             class="relative"
                             data-tooltip-container
@@ -532,7 +524,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                             <span
                               class={
                                 row.meta
-                                  ? "group cursor-pointer underline decoration-dotted underline-offset-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
+                                  ? "cursor-pointer underline decoration-dotted underline-offset-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
                                   : undefined
                               }
                               data-tooltip-trigger={
@@ -573,14 +565,6 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                   </sup>
                                 );
                               })}
-                              {row.meta && (
-                                <span
-                                  aria-hidden="true"
-                                  class="ml-1 inline-flex h-4 w-4 align-middle items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 group-hover:border-vhcc-blue group-hover:text-vhcc-blue group-focus-visible:border-vhcc-blue group-focus-visible:text-vhcc-blue dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:group-hover:border-sky-400 dark:group-hover:text-sky-400 dark:group-focus-visible:border-sky-400 dark:group-focus-visible:text-sky-400"
-                                >
-                                  i
-                                </span>
-                              )}
                             </span>
                             {row.meta && (
                               <div
@@ -590,7 +574,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                 data-tooltip-panel
                                 data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
                                 tabindex="-1"
-                                class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                                class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-lg bg-white p-4 text-sm text-slate-700 opacity-0 shadow-xl ring-1 ring-black/5 transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:bg-gray-800 dark:text-gray-200 dark:ring-white/10"
                               >
                                 <div class="flex items-start justify-between gap-2">
                                   <p class="font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
@@ -616,7 +600,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                             )}
                           </span>
                         </td>
-                        <td class="border-b border-slate-100 px-3 py-2 text-right text-gray-900 align-top dark:border-gray-700 dark:text-gray-100">
+                        <td class="border-b border-slate-100 px-4 py-3 text-right text-gray-900 align-top dark:border-gray-700 dark:text-gray-100">
                           {row.creditsText}
                         </td>
                       </tr>
@@ -625,12 +609,12 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                 </tbody>
                 {showTotals && (
                   <tfoot>
-                    <tr class="bg-slate-50 dark:bg-gray-700/50">
-                      <td class="px-3 py-2" />
-                      <td class="px-3 py-2 text-right font-semibold text-gray-900 dark:text-gray-100">
+                    <tr class="border-t-2 border-slate-200 dark:border-gray-600">
+                      <td class="px-4 py-3" />
+                      <td class="px-4 py-3 text-right font-bold text-vhcc-navy dark:text-sky-300">
                         Total
                       </td>
-                      <td class="px-3 py-2 text-right font-semibold text-gray-900 dark:text-gray-100">
+                      <td class="px-4 py-3 text-right font-bold text-vhcc-navy dark:text-sky-300">
                         {term.total}
                       </td>
                     </tr>

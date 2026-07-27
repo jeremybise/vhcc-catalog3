@@ -1,6 +1,29 @@
 ---
 import { getCollection, render } from "astro:content";
+import { Icon } from "astro-icon/components";
 import CatalogLayout from "../../layouts/CatalogLayout.astro";
+
+/** Maps a catalog section's folder slug to a Material Symbols icon. */
+const sectionIcons: Record<string, string> = {
+  "college-calendar": "material-symbols:calendar-month-outline",
+  "about-the-college": "material-symbols:account-balance-outline",
+  admissions: "material-symbols:how-to-reg-outline",
+  "tuition-and-financial-aid": "material-symbols:payments-outline",
+  "academic-policies": "material-symbols:policy-outline",
+  "explanation-of-degrees-and-courses":
+    "material-symbols:workspace-premium-outline",
+  "school-of-arts-and-sciences": "material-symbols:science-outline",
+  "school-of-business-and-industry":
+    "material-symbols:business-center-outline",
+  "school-of-health-professions": "material-symbols:health-and-safety-outline",
+  "workforce-development-and-continuing-education":
+    "material-symbols:handyman-outline",
+  "course-descriptions": "material-symbols:menu-book-outline",
+  "courses-of-study": "material-symbols:route-outline",
+  "administration-faculty-instructional-and-support-staff":
+    "material-symbols:groups-outline",
+};
+const defaultSectionIcon = "material-symbols:folder-outline";
 
 export async function getStaticPaths() {
   const allEntries = await getCollection("catalog");
@@ -138,25 +161,29 @@ const currentYear = yearEntries2
   <h1 slot="title">{yearIndex.data.title}</h1>
   <Content />
 
-  <nav class="not-prose mt-10" aria-label="Catalog sections">
-    <h2 class="mb-5 text-2xl font-bold text-vhcc-navy dark:text-sky-300">
+  <nav class="not-prose mt-14" aria-label="Catalog sections">
+    <h2 class="mb-6 text-3xl font-bold text-vhcc-navy dark:text-sky-300">
       Catalog Sections
     </h2>
-    <div class="grid gap-3 sm:grid-cols-2">
+    <div class="grid gap-2 sm:grid-cols-2 sm:-mx-4">
       {
         sidebar.map((section) => (
           <a
             href={section.href}
-            class="group flex items-center gap-4 rounded-lg border border-gray-200 p-4 transition-colors hover:border-vhcc-blue hover:bg-vhcc-blue/5 no-underline dark:border-gray-700 dark:hover:border-sky-500 dark:hover:bg-sky-500/10"
+            class="group flex items-center gap-4 rounded-lg p-4 transition-colors hover:bg-vhcc-blue/5 no-underline dark:hover:bg-sky-500/10"
           >
-            <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-vhcc-navy text-sm font-bold text-white dark:bg-sky-800 dark:text-sky-200">
-              {section.order}
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-vhcc-blue/10 text-vhcc-blue dark:bg-sky-400/10 dark:text-sky-300">
+              <Icon
+                name={sectionIcons[section.slug] ?? defaultSectionIcon}
+                class="h-5 w-5"
+                aria-hidden="true"
+              />
             </span>
-            <span class="text-sm font-semibold text-gray-900 group-hover:text-vhcc-blue dark:text-gray-100 dark:group-hover:text-sky-300">
+            <span class="text-lg font-semibold text-gray-900 group-hover:text-vhcc-blue dark:text-gray-100 dark:group-hover:text-sky-300">
               {section.pages[0]?.title ?? section.label}
             </span>
             <svg
-              class="ml-auto h-4 w-4 shrink-0 text-gray-400 group-hover:text-vhcc-blue dark:text-gray-500 dark:group-hover:text-sky-300"
+              class="ml-auto h-4 w-4 shrink-0 text-gray-300 transition-transform group-hover:translate-x-0.5 group-hover:text-vhcc-blue dark:text-gray-600 dark:group-hover:text-sky-300"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"

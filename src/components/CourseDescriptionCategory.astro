@@ -8,6 +8,34 @@ interface Props {
 
 const { year, category } = Astro.props;
 
+type NotePart =
+  | { kind: "text"; text: string }
+  | { kind: "link"; text: string; href: string };
+
+/** Prerequisite/corequisite notes are plain text fields, but editors sometimes
+ * write markdown-style links in them — render those instead of showing the
+ * raw [text](url) syntax. */
+const parseNote = (value: string): NotePart[] => {
+  const parts: NotePart[] = [];
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  let lastIndex = 0;
+
+  for (const match of value.matchAll(linkRegex)) {
+    const start = match.index ?? 0;
+    if (start > lastIndex) {
+      parts.push({ kind: "text", text: value.slice(lastIndex, start) });
+    }
+    parts.push({ kind: "link", text: match[1], href: match[2] });
+    lastIndex = start + match[0].length;
+  }
+
+  if (lastIndex < value.length) {
+    parts.push({ kind: "text", text: value.slice(lastIndex) });
+  }
+
+  return parts.length > 0 ? parts : [{ kind: "text", text: value }];
+};
+
 const allCourses = await getCollection("courses");
 const categoryCourses = allCourses
   .filter(
@@ -37,12 +65,38 @@ const displayCode = (code: string) => code.replace("-", " ");
       </p>
       {course.data.prerequisiteNote && (
         <p>
-          <em>{course.data.prerequisiteNote}</em>
+          <em>
+            {parseNote(course.data.prerequisiteNote).map((part) =>
+              part.kind === "link" ? (
+                <a
+                  href={part.href}
+                  class="text-vhcc-blue underline decoration-vhcc-blue/40 underline-offset-2 hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:text-sky-400 dark:decoration-sky-400/40 dark:hover:text-sky-300"
+                >
+                  {part.text}
+                </a>
+              ) : (
+                part.text
+              ),
+            )}
+          </em>
         </p>
       )}
       {course.data.corequisiteNote && (
         <p>
-          <em>{course.data.corequisiteNote}</em>
+          <em>
+            {parseNote(course.data.corequisiteNote).map((part) =>
+              part.kind === "link" ? (
+                <a
+                  href={part.href}
+                  class="text-vhcc-blue underline decoration-vhcc-blue/40 underline-offset-2 hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:text-sky-400 dark:decoration-sky-400/40 dark:hover:text-sky-300"
+                >
+                  {part.text}
+                </a>
+              ) : (
+                part.text
+              ),
+            )}
+          </em>
         </p>
       )}
       <Content />
