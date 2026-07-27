@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, useId } from "react";
 
 interface PagefindResultData {
   url: string;
@@ -36,6 +36,10 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const selectedResultRef = useRef<HTMLAnchorElement>(null);
   const pagefindRef = useRef<PagefindModule | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const listboxId = useId();
+  const optionId = (index: number) => `${listboxId}-option-${index}`;
 
   // Load Pagefind via dynamic import (escapes Vite's static analysis)
   useEffect(() => {
@@ -62,6 +66,10 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
     setQuery("");
     setResults([]);
     setSelectedIndex(-1);
+    // Return focus to the button that opened the modal, per the
+    // standard dialog pattern, instead of leaving it stuck on a
+    // now-hidden element.
+    triggerRef.current?.focus();
   }, []);
 
   // Focus input when modal opens
@@ -167,6 +175,25 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
         e.preventDefault();
         window.location.href = results[selectedIndex].url;
       }
+      // Keep Tab from leaving the dialog while it's open — without this,
+      // keyboard users can tab past the modal into the page underneath
+      // even though it's still visually (and semantically, via
+      // aria-modal) blocked.
+      if (e.key === "Tab" && panelRef.current) {
+        const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
@@ -176,6 +203,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
     <>
       {/* Trigger button in header */}
       <button
+        ref={triggerRef}
         type="button"
         onClick={openModal}
         aria-label="Search catalog"
@@ -210,7 +238,10 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
           />
 
           {/* Panel */}
-          <div className="relative w-full max-w-xl rounded-xl bg-white shadow-2xl ring-1 ring-black/10 flex flex-col max-h-[70vh] dark:bg-gray-800 dark:ring-black/30">
+          <div
+            ref={panelRef}
+            className="relative w-full max-w-xl rounded-xl bg-white shadow-2xl ring-1 ring-black/10 flex flex-col max-h-[70vh] dark:bg-gray-800 dark:ring-black/30"
+          >
             {/* Input row */}
             <div className="flex items-center gap-3 px-4 py-3 border-b border-gray-200 dark:border-gray-700">
               <svg
@@ -227,10 +258,18 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
               <input
                 ref={inputRef}
                 type="search"
+                role="combobox"
+                aria-label={`Search ${currentYear} catalog`}
+                aria-expanded={results.length > 0}
+                aria-controls={listboxId}
+                aria-autocomplete="list"
+                aria-activedescendant={
+                  selectedIndex >= 0 ? optionId(selectedIndex) : undefined
+                }
                 placeholder={`Search ${currentYear} catalog…`}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="flex-1 bg-transparent text-base text-gray-900 placeholder:text-gray-400 outline-none dark:text-gray-100 dark:placeholder:text-gray-500"
+                className="flex-1 bg-transparent text-base text-gray-900 placeholder:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue rounded-sm dark:text-gray-100 dark:placeholder:text-gray-400"
               />
               {query && (
                 <button
@@ -240,7 +279,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
                     setResults([]);
                     inputRef.current?.focus();
                   }}
-                  className="shrink-0 text-xs text-gray-400 hover:text-gray-600"
+                  className="shrink-0 text-xs text-gray-500 hover:text-gray-600 dark:text-gray-400"
                   aria-label="Clear search"
                 >
                   Clear
@@ -250,7 +289,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
                 type="button"
                 onClick={closeModal}
                 className="shrink-0 rounded-md border border-gray-200 px-1.5 py-0.5 text-xs text-gray-500 hover:bg-gray-100 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
-                aria-label="Close search"
+                aria-label="Close search (Esc)"
               >
                 Esc
               </button>
@@ -259,7 +298,10 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
             {/* Status / results */}
             <div className="overflow-y-auto flex-1">
               {query && (
-                <div className="px-4 py-1.5 text-xs text-gray-400 border-b border-gray-100 dark:text-gray-500 dark:border-gray-700">
+                <div
+                  className="px-4 py-1.5 text-xs text-gray-500 border-b border-gray-100 dark:text-gray-400 dark:border-gray-700"
+                  role="status"
+                >
                   {isSearching
                     ? "Searching…"
                     : results.length > 0
@@ -270,12 +312,14 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
 
               {results.length > 0 ? (
                 <ul
+                  id={listboxId}
                   className="divide-y divide-gray-100 dark:divide-gray-700"
                   role="listbox"
                 >
                   {results.map((result, index) => (
                     <li
                       key={result.id}
+                      id={optionId(index)}
                       role="option"
                       aria-selected={index === selectedIndex}
                     >
@@ -283,7 +327,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
                         ref={index === selectedIndex ? selectedResultRef : null}
                         href={result.url}
                         onClick={closeModal}
-                        className={`block px-4 py-3 transition-colors ${
+                        className={`block px-4 py-3 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue focus-visible:ring-inset ${
                           index === selectedIndex
                             ? "border-l-2 border-vhcc-blue bg-vhcc-blue/10 dark:bg-vhcc-blue/20"
                             : "hover:bg-gray-50 dark:hover:bg-gray-700"
@@ -306,7 +350,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
                   No results found
                 </p>
               ) : !query ? (
-                <p className="px-4 py-10 text-center text-sm text-gray-400 dark:text-gray-500">
+                <p className="px-4 py-10 text-center text-sm text-gray-500 dark:text-gray-400">
                   Start typing to search the catalog…
                 </p>
               ) : null}
@@ -314,7 +358,7 @@ export default function CatalogSearch({ currentYear }: CatalogSearchProps) {
 
             {/* Keyboard hint footer */}
             {results.length > 0 && (
-              <div className="shrink-0 flex gap-4 border-t border-gray-100 bg-gray-50 px-4 py-2 text-xs text-gray-400 rounded-b-xl dark:border-gray-700 dark:bg-gray-700/50 dark:text-gray-500">
+              <div className="shrink-0 flex gap-4 border-t border-gray-100 bg-gray-50 px-4 py-2 text-xs text-gray-500 rounded-b-xl dark:border-gray-700 dark:bg-gray-700/50 dark:text-gray-400">
                 <span>
                   <kbd className="font-semibold">↑↓</kbd> navigate
                 </span>

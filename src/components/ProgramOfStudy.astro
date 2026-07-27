@@ -405,18 +405,36 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                   <span class="font-medium">{item.code}</span>
                                   {": "}
                                   <span
-                                    class="group/tooltip relative ml-1 align-middle"
+                                    class="relative ml-1 align-middle"
                                     data-tooltip-container
                                     data-tooltip-id={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
                                   >
                                     <span
                                       class={
                                         item.meta
-                                          ? "cursor-pointer underline decoration-dotted underline-offset-2"
+                                          ? "group cursor-pointer underline decoration-dotted underline-offset-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
                                           : undefined
                                       }
                                       data-tooltip-trigger={
                                         item.meta ? "true" : undefined
+                                      }
+                                      role={item.meta ? "button" : undefined}
+                                      tabindex={item.meta ? 0 : undefined}
+                                      aria-label={
+                                        item.meta
+                                          ? `View details: ${item.code}`
+                                          : undefined
+                                      }
+                                      aria-controls={
+                                        item.meta
+                                          ? `${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`
+                                          : undefined
+                                      }
+                                      aria-expanded={
+                                        item.meta ? "false" : undefined
+                                      }
+                                      aria-haspopup={
+                                        item.meta ? "dialog" : undefined
                                       }
                                     >
                                       {item.title.parts.map(
@@ -444,54 +462,49 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                           );
                                         },
                                       )}
-                                    </span>
-                                    {item.meta && (
-                                      <>
-                                        <button
-                                          type="button"
-                                          class="ml-1 inline-flex h-4 w-4 align-middle items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue group-hover/tooltip:border-vhcc-blue group-hover/tooltip:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400 dark:group-hover/tooltip:border-sky-400 dark:group-hover/tooltip:text-sky-400"
-                                          data-tooltip-trigger
-                                          aria-label={`View course details for ${item.meta.code}`}
-                                          aria-controls={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
-                                          aria-expanded="false"
-                                          aria-haspopup="dialog"
+                                      {item.meta && (
+                                        <span
+                                          aria-hidden="true"
+                                          class="ml-1 inline-flex h-4 w-4 align-middle items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 group-hover:border-vhcc-blue group-hover:text-vhcc-blue group-focus-visible:border-vhcc-blue group-focus-visible:text-vhcc-blue dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:group-hover:border-sky-400 dark:group-hover:text-sky-400 dark:group-focus-visible:border-sky-400 dark:group-focus-visible:text-sky-400"
                                         >
                                           i
-                                        </button>
-                                        <div
-                                          id={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
-                                          role="dialog"
-                                          aria-label={`Course details for ${item.meta.code}`}
-                                          data-tooltip-panel
-                                          data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
-                                          tabindex="-1"
-                                          class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
-                                        >
-                                          <div class="flex items-start justify-between gap-2">
-                                            <p class="font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
-                                              {item.meta.code}:{" "}
-                                              {item.meta.title}
-                                            </p>
-                                            <button
-                                              type="button"
-                                              class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-300 text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-600 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400"
-                                              data-tooltip-close
-                                              aria-label="Close course details"
-                                            >
-                                              ×
-                                            </button>
-                                          </div>
-                                          <p class="mt-1 text-slate-700 wrap-break-word dark:text-gray-300">
-                                            <span class="font-semibold">
-                                              Credits:
-                                            </span>{" "}
-                                            {item.meta.credits}
+                                        </span>
+                                      )}
+                                    </span>
+                                    {item.meta && (
+                                      <div
+                                        id={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
+                                        role="dialog"
+                                        aria-label={`Course details for ${item.meta.code}`}
+                                        data-tooltip-panel
+                                        data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
+                                        tabindex="-1"
+                                        class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                                      >
+                                        <div class="flex items-start justify-between gap-2">
+                                          <p class="font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
+                                            {item.meta.code}:{" "}
+                                            {item.meta.title}
                                           </p>
-                                          <p class="mt-1 leading-relaxed wrap-break-word">
-                                            {item.meta.description}
-                                          </p>
+                                          <button
+                                            type="button"
+                                            class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-300 text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-600 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400"
+                                            data-tooltip-close
+                                            aria-label="Close course details"
+                                          >
+                                            ×
+                                          </button>
                                         </div>
-                                      </>
+                                        <p class="mt-1 text-slate-700 wrap-break-word dark:text-gray-300">
+                                          <span class="font-semibold">
+                                            Credits:
+                                          </span>{" "}
+                                          {item.meta.credits}
+                                        </p>
+                                        <p class="mt-1 leading-relaxed wrap-break-word">
+                                          {item.meta.description}
+                                        </p>
+                                      </div>
                                     )}
                                   </span>
                                 </li>
@@ -512,19 +525,31 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                         </td>
                         <td class="border-b border-slate-100 px-3 py-2 text-gray-800 align-top wrap-break-word dark:border-gray-700 dark:text-gray-200">
                           <span
-                            class="group/tooltip relative"
+                            class="relative"
                             data-tooltip-container
                             data-tooltip-id={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
                           >
                             <span
                               class={
                                 row.meta
-                                  ? "cursor-pointer underline decoration-dotted underline-offset-2"
+                                  ? "group cursor-pointer underline decoration-dotted underline-offset-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
                                   : undefined
                               }
                               data-tooltip-trigger={
                                 row.meta ? "true" : undefined
                               }
+                              role={row.meta ? "button" : undefined}
+                              tabindex={row.meta ? 0 : undefined}
+                              aria-label={
+                                row.meta ? `View details: ${row.code}` : undefined
+                              }
+                              aria-controls={
+                                row.meta
+                                  ? `${instanceId}-course-tip-${termIndex}-${rowIndex}`
+                                  : undefined
+                              }
+                              aria-expanded={row.meta ? "false" : undefined}
+                              aria-haspopup={row.meta ? "dialog" : undefined}
                             >
                               {row.title.parts.map((part, partIndex) => {
                                 if (part.kind === "text") return part.text;
@@ -548,51 +573,46 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                   </sup>
                                 );
                               })}
-                            </span>
-                            {row.meta && (
-                              <>
-                                <button
-                                  type="button"
-                                  class="ml-1 inline-flex h-4 w-4 align-middle items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue group-hover/tooltip:border-vhcc-blue group-hover/tooltip:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400 dark:group-hover/tooltip:border-sky-400 dark:group-hover/tooltip:text-sky-400"
-                                  data-tooltip-trigger
-                                  aria-label={`View course details for ${row.meta.code}`}
-                                  aria-controls={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
-                                  aria-expanded="false"
-                                  aria-haspopup="dialog"
+                              {row.meta && (
+                                <span
+                                  aria-hidden="true"
+                                  class="ml-1 inline-flex h-4 w-4 align-middle items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 group-hover:border-vhcc-blue group-hover:text-vhcc-blue group-focus-visible:border-vhcc-blue group-focus-visible:text-vhcc-blue dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:group-hover:border-sky-400 dark:group-hover:text-sky-400 dark:group-focus-visible:border-sky-400 dark:group-focus-visible:text-sky-400"
                                 >
                                   i
-                                </button>
-                                <div
-                                  id={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
-                                  role="dialog"
-                                  aria-label={`Course details for ${row.meta.code}`}
-                                  data-tooltip-panel
-                                  data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
-                                  tabindex="-1"
-                                  class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
-                                >
-                                  <div class="flex items-start justify-between gap-2">
-                                    <p class="font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
-                                      {row.meta.code}: {row.meta.title}
-                                    </p>
-                                    <button
-                                      type="button"
-                                      class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-300 text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-600 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400"
-                                      data-tooltip-close
-                                      aria-label="Close course details"
-                                    >
-                                      ×
-                                    </button>
-                                  </div>
-                                  <p class="mt-1 text-slate-700 wrap-break-word dark:text-gray-300">
-                                    <span class="font-semibold">Credits:</span>{" "}
-                                    {row.meta.credits}
+                                </span>
+                              )}
+                            </span>
+                            {row.meta && (
+                              <div
+                                id={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
+                                role="dialog"
+                                aria-label={`Course details for ${row.meta.code}`}
+                                data-tooltip-panel
+                                data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
+                                tabindex="-1"
+                                class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
+                              >
+                                <div class="flex items-start justify-between gap-2">
+                                  <p class="font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
+                                    {row.meta.code}: {row.meta.title}
                                   </p>
-                                  <p class="mt-1 leading-relaxed wrap-break-word">
-                                    {row.meta.description}
-                                  </p>
+                                  <button
+                                    type="button"
+                                    class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-300 text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-600 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400"
+                                    data-tooltip-close
+                                    aria-label="Close course details"
+                                  >
+                                    ×
+                                  </button>
                                 </div>
-                              </>
+                                <p class="mt-1 text-slate-700 wrap-break-word dark:text-gray-300">
+                                  <span class="font-semibold">Credits:</span>{" "}
+                                  {row.meta.credits}
+                                </p>
+                                <p class="mt-1 leading-relaxed wrap-break-word">
+                                  {row.meta.description}
+                                </p>
+                              </div>
                             )}
                           </span>
                         </td>
@@ -692,13 +712,14 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
 
       if (open) {
         // Portal panel to body so it sits in root stacking context above the backdrop
-        const iBtn = container.querySelector("button[data-tooltip-trigger]");
-        const rect = iBtn
-          ? iBtn.getBoundingClientRect()
+        const triggerNode =
+          triggerEl || container.querySelector("[data-tooltip-trigger]");
+        const rect = triggerNode
+          ? triggerNode.getBoundingClientRect()
           : container.getBoundingClientRect();
         panel._portalParent = panel.parentElement;
         panel._portalNext = panel.nextSibling;
-        panel._triggerEl = iBtn || triggerEl || null;
+        panel._triggerEl = triggerNode || null;
         document.body.appendChild(panel);
         const isMobile = window.innerWidth < 640;
         if (isMobile) {
@@ -713,12 +734,14 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
         }
         panel.classList.remove("invisible", "opacity-0", "pointer-events-none");
         panel.classList.add("visible", "opacity-100", "pointer-events-auto");
+        panel.setAttribute("aria-modal", "true");
         showBackdrop();
         const closeBtn = panel.querySelector("[data-tooltip-close]");
         if (closeBtn) closeBtn.focus();
       } else {
         panel.classList.add("invisible", "opacity-0", "pointer-events-none");
         panel.classList.remove("visible", "opacity-100", "pointer-events-auto");
+        panel.removeAttribute("aria-modal");
         const returnTarget = panel._triggerEl;
         panel._triggerEl = null;
         // Restore panel to original position in DOM
@@ -795,6 +818,52 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
       if (!(target instanceof Element)) return;
 
       if (event.key === "Escape") closeAll();
+
+      // Course titles that contain a footnote link can't be real <button>
+      // elements (a <button> can't contain an <a>), so they're marked
+      // role="button" instead and don't get native Enter/Space activation —
+      // wire that up here. Scoped to [role="button"] so real <button>
+      // triggers (which already activate natively) aren't double-toggled.
+      if (event.key === "Enter" || event.key === " ") {
+        const trigger = target.closest('[data-tooltip-trigger][role="button"]');
+        if (trigger && !target.closest("a")) {
+          event.preventDefault();
+          const container = trigger.closest("[data-tooltip-container]");
+          if (!container) return;
+          const isOpen =
+            container.getAttribute("data-tooltip-open") === "true";
+          closeAll(container);
+          setOpen(container, !isOpen, !isOpen ? trigger : null);
+          if (isOpen) {
+            const anyOpen = document.querySelector(
+              "[data-tooltip-open='true']",
+            );
+            if (!anyOpen) hideBackdrop();
+          }
+        }
+      }
+
+      // Keep Tab inside the open panel — otherwise keyboard users can
+      // tab past it into the dimmed page behind it.
+      if (event.key === "Tab") {
+        const openPanel = document.querySelector(
+          "[data-tooltip-panel].visible",
+        );
+        if (!openPanel) return;
+        const focusable = openPanel.querySelectorAll(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
     });
   })();
 </script>

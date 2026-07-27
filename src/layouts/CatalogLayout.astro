@@ -127,6 +127,11 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         -webkit-overflow-scrolling: touch;
       }
 
+      .prose-table-scroll:focus-visible {
+        outline: 2px solid #4578ba;
+        outline-offset: 2px;
+      }
+
       /* Tables fill their scroll wrapper and use fixed equal-width columns */
       .prose table:not([class]) {
         width: 100%;
@@ -227,8 +232,12 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         <span class="tracking-tight leading-tight">College Catalog</span>
       </a>
       <label for="catalog-year-switcher" class="sr-only">Catalog Year</label>
+      <span id="catalog-year-switcher-hint" class="sr-only">
+        Selecting a year takes you to that catalog.
+      </span>
       <select
         id="catalog-year-switcher"
+        aria-describedby="catalog-year-switcher-hint"
         class="rounded-md border border-vhcc-blue bg-vhcc-navy px-2 py-1 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
         onchange="window.location.href='/' + this.value"
       >
@@ -654,11 +663,21 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         const wrapTables = () => {
           document
             .querySelectorAll(".prose table:not([class])")
-            .forEach((table) => {
+            .forEach((table, index) => {
               if (table.parentElement?.classList.contains("prose-table-scroll"))
                 return;
               const wrapper = document.createElement("div");
               wrapper.className = "prose-table-scroll";
+              // Scrollable regions need to be reachable and operable by
+              // keyboard, and announced as a region, or their horizontal
+              // content is effectively unavailable to keyboard/AT users.
+              wrapper.setAttribute("tabindex", "0");
+              wrapper.setAttribute("role", "region");
+              const caption = table.querySelector("caption");
+              wrapper.setAttribute(
+                "aria-label",
+                caption?.textContent?.trim() || `Table ${index + 1}`,
+              );
               table.parentNode.insertBefore(wrapper, table);
               wrapper.appendChild(table);
             });

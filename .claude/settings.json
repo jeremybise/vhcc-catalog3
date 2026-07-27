@@ -3,7 +3,20 @@
     "allow": [
       "Bash(npx astro *)",
       "Bash(npx tsc *)",
-      "Bash(echo \"EXIT:$?\")"
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(echo \"TS_EXIT:$?\")",
+      "Bash(curl -sf http://127.0.0.1:4322/2026-2027/catalog/school-of-arts-and-sciences/computer-science-program -o /tmp/cs-program.html)",
+      "Bash(curl -sf http://127.0.0.1:4322/2026-2027 -o /tmp/year-index.html)",
+      "Bash(curl -s -o /tmp/cs-program.html -w \"HTTP %{http_code}\\\\n\" \"http://127.0.0.1:4322/2026-2027/school-of-arts-and-sciences/computer-science-program\")",
+      "Bash(node --check /tmp/tooltip_script.js)",
+      "Bash(curl -s -o /tmp/catalogsearch.js -w \"HTTP %{http_code}\\\\n\" \"http://127.0.0.1:4322/src/components/CatalogSearch.tsx\")",
+      "Bash(lsof -ti:4322 -sTCP:LISTEN)",
+      "Bash(xargs -r kill)",
+      "Bash(curl -sf http://127.0.0.1:4322)",
+      "Bash(awk '/button/{print NR\": \"$0}' /Users/jeremybise/code/vhcc-catalog3/node_modules/tailwindcss/preflight.css)",
+      "Bash(curl -s -o /tmp/cs-program2.html -w \"HTTP %{http_code}\\\\n\" \"http://127.0.0.1:4322/2026-2027/school-of-arts-and-sciences/computer-science-program\")",
+      "Bash(curl -s -o /tmp/edu-program.html \"http://127.0.0.1:4322/2026-2027/school-of-arts-and-sciences/education-program\")",
+      "Bash(node --check /tmp/pos_script.js)"
     ]
   }
 }

@@ -57,27 +57,29 @@ const hasDetails = Boolean(
 ---
 
 <span
-  class="group/tooltip relative inline-flex items-center gap-1 align-middle"
+  class="relative inline-flex items-center align-middle"
   data-tooltip-container
   data-tooltip-id={`course-tip-inline-${normalizedCode.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
 >
-  <span
-    class="cursor-pointer underline decoration-dotted underline-offset-2"
-    data-tooltip-trigger>{displayLabel}</span
-  >
   {
-    hasDetails && (
+    hasDetails ? (
       <>
         <button
           type="button"
-          class="inline-flex h-4 w-4 items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue group-hover/tooltip:border-vhcc-blue group-hover/tooltip:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400 dark:group-hover/tooltip:border-sky-400 dark:group-hover/tooltip:text-sky-400"
+          class="group inline-flex items-center gap-1 border-0 bg-transparent p-0 m-0 text-left text-inherit cursor-pointer underline decoration-dotted underline-offset-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
           data-tooltip-trigger
-          aria-label={`View course details for ${normalizedCode}`}
+          aria-label={`View details: ${displayLabel}`}
           aria-controls={`course-tip-inline-${normalizedCode.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
           aria-expanded="false"
           aria-haspopup="dialog"
         >
-          i
+          {displayLabel}
+          <span
+            aria-hidden="true"
+            class="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 group-hover:border-vhcc-blue group-hover:text-vhcc-blue group-focus-visible:border-vhcc-blue group-focus-visible:text-vhcc-blue dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:group-hover:border-sky-400 dark:group-hover:text-sky-400 dark:group-focus-visible:border-sky-400 dark:group-focus-visible:text-sky-400"
+          >
+            i
+          </span>
         </button>
         <div
           id={`course-tip-inline-${normalizedCode.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
@@ -114,6 +116,8 @@ const hasDetails = Boolean(
           )}
         </div>
       </>
+    ) : (
+      <span>{displayLabel}</span>
     )
   }
 </span>
@@ -149,6 +153,7 @@ const hasDetails = Boolean(
 
       panel.classList.add("invisible", "opacity-0", "pointer-events-none");
       panel.classList.remove("visible", "opacity-100", "pointer-events-auto");
+      panel.removeAttribute("aria-modal");
 
       const returnTarget = panel._triggerEl;
       panel._triggerEl = null;
@@ -202,6 +207,7 @@ const hasDetails = Boolean(
 
       panel.classList.remove("invisible", "opacity-0", "pointer-events-none");
       panel.classList.add("visible", "opacity-100", "pointer-events-auto");
+      panel.setAttribute("aria-modal", "true");
 
       activePanel = panel;
       activeContainer = container;
@@ -252,6 +258,24 @@ const hasDetails = Boolean(
 
     document.addEventListener("keydown", (event) => {
       if (event.key === "Escape") closeActive();
+
+      // Keep Tab inside the open panel — otherwise keyboard users can
+      // tab past it into the dimmed page behind it.
+      if (event.key === "Tab" && activePanel) {
+        const focusable = activePanel.querySelectorAll(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
     });
   })();
 </script>

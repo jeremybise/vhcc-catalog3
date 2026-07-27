@@ -5,18 +5,24 @@ import { createElement as h } from "react";
 const markdocComponents = {
   br: inline({
     label: "Line Break",
+    description: "Forces a line break within a paragraph, without starting a new one.",
     schema: {},
   }),
   coursetooltip: inline({
     label: "Course Tooltip",
+    description:
+      "An inline, clickable course reference. Shows the course code (or a custom label) with a hover/click popover containing its real title, credits, and description.",
     schema: {
       code: fields.relationship({
         label: "Course",
+        description:
+          "The course this tooltip links to. Its title, credits, and description are pulled live from that course's own page.",
         collection: "courses_2026",
       }),
       label: fields.text({
         label: "Display label",
-        description: "Optional label text instead of course code.",
+        description:
+          'Text shown instead of the course code (e.g. "Intro to Programming" instead of "CSC-221"). Leave blank to show the course code itself.',
       }),
     },
   }),
@@ -330,17 +336,24 @@ const markdocComponents = {
   }),
   sectiontoc: block({
     label: "Section TOC",
+    description:
+      "Auto-generates a list of links to the other pages in this same section — nothing to maintain by hand, it always reflects whatever pages currently exist.",
     schema: {
       title: fields.text({
         label: "Title",
-        description: "Heading shown above the generated links.",
+        description:
+          "Heading shown above the generated links. Leave blank for no heading.",
       }),
       includeIndex: fields.checkbox({
         label: "Include index page",
+        description:
+          "Also list this section's own index/landing page in the links (usually left off, since it's the page this block is already placed on).",
         defaultValue: false,
       }),
       variant: fields.select({
         label: "Variant",
+        description:
+          "List = a plain bullet list of links. Cards = boxed link tiles arranged in a grid.",
         options: [
           { label: "List", value: "list" },
           { label: "Cards", value: "cards" },
@@ -393,10 +406,28 @@ export default config({
       format: { contentField: "content" },
       columns: ["code", "title", "category", "credits"],
       schema: {
-        code: fields.slug({ name: { label: "Course Code" } }),
-        title: fields.text({ label: "Title" }),
-        category: fields.text({ label: "Category" }),
-        credits: fields.text({ label: "Credits" }),
+        code: fields.slug({
+          name: {
+            label: "Course Code",
+            description:
+              'The course number, e.g. "CSC-221." This is how the course is referenced everywhere else — in Course Tooltips, Program of Study rows, and prerequisite/corequisite lists.',
+          },
+        }),
+        title: fields.text({
+          label: "Title",
+          description:
+            "Full course name. Shown on this course's own page and everywhere it's referenced (tooltips, program tables, course descriptions).",
+        }),
+        category: fields.text({
+          label: "Category",
+          description:
+            'Groups this course under the matching page in Course Descriptions, e.g. "computer-science" or "machine-technology." Must exactly match that page\'s URL slug (lowercase, hyphenated) or this course won\'t show up there.',
+        }),
+        credits: fields.text({
+          label: "Credits",
+          description:
+            'Credit hours shown wherever this course appears. A plain number ("3") or a range ("3-4") for variable-credit courses — ranges are used in Program of Study credit totals.',
+        }),
         prerequisites: fields.array(
           fields.relationship({
             label: "Prerequisites",
@@ -404,12 +435,15 @@ export default config({
           }),
           {
             label: "Prerequisites",
+            description:
+              "Other courses that must be completed before this one. Shown on this course's own page.",
             itemLabel: (props) => props.value ?? "",
           },
         ),
         prerequisiteNote: fields.text({
           label: "Prerequisite Note",
-          description: "Additional notes about prerequisites",
+          description:
+            'Extra prerequisite text shown alongside the list above (e.g. "or divisional approval").',
         }),
         corequisites: fields.array(
           fields.relationship({
@@ -418,15 +452,20 @@ export default config({
           }),
           {
             label: "Corequisites",
+            description:
+              "Other courses that must be taken at the same time as this one. Shown on this course's own page.",
             itemLabel: (props) => props.value ?? "",
           },
         ),
         corequisiteNote: fields.text({
           label: "Corequisite Note",
-          description: "Additional notes about corequisites",
+          description:
+            "Extra corequisite text shown alongside the list above.",
         }),
         content: fields.markdoc({
           label: "Content",
+          description:
+            "The course description. Shown on this course's own page, in Course Tooltip popovers, and in the Course Descriptions section.",
           components: markdocComponents,
           options: {
             image: {
