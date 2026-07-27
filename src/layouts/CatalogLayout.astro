@@ -111,6 +111,15 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       #page-title-bar[data-stuck] h1 {
         font-size: clamp(1.125rem, 2.5vw, 1.5rem);
       }
+      /* Give the breadcrumb room to breathe against the much larger
+         unstuck title, but tighten back up once the bar compacts. */
+      #page-title-bar nav[aria-label="Breadcrumb"] {
+        margin-bottom: 0.625rem;
+        transition: margin-bottom 0.2s ease;
+      }
+      #page-title-bar[data-stuck] nav[aria-label="Breadcrumb"] {
+        margin-bottom: 0.125rem;
+      }
       #page-title-bar[data-stuck] {
         padding-top: 0.625rem;
         padding-bottom: 0.625rem;
@@ -490,7 +499,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
               breadcrumbs.length > 0 && (
                 <nav
                   aria-label="Breadcrumb"
-                  class="mb-0.5 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 min-w-0"
+                  class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 min-w-0"
                 >
                   <a
                     href={`/${year}`}
@@ -545,10 +554,10 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                 {
                   tocHeadings.length > 0 && (
                     <nav
-                      class="not-prose mb-8 border-l-2 border-slate-200 pl-4 dark:border-gray-700"
+                      class="not-prose mb-10 rounded-lg border border-slate-200 bg-slate-50 p-6 dark:border-gray-700 dark:bg-gray-800/60"
                       aria-label="On this page"
                     >
-                      <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400">
+                      <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400">
                         What's on this page
                       </p>
                       <ul class="space-y-2 text-lg">

@@ -471,10 +471,10 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                         data-tooltip-panel
                                         data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
                                         tabindex="-1"
-                                        class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-lg bg-white p-4 text-sm text-slate-700 opacity-0 shadow-xl ring-1 ring-black/5 transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:bg-gray-800 dark:text-gray-200 dark:ring-white/10"
+                                        class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-lg bg-white p-4 text-base text-slate-700 opacity-0 shadow-xl ring-1 ring-black/5 transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-96 sm:max-w-[calc(100vw-4rem)] dark:bg-gray-800 dark:text-gray-200 dark:ring-white/10"
                                       >
                                         <div class="flex items-start justify-between gap-2">
-                                          <p class="font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
+                                          <p class="text-lg font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
                                             {item.meta.code}:{" "}
                                             {item.meta.title}
                                           </p>
@@ -574,10 +574,10 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                 data-tooltip-panel
                                 data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
                                 tabindex="-1"
-                                class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-lg bg-white p-4 text-sm text-slate-700 opacity-0 shadow-xl ring-1 ring-black/5 transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:bg-gray-800 dark:text-gray-200 dark:ring-white/10"
+                                class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-lg bg-white p-4 text-base text-slate-700 opacity-0 shadow-xl ring-1 ring-black/5 transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-96 sm:max-w-[calc(100vw-4rem)] dark:bg-gray-800 dark:text-gray-200 dark:ring-white/10"
                               >
                                 <div class="flex items-start justify-between gap-2">
-                                  <p class="font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
+                                  <p class="text-lg font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
                                     {row.meta.code}: {row.meta.title}
                                   </p>
                                   <button
@@ -710,11 +710,27 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
           panel.style.cssText =
             "position:fixed;left:12px;right:12px;bottom:12px;top:auto;width:auto;max-width:none;z-index:50";
         } else {
-          const panelWidth = 320;
+          const panelWidth = 384;
           let left = rect.left;
           if (left + panelWidth > window.innerWidth - 16)
             left = window.innerWidth - panelWidth - 16;
+          if (left < 16) left = 16;
+          // Provisionally place below the trigger — panel is still
+          // invisible here, so measuring its height doesn't cause any
+          // visible jump.
           panel.style.cssText = `position:fixed;top:${rect.bottom + 6}px;left:${left}px;width:${panelWidth}px;bottom:auto;right:auto;z-index:50`;
+          const panelHeight = panel.offsetHeight;
+          const spaceBelow = window.innerHeight - rect.bottom - 6;
+          const spaceAbove = rect.top - 6;
+          if (panelHeight > spaceBelow && spaceAbove > spaceBelow) {
+            // Not enough room below, but more room above — flip it.
+            panel.style.top = `${Math.max(16, rect.top - panelHeight - 6)}px`;
+          } else if (panelHeight > spaceBelow) {
+            // Not enough room either side of the trigger — pin inside the
+            // viewport instead of letting it run off the bottom, since a
+            // fixed-position panel doesn't move when the page scrolls.
+            panel.style.top = `${Math.max(16, window.innerHeight - panelHeight - 16)}px`;
+          }
         }
         panel.classList.remove("invisible", "opacity-0", "pointer-events-none");
         panel.classList.add("visible", "opacity-100", "pointer-events-auto");
