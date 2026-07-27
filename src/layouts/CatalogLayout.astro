@@ -2,7 +2,7 @@
 import "../styles/global.css";
 import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
-import logo from "../assets/image007.png";
+import logo from "../assets/logo.svg";
 import CatalogSearch from "../components/CatalogSearch";
 
 export interface Props {
@@ -739,7 +739,9 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                 // page actually loaded scrolled to — don't animate that, or
                 // a fresh page load can flash through the wrong state.
                 // Only real, later, user-driven scroll toggles animate.
-                requestAnimationFrame(() => bar.classList.add("title-bar-animated"));
+                requestAnimationFrame(() =>
+                  bar.classList.add("title-bar-animated"),
+                );
               }
             },
             {
