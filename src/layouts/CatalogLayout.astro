@@ -413,7 +413,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                     class="group"
                     open={section.slug === currentSection || undefined}
                   >
-                    <summary class="flex items-center justify-between px-4 py-2.5 text-xs font-medium uppercase tracking-wider text-gray-500 cursor-pointer select-none hover:bg-slate-100 hover:text-vhcc-navy group-open:text-vhcc-navy list-none [&::-webkit-details-marker]:hidden dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:group-open:text-white">
+                    <summary class="flex items-center justify-between px-4 py-2.5 text-base font-bold text-vhcc-navy cursor-pointer select-none hover:bg-slate-100 list-none [&::-webkit-details-marker]:hidden dark:text-sky-300 dark:hover:bg-gray-800">
                       <span>{section.label}</span>
                       <svg
                         class="w-3.5 h-3.5 shrink-0 ml-1 transition-transform group-open:rotate-90"
@@ -456,10 +456,10 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                       section.href === currentHref ? "page" : undefined
                     }
                     class:list={[
-                      "block px-4 py-2.5 text-xs font-medium uppercase tracking-wider transition-colors",
+                      "block px-4 py-2.5 text-base font-bold transition-colors",
                       section.href === currentHref
                         ? "bg-vhcc-blue/15 text-vhcc-navy border-l-2 border-vhcc-green dark:bg-sky-400/20 dark:text-sky-300 dark:border-emerald-400"
-                        : "text-gray-500 hover:bg-slate-100 hover:text-vhcc-navy dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white",
+                        : "text-vhcc-navy hover:bg-slate-100 dark:text-sky-300 dark:hover:bg-gray-800",
                     ]}
                   >
                     {section.label}
@@ -551,12 +551,12 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                       <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400">
                         What's on this page
                       </p>
-                      <ul class="space-y-1.5 text-sm">
+                      <ul class="space-y-2 text-lg">
                         {tocHeadings.map((heading) => (
                           <li>
                             <a
                               href={`#${heading.slug}`}
-                              class="font-medium text-gray-700 transition-colors hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue rounded-sm dark:text-gray-300 dark:hover:text-sky-300"
+                              class="font-medium text-vhcc-blue transition-colors hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue rounded-sm dark:text-sky-400 dark:hover:text-sky-300"
                             >
                               {heading.text}
                             </a>
