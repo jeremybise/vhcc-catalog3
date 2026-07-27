@@ -168,25 +168,34 @@ const markdocComponents = {
     schema: {
       title: fields.text({
         label: "Title",
+        description: "Heading printed above the whole table, e.g. \"Course of Study.\"",
         defaultValue: "Program of Study",
       }),
       showTotals: fields.checkbox({
         label: "Show total credits",
+        description:
+          "Adds a Total row to each term's table and a grand total line under the whole program.",
         defaultValue: true,
       }),
       notes: fields.array(
         fields.object({
           number: fields.integer({
             label: "Note number",
+            description:
+              "The number shown in the footnote list. Match this to the [1], [2], etc. you type into a row's title below.",
             validation: { min: 1 },
           }),
           text: fields.text({
             label: "Note text",
+            description:
+              'Footnote text shown at the bottom of the table. To reference a course inside it, type {% coursetooltip code="ABC-123" /%}.',
             multiline: true,
           }),
         }),
         {
           label: "Program notes",
+          description:
+            "Numbered footnotes for the whole program, printed below the table. Rows link to these using [1], [2], etc. in a title.",
           itemLabel: (props) => {
             const number = props.fields.number.value;
             const text = props.fields.text.value;
@@ -200,12 +209,16 @@ const markdocComponents = {
         fields.object({
           termLabel: fields.text({
             label: "Term label",
+            description:
+              'Heading for this semester\'s table, e.g. "First Semester (Fall)."',
             defaultValue: "Semester",
           }),
           rows: fields.array(
             fields.object({
               rowType: fields.select({
                 label: "Row type",
+                description:
+                  "Course = one course in the table. Option group = a \"choose N of these\" group. Note row = a plain instructional line spanning the row.",
                 options: [
                   { label: "Course", value: "course" },
                   { label: "Option group (choose from)", value: "options" },
@@ -215,34 +228,42 @@ const markdocComponents = {
               }),
               course: fields.relationship({
                 label: "Course",
+                description:
+                  "Pulls this course's real title and credits from the catalog. Leave blank and use the overrides below for a non-catalog row.",
                 collection: "courses_2026",
               }),
               codeOverride: fields.text({
                 label: "Course code override",
                 description:
-                  "Optional custom course number for non-catalog rows (for example EEE or MTH or SCI).",
+                  "Custom course number shown instead of a picked course, for rows that aren't a real catalog course (for example EEE or MTH or SCI).",
               }),
               titleOverride: fields.text({
                 label: "Title override",
                 description:
-                  "Optional custom title text for this row instead of the selected course title. Use [1], [2], etc. to link to program notes.",
+                  "Custom title shown instead of the picked course's title. Add [1], [2], etc. to link to a program note below.",
               }),
               creditsOverride: fields.text({
                 label: "Credits override",
                 description:
-                  "Optional credit display override (for example 3-4 or 1-2).",
+                  "Custom credit text shown instead of the picked course's credits (for example 3-4 or 1-2).",
               }),
               optionLabel: fields.text({
                 label: "Option label",
+                description:
+                  'Instruction printed above the choices, e.g. "Select one mathematics course."',
                 defaultValue: "Choose one",
               }),
               minChoices: fields.integer({
                 label: "Minimum choices",
+                description:
+                  "How many of the options below a student must take. Sets the low end of this row's credit range.",
                 defaultValue: 1,
                 validation: { min: 0 },
               }),
               maxChoices: fields.integer({
                 label: "Maximum choices",
+                description:
+                  "The most options below that count toward credits. Sets the high end of this row's credit range.",
                 defaultValue: 1,
                 validation: { min: 1 },
               }),
@@ -253,16 +274,21 @@ const markdocComponents = {
                 }),
                 {
                   label: "Option courses",
+                  description: "The courses a student can choose between for this group.",
                   itemLabel: (props) => props.value ?? "",
                 },
               ),
               note: fields.text({
                 label: "Note",
+                description:
+                  "Plain text shown across the full row width. No course lookup or credit math is applied to it.",
                 multiline: true,
               }),
             }),
             {
               label: "Rows",
+              description:
+                "The courses (or choices) for this term, in the order they'll appear in the table.",
               itemLabel: (props) => {
                 const rowType = props.fields.rowType.value;
                 if (rowType === "note") {
@@ -292,6 +318,8 @@ const markdocComponents = {
         }),
         {
           label: "Terms",
+          description:
+            "One entry per semester. Each becomes its own table on the page, with its own credit total.",
           itemLabel: (props) => {
             const termLabel = props.fields.termLabel.value;
             return termLabel ? `Term: ${termLabel}` : "Term";
