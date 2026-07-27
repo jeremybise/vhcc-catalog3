@@ -106,7 +106,6 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       }
       #page-title-bar h1 {
         font-size: clamp(1.75rem, 4vw, 2.75rem);
-        transition: font-size 0.2s ease;
       }
       #page-title-bar[data-stuck] h1 {
         font-size: clamp(1.125rem, 2.5vw, 1.5rem);
@@ -115,7 +114,6 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
          unstuck title, but tighten back up once the bar compacts. */
       #page-title-bar nav[aria-label="Breadcrumb"] {
         margin-bottom: 0.625rem;
-        transition: margin-bottom 0.2s ease;
       }
       #page-title-bar[data-stuck] nav[aria-label="Breadcrumb"] {
         margin-bottom: 0.125rem;
@@ -129,6 +127,29 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       .dark #page-title-bar[data-stuck] {
         border-bottom-color: #374151;
         box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.4);
+      }
+      /* Only animate the compact/relaxed swap once the page has settled on
+         its real scroll position — added by JS after the sticky observer's
+         first read, so a fresh page load never shows a grow/shrink flash. */
+      #page-title-bar.title-bar-animated {
+        transition:
+          padding 0.2s ease,
+          box-shadow 0.2s ease,
+          border-color 0.2s ease;
+      }
+      #page-title-bar.title-bar-animated h1 {
+        transition: font-size 0.2s ease;
+      }
+      #page-title-bar.title-bar-animated nav[aria-label="Breadcrumb"] {
+        transition: margin-bottom 0.2s ease;
+      }
+      /* Momentarily forcing data-stuck to measure the compact title bar
+         height (see syncOffsets) shouldn't animate — several properties in
+         here (h1 font-size, padding, breadcrumb margin) are transitioned,
+         and reading offsetHeight mid-transition measures the wrong height. */
+      #page-title-bar.measuring-offset,
+      #page-title-bar.measuring-offset * {
+        transition: none !important;
       }
 
       .prose-table-scroll {
@@ -223,7 +244,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
     <!-- Top header -->
     <header
       id="site-header"
-      class="bg-vhcc-navy text-white px-3 sm:px-4 py-3 flex items-center gap-3 sticky top-0 z-10 shadow-md"
+      class="bg-vhcc-navy text-white px-3 sm:px-4 py-3 flex items-center gap-3 sticky top-0 z-10 shadow-md border-b-4 border-vhcc-green"
     >
       <a
         href={`/${year}`}
@@ -491,7 +512,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         <!-- Sticky title bar (content column only, not over sidebar) -->
         <div
           id="page-title-bar"
-          class="sticky z-9 bg-white/95 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-6 transition-[padding,box-shadow,border-color] duration-200 dark:bg-gray-950/95"
+          class="sticky z-9 bg-white/95 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-6 dark:bg-gray-950/95"
           style="top: var(--header-h, 52px)"
         >
           <div class="mx-auto w-full max-w-3xl">
@@ -704,12 +725,21 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
           const sentinel = document.getElementById("title-bar-sentinel");
           const bar = document.getElementById("page-title-bar");
           if (!sentinel || !bar) return;
+          let settled = false;
           const observer = new IntersectionObserver(
             ([entry]) => {
               if (!entry.isIntersecting) {
                 bar.setAttribute("data-stuck", "");
               } else {
                 bar.removeAttribute("data-stuck");
+              }
+              if (!settled) {
+                settled = true;
+                // This first callback just syncs data-stuck to wherever the
+                // page actually loaded scrolled to — don't animate that, or
+                // a fresh page load can flash through the wrong state.
+                // Only real, later, user-driven scroll toggles animate.
+                requestAnimationFrame(() => bar.classList.add("title-bar-animated"));
               }
             },
             {
@@ -743,12 +773,16 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
               headerH + "px",
             );
             // For scroll-margin-top: use the stuck (compact) title bar height
-            // measured while data-stuck is temporarily forced on
+            // measured while data-stuck is temporarily forced on. Suspend
+            // transitions first so the forced state is measured instantly
+            // instead of mid-animation.
             if (titleBar) {
               const wasStuck = titleBar.hasAttribute("data-stuck");
+              titleBar.classList.add("measuring-offset");
               if (!wasStuck) titleBar.setAttribute("data-stuck", "");
               const titleBarH = titleBar.offsetHeight;
               if (!wasStuck) titleBar.removeAttribute("data-stuck");
+              titleBar.classList.remove("measuring-offset");
               document.documentElement.style.setProperty(
                 "--scroll-offset",
                 headerH + titleBarH + 8 + "px",
