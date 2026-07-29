@@ -1,7 +1,8 @@
 ---
 import "../styles/global.css";
 import { Image } from "astro:assets";
-import logo from "../assets/image007.png";
+import { Icon } from "astro-icon/components";
+import logo from "../assets/logo.svg";
 import CatalogSearch from "../components/CatalogSearch";
 
 export interface Props {
@@ -105,10 +106,17 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       }
       #page-title-bar h1 {
         font-size: clamp(1.75rem, 4vw, 2.75rem);
-        transition: font-size 0.2s ease;
       }
       #page-title-bar[data-stuck] h1 {
         font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+      }
+      /* Give the breadcrumb room to breathe against the much larger
+         unstuck title, but tighten back up once the bar compacts. */
+      #page-title-bar nav[aria-label="Breadcrumb"] {
+        margin-bottom: 0.625rem;
+      }
+      #page-title-bar[data-stuck] nav[aria-label="Breadcrumb"] {
+        margin-bottom: 0.125rem;
       }
       #page-title-bar[data-stuck] {
         padding-top: 0.625rem;
@@ -120,11 +128,39 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         border-bottom-color: #374151;
         box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.4);
       }
+      /* Only animate the compact/relaxed swap once the page has settled on
+         its real scroll position — added by JS after the sticky observer's
+         first read, so a fresh page load never shows a grow/shrink flash. */
+      #page-title-bar.title-bar-animated {
+        transition:
+          padding 0.2s ease,
+          box-shadow 0.2s ease,
+          border-color 0.2s ease;
+      }
+      #page-title-bar.title-bar-animated h1 {
+        transition: font-size 0.2s ease;
+      }
+      #page-title-bar.title-bar-animated nav[aria-label="Breadcrumb"] {
+        transition: margin-bottom 0.2s ease;
+      }
+      /* Momentarily forcing data-stuck to measure the compact title bar
+         height (see syncOffsets) shouldn't animate — several properties in
+         here (h1 font-size, padding, breadcrumb margin) are transitioned,
+         and reading offsetHeight mid-transition measures the wrong height. */
+      #page-title-bar.measuring-offset,
+      #page-title-bar.measuring-offset * {
+        transition: none !important;
+      }
 
       .prose-table-scroll {
         width: 100%;
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+      }
+
+      .prose-table-scroll:focus-visible {
+        outline: 2px solid #4578ba;
+        outline-offset: 2px;
       }
 
       /* Tables fill their scroll wrapper and use fixed equal-width columns */
@@ -142,7 +178,6 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
       /* Header row */
       .prose table:not([class]) thead th {
         white-space: nowrap;
-        background-color: #e9eef5;
         border-bottom: 2px solid #cbd5e1 !important;
       }
 
@@ -153,7 +188,6 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
 
       /* Dark mode */
       .dark .prose table:not([class]) thead th {
-        background-color: #2d3748;
         border-bottom-color: #4a5568 !important;
       }
       .dark .prose table:not([class]) tbody tr:nth-child(even) td {
@@ -210,7 +244,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
     <!-- Top header -->
     <header
       id="site-header"
-      class="bg-vhcc-navy text-white px-3 sm:px-4 py-3 flex items-center gap-3 sticky top-0 z-10 shadow-md"
+      class="bg-vhcc-navy text-white px-3 sm:px-4 py-3 flex items-center gap-3 sticky top-0 z-10 shadow-md border-b-4 border-vhcc-green"
     >
       <a
         href={`/${year}`}
@@ -227,8 +261,12 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         <span class="tracking-tight leading-tight">College Catalog</span>
       </a>
       <label for="catalog-year-switcher" class="sr-only">Catalog Year</label>
+      <span id="catalog-year-switcher-hint" class="sr-only">
+        Selecting a year takes you to that catalog.
+      </span>
       <select
         id="catalog-year-switcher"
+        aria-describedby="catalog-year-switcher-hint"
         class="rounded-md border border-vhcc-blue bg-vhcc-navy px-2 py-1 text-sm text-white outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
         onchange="window.location.href='/' + this.value"
       >
@@ -319,7 +357,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                   <li class="border-b border-gray-100 last:border-b-0 dark:border-gray-700">
                     <a
                       href={section.href}
-                      class="block px-4 py-3 text-base font-semibold text-vhcc-navy hover:bg-slate-100 dark:text-sky-300 dark:hover:bg-gray-800"
+                      class="block px-4 py-3 text-lg font-bold text-vhcc-navy hover:bg-slate-100 dark:text-sky-300 dark:hover:bg-gray-800"
                     >
                       {section.label}
                     </a>
@@ -396,7 +434,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         style="top: var(--header-h, 52px)"
         aria-label="Catalog navigation"
       >
-        <ul class="py-2">
+        <ul class="py-3 space-y-0.5">
           {
             sidebar.map((section) => (
               <li>
@@ -405,7 +443,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                     class="group"
                     open={section.slug === currentSection || undefined}
                   >
-                    <summary class="flex items-center justify-between px-4 py-2 text-sm font-semibold uppercase tracking-wide text-gray-600 cursor-pointer select-none hover:bg-slate-100 hover:text-vhcc-navy group-open:text-vhcc-navy list-none [&::-webkit-details-marker]:hidden dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white dark:group-open:text-white">
+                    <summary class="flex items-center justify-between px-4 py-2.5 text-base font-bold text-vhcc-navy cursor-pointer select-none hover:bg-slate-100 list-none [&::-webkit-details-marker]:hidden dark:text-sky-300 dark:hover:bg-gray-800">
                       <span>{section.label}</span>
                       <svg
                         class="w-3.5 h-3.5 shrink-0 ml-1 transition-transform group-open:rotate-90"
@@ -448,10 +486,10 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                       section.href === currentHref ? "page" : undefined
                     }
                     class:list={[
-                      "block px-4 py-2 text-sm font-semibold uppercase tracking-wide transition-colors",
+                      "block px-4 py-2.5 text-base font-bold transition-colors",
                       section.href === currentHref
                         ? "bg-vhcc-blue/15 text-vhcc-navy border-l-2 border-vhcc-green dark:bg-sky-400/20 dark:text-sky-300 dark:border-emerald-400"
-                        : "text-gray-600 hover:bg-slate-100 hover:text-vhcc-navy dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-white",
+                        : "text-vhcc-navy hover:bg-slate-100 dark:text-sky-300 dark:hover:bg-gray-800",
                     ]}
                   >
                     {section.label}
@@ -474,7 +512,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         <!-- Sticky title bar (content column only, not over sidebar) -->
         <div
           id="page-title-bar"
-          class="sticky z-9 bg-white/95 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-6 transition-[padding,box-shadow,border-color] duration-200 dark:bg-gray-950/95"
+          class="sticky z-9 bg-white/95 backdrop-blur-sm px-4 sm:px-6 lg:px-8 py-6 dark:bg-gray-950/95"
           style="top: var(--header-h, 52px)"
         >
           <div class="mx-auto w-full max-w-3xl">
@@ -482,7 +520,7 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
               breadcrumbs.length > 0 && (
                 <nav
                   aria-label="Breadcrumb"
-                  class="mb-0.5 flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 min-w-0"
+                  class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 min-w-0"
                 >
                   <a
                     href={`/${year}`}
@@ -537,19 +575,18 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                 {
                   tocHeadings.length > 0 && (
                     <nav
-                      class="not-prose mb-6 rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 dark:border-gray-700 dark:bg-gray-800"
+                      class="not-prose mb-10 rounded-lg border border-slate-200 bg-slate-50 p-6 dark:border-gray-700 dark:bg-gray-800/60"
                       aria-label="On this page"
                     >
-                      <p class="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.12em] text-vhcc-navy/85 dark:text-sky-300/85">
-                        <span class="h-1.5 w-1.5 rounded-full bg-vhcc-green dark:bg-emerald-400" />
+                      <p class="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-gray-500 dark:text-gray-400">
                         What's on this page
                       </p>
-                      <ul class="space-y-1 text-sm">
+                      <ul class="space-y-2 text-lg">
                         {tocHeadings.map((heading) => (
                           <li>
                             <a
                               href={`#${heading.slug}`}
-                              class="block rounded-md px-2 py-1 font-medium text-gray-700 transition-colors hover:bg-slate-100 hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+                              class="font-medium text-vhcc-blue transition-colors hover:text-vhcc-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue rounded-sm dark:text-sky-400 dark:hover:text-sky-300"
                             >
                               {heading.text}
                             </a>
@@ -571,12 +608,17 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                     {prevPage ? (
                       <a
                         href={prevPage.href}
-                        class="group rounded-lg border border-slate-200 bg-white p-4 hover:border-vhcc-blue/60 hover:bg-slate-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        class="group rounded-lg p-4 transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:hover:bg-gray-800"
                       >
                         <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                           Previous
                         </p>
-                        <p class="mt-1 text-sm font-medium text-gray-900 group-hover:text-vhcc-navy dark:text-gray-100 dark:group-hover:text-white">
+                        <p class="mt-1 flex items-center gap-1.5 text-base font-semibold text-gray-900 group-hover:text-vhcc-blue dark:text-gray-100 dark:group-hover:text-sky-300">
+                          <Icon
+                            name="material-symbols:chevron-left"
+                            class="h-5 w-5 shrink-0 -ml-1 text-gray-400 transition-transform group-hover:-translate-x-0.5 group-hover:text-vhcc-blue dark:text-gray-500 dark:group-hover:text-sky-300"
+                            aria-hidden="true"
+                          />
                           {prevPage.title}
                         </p>
                       </a>
@@ -586,13 +628,18 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
                     {nextPage ? (
                       <a
                         href={nextPage.href}
-                        class="group rounded-lg border border-slate-200 bg-white p-4 text-right hover:border-vhcc-blue/60 hover:bg-slate-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+                        class="group rounded-lg p-4 text-right transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:hover:bg-gray-800"
                       >
                         <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
                           Next
                         </p>
-                        <p class="mt-1 text-sm font-medium text-gray-900 group-hover:text-vhcc-navy dark:text-gray-100 dark:group-hover:text-white">
+                        <p class="mt-1 flex items-center justify-end gap-1.5 text-base font-semibold text-gray-900 group-hover:text-vhcc-blue dark:text-gray-100 dark:group-hover:text-sky-300">
                           {nextPage.title}
+                          <Icon
+                            name="material-symbols:chevron-right"
+                            class="h-5 w-5 shrink-0 -mr-1 text-gray-400 transition-transform group-hover:translate-x-0.5 group-hover:text-vhcc-blue dark:text-gray-500 dark:group-hover:text-sky-300"
+                            aria-hidden="true"
+                          />
                         </p>
                       </a>
                     ) : (
@@ -654,11 +701,21 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         const wrapTables = () => {
           document
             .querySelectorAll(".prose table:not([class])")
-            .forEach((table) => {
+            .forEach((table, index) => {
               if (table.parentElement?.classList.contains("prose-table-scroll"))
                 return;
               const wrapper = document.createElement("div");
               wrapper.className = "prose-table-scroll";
+              // Scrollable regions need to be reachable and operable by
+              // keyboard, and announced as a region, or their horizontal
+              // content is effectively unavailable to keyboard/AT users.
+              wrapper.setAttribute("tabindex", "0");
+              wrapper.setAttribute("role", "region");
+              const caption = table.querySelector("caption");
+              wrapper.setAttribute(
+                "aria-label",
+                caption?.textContent?.trim() || `Table ${index + 1}`,
+              );
               table.parentNode.insertBefore(wrapper, table);
               wrapper.appendChild(table);
             });
@@ -668,12 +725,23 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
           const sentinel = document.getElementById("title-bar-sentinel");
           const bar = document.getElementById("page-title-bar");
           if (!sentinel || !bar) return;
+          let settled = false;
           const observer = new IntersectionObserver(
             ([entry]) => {
               if (!entry.isIntersecting) {
                 bar.setAttribute("data-stuck", "");
               } else {
                 bar.removeAttribute("data-stuck");
+              }
+              if (!settled) {
+                settled = true;
+                // This first callback just syncs data-stuck to wherever the
+                // page actually loaded scrolled to — don't animate that, or
+                // a fresh page load can flash through the wrong state.
+                // Only real, later, user-driven scroll toggles animate.
+                requestAnimationFrame(() =>
+                  bar.classList.add("title-bar-animated"),
+                );
               }
             },
             {
@@ -707,12 +775,16 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
               headerH + "px",
             );
             // For scroll-margin-top: use the stuck (compact) title bar height
-            // measured while data-stuck is temporarily forced on
+            // measured while data-stuck is temporarily forced on. Suspend
+            // transitions first so the forced state is measured instantly
+            // instead of mid-animation.
             if (titleBar) {
               const wasStuck = titleBar.hasAttribute("data-stuck");
+              titleBar.classList.add("measuring-offset");
               if (!wasStuck) titleBar.setAttribute("data-stuck", "");
               const titleBarH = titleBar.offsetHeight;
               if (!wasStuck) titleBar.removeAttribute("data-stuck");
+              titleBar.classList.remove("measuring-offset");
               document.documentElement.style.setProperty(
                 "--scroll-offset",
                 headerH + titleBarH + 8 + "px",

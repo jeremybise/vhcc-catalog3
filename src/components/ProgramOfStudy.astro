@@ -65,7 +65,8 @@ const instanceId = crypto.randomUUID().slice(0, 8);
 const pathnameParts = Astro.url.pathname.split("/").filter(Boolean);
 const year = pathnameParts[0] ?? "";
 // On the print view the tooltip panels are unreachable and would add megabytes
-// of hidden markup, so the tables render as plain course listings.
+// of hidden markup. Dropping `meta` below switches off the trigger and the
+// panel together, so the tables render as plain course listings.
 const isPrintView = pathnameParts[1] === "print";
 
 const courses = await getCollection("courses");
@@ -255,12 +256,14 @@ const processedTerms = terms.map((term) => {
             code: entry.data.code,
             title: entry.data.title,
             credits: parseCredits(credits),
-            meta: {
-              code: entry.data.code,
-              title: entry.data.title,
-              credits,
-              description: getCourseDescription(entry),
-            },
+            meta: isPrintView
+              ? undefined
+              : {
+                  code: entry.data.code,
+                  title: entry.data.title,
+                  credits,
+                  description: getCourseDescription(entry),
+                },
           };
         }
         return {
@@ -325,14 +328,15 @@ const processedTerms = terms.map((term) => {
       code,
       title: splitNoteLinks(courseTitle),
       creditsText,
-      meta: entry
-        ? {
-            code: entry.data.code,
-            title: entry.data.title,
-            credits: entry.data.credits || "",
-            description: getCourseDescription(entry),
-          }
-        : undefined,
+      meta:
+        entry && !isPrintView
+          ? {
+              code: entry.data.code,
+              title: entry.data.title,
+              credits: entry.data.credits || "",
+              description: getCourseDescription(entry),
+            }
+          : undefined,
     };
   });
 
@@ -359,20 +363,20 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
       processedTerms.map((term, termIndex) => {
         return (
           <section class="program-term">
-            <h4 class="mb-2 text-base font-semibold text-gray-900 dark:text-gray-100">
+            <h4 class="mb-3 text-lg font-bold text-vhcc-navy dark:text-sky-300">
               {term.termLabel}
             </h4>
-            <div class="rounded-lg border border-slate-200 dark:border-gray-600">
-              <table class="w-full border-collapse bg-white text-base table-fixed dark:bg-gray-800">
+            <div>
+              <table class="w-full border-collapse text-base table-fixed">
                 <thead>
-                  <tr class="bg-slate-50 dark:bg-gray-700/50">
-                    <th class="w-1/4 border-b border-slate-200 px-3 py-2 text-left font-semibold text-gray-900 align-top dark:border-gray-600 dark:text-gray-100">
+                  <tr>
+                    <th class="w-1/4 border-b-2 border-slate-200 px-4 py-3 text-left text-sm font-medium text-gray-500 align-top dark:border-gray-600 dark:text-gray-400">
                       Course Number
                     </th>
-                    <th class="w-1/2 border-b border-slate-200 px-3 py-2 text-left font-semibold text-gray-900 align-top dark:border-gray-600 dark:text-gray-100">
+                    <th class="w-1/2 border-b-2 border-slate-200 px-4 py-3 text-left text-sm font-medium text-gray-500 align-top dark:border-gray-600 dark:text-gray-400">
                       Course Title
                     </th>
-                    <th class="w-1/4 border-b border-slate-200 px-3 py-2 text-right font-semibold text-gray-900 align-top dark:border-gray-600 dark:text-gray-100">
+                    <th class="w-1/4 border-b-2 border-slate-200 px-4 py-3 text-right text-sm font-medium text-gray-500 align-top dark:border-gray-600 dark:text-gray-400">
                       Credits
                     </th>
                   </tr>
@@ -384,7 +388,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                         <tr>
                           <td
                             colspan={3}
-                            class="border-b border-slate-100 px-3 py-2 text-gray-700 italic dark:border-gray-700 dark:text-gray-400"
+                            class="border-b border-slate-100 px-4 py-3 text-gray-700 italic dark:border-gray-700 dark:text-gray-400"
                           >
                             {row.note}
                           </td>
@@ -395,10 +399,10 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                     if (row.kind === "options") {
                       return (
                         <tr>
-                          <td class="border-b border-slate-100 px-3 py-2 font-medium text-gray-700 align-top wrap-break-word dark:border-gray-700 dark:text-gray-400">
+                          <td class="border-b border-slate-100 px-4 py-3 font-medium text-gray-700 align-top wrap-break-word dark:border-gray-700 dark:text-gray-400">
                             Option Group
                           </td>
-                          <td class="border-b border-slate-100 px-3 py-2 text-gray-800 align-top wrap-break-word dark:border-gray-700 dark:text-gray-200">
+                          <td class="border-b border-slate-100 px-4 py-3 text-gray-800 align-top wrap-break-word dark:border-gray-700 dark:text-gray-200">
                             <p class="font-medium text-gray-900 dark:text-gray-100">
                               {row.label}
                             </p>
@@ -408,20 +412,36 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                   <span class="font-medium">{item.code}</span>
                                   {": "}
                                   <span
-                                    class="group/tooltip relative ml-1 align-middle"
+                                    class="relative ml-1 align-middle"
                                     data-tooltip-container
                                     data-tooltip-id={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
                                   >
                                     <span
                                       class={
-                                        item.meta && !isPrintView
-                                          ? "cursor-pointer underline decoration-dotted underline-offset-2"
+                                        item.meta
+                                          ? "cursor-pointer underline decoration-dotted underline-offset-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
                                           : undefined
                                       }
                                       data-tooltip-trigger={
-                                        item.meta && !isPrintView
-                                          ? "true"
+                                        item.meta ? "true" : undefined
+                                      }
+                                      role={item.meta ? "button" : undefined}
+                                      tabindex={item.meta ? 0 : undefined}
+                                      aria-label={
+                                        item.meta
+                                          ? `View details: ${item.code}`
                                           : undefined
+                                      }
+                                      aria-controls={
+                                        item.meta
+                                          ? `${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`
+                                          : undefined
+                                      }
+                                      aria-expanded={
+                                        item.meta ? "false" : undefined
+                                      }
+                                      aria-haspopup={
+                                        item.meta ? "dialog" : undefined
                                       }
                                     >
                                       {item.title.parts.map(
@@ -450,60 +470,47 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                         },
                                       )}
                                     </span>
-                                    {item.meta && !isPrintView && (
-                                      <>
-                                        <button
-                                          type="button"
-                                          class="ml-1 inline-flex h-4 w-4 align-middle items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue group-hover/tooltip:border-vhcc-blue group-hover/tooltip:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400 dark:group-hover/tooltip:border-sky-400 dark:group-hover/tooltip:text-sky-400"
-                                          data-tooltip-trigger
-                                          aria-label={`View course details for ${item.meta.code}`}
-                                          aria-controls={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
-                                          aria-expanded="false"
-                                          aria-haspopup="dialog"
-                                        >
-                                          i
-                                        </button>
-                                        <div
-                                          id={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
-                                          role="dialog"
-                                          aria-label={`Course details for ${item.meta.code}`}
-                                          data-tooltip-panel
-                                          data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
-                                          tabindex="-1"
-                                          class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
-                                        >
-                                          <div class="flex items-start justify-between gap-2">
-                                            <p class="font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
-                                              {item.meta.code}:{" "}
-                                              {item.meta.title}
-                                            </p>
-                                            <button
-                                              type="button"
-                                              class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-300 text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-600 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400"
-                                              data-tooltip-close
-                                              aria-label="Close course details"
-                                            >
-                                              ×
-                                            </button>
-                                          </div>
-                                          <p class="mt-1 text-slate-700 wrap-break-word dark:text-gray-300">
-                                            <span class="font-semibold">
-                                              Credits:
-                                            </span>{" "}
-                                            {item.meta.credits}
+                                    {item.meta && (
+                                      <div
+                                        id={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
+                                        role="dialog"
+                                        aria-label={`Course details for ${item.meta.code}`}
+                                        data-tooltip-panel
+                                        data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}-${optionIndex}`}
+                                        tabindex="-1"
+                                        class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-lg bg-white p-4 text-base text-slate-700 opacity-0 shadow-xl ring-1 ring-black/5 transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-96 sm:max-w-[calc(100vw-4rem)] dark:bg-gray-800 dark:text-gray-200 dark:ring-white/10"
+                                      >
+                                        <div class="flex items-start justify-between gap-2">
+                                          <p class="text-lg font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
+                                            {item.meta.code}:{" "}
+                                            {item.meta.title}
                                           </p>
-                                          <p class="mt-1 leading-relaxed wrap-break-word">
-                                            {item.meta.description}
-                                          </p>
+                                          <button
+                                            type="button"
+                                            class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-300 text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-600 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400"
+                                            data-tooltip-close
+                                            aria-label="Close course details"
+                                          >
+                                            ×
+                                          </button>
                                         </div>
-                                      </>
+                                        <p class="mt-1 text-slate-700 wrap-break-word dark:text-gray-300">
+                                          <span class="font-semibold">
+                                            Credits:
+                                          </span>{" "}
+                                          {item.meta.credits}
+                                        </p>
+                                        <p class="mt-1 leading-relaxed wrap-break-word">
+                                          {item.meta.description}
+                                        </p>
+                                      </div>
                                     )}
                                   </span>
                                 </li>
                               ))}
                             </ul>
                           </td>
-                          <td class="border-b border-slate-100 px-3 py-2 text-right font-medium text-gray-900 align-top dark:border-gray-700 dark:text-gray-100">
+                          <td class="border-b border-slate-100 px-4 py-3 text-right font-medium text-gray-900 align-top dark:border-gray-700 dark:text-gray-100">
                             {row.creditsText}
                           </td>
                         </tr>
@@ -512,24 +519,36 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
 
                     return (
                       <tr>
-                        <td class="border-b border-slate-100 px-3 py-2 font-medium text-gray-700 align-top wrap-break-word dark:border-gray-700 dark:text-gray-300">
+                        <td class="border-b border-slate-100 px-4 py-3 font-medium text-gray-700 align-top wrap-break-word dark:border-gray-700 dark:text-gray-300">
                           {row.code}
                         </td>
-                        <td class="border-b border-slate-100 px-3 py-2 text-gray-800 align-top wrap-break-word dark:border-gray-700 dark:text-gray-200">
+                        <td class="border-b border-slate-100 px-4 py-3 text-gray-800 align-top wrap-break-word dark:border-gray-700 dark:text-gray-200">
                           <span
-                            class="group/tooltip relative"
+                            class="relative"
                             data-tooltip-container
                             data-tooltip-id={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
                           >
                             <span
                               class={
-                                row.meta && !isPrintView
-                                  ? "cursor-pointer underline decoration-dotted underline-offset-2"
+                                row.meta
+                                  ? "cursor-pointer underline decoration-dotted underline-offset-2 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue"
                                   : undefined
                               }
                               data-tooltip-trigger={
-                                row.meta && !isPrintView ? "true" : undefined
+                                row.meta ? "true" : undefined
                               }
+                              role={row.meta ? "button" : undefined}
+                              tabindex={row.meta ? 0 : undefined}
+                              aria-label={
+                                row.meta ? `View details: ${row.code}` : undefined
+                              }
+                              aria-controls={
+                                row.meta
+                                  ? `${instanceId}-course-tip-${termIndex}-${rowIndex}`
+                                  : undefined
+                              }
+                              aria-expanded={row.meta ? "false" : undefined}
+                              aria-haspopup={row.meta ? "dialog" : undefined}
                             >
                               {row.title.parts.map((part, partIndex) => {
                                 if (part.kind === "text") return part.text;
@@ -554,54 +573,41 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                 );
                               })}
                             </span>
-                            {row.meta && !isPrintView && (
-                              <>
-                                <button
-                                  type="button"
-                                  class="ml-1 inline-flex h-4 w-4 align-middle items-center justify-center rounded-full border border-slate-300 bg-white text-[10px] font-bold text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue group-hover/tooltip:border-vhcc-blue group-hover/tooltip:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-500 dark:bg-gray-700 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400 dark:group-hover/tooltip:border-sky-400 dark:group-hover/tooltip:text-sky-400"
-                                  data-tooltip-trigger
-                                  aria-label={`View course details for ${row.meta.code}`}
-                                  aria-controls={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
-                                  aria-expanded="false"
-                                  aria-haspopup="dialog"
-                                >
-                                  i
-                                </button>
-                                <div
-                                  id={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
-                                  role="dialog"
-                                  aria-label={`Course details for ${row.meta.code}`}
-                                  data-tooltip-panel
-                                  data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
-                                  tabindex="-1"
-                                  class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-md border border-slate-300 bg-white p-3 text-sm text-slate-700 opacity-0 shadow-lg transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-80 sm:max-w-[calc(100vw-4rem)] dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200"
-                                >
-                                  <div class="flex items-start justify-between gap-2">
-                                    <p class="font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
-                                      {row.meta.code}: {row.meta.title}
-                                    </p>
-                                    <button
-                                      type="button"
-                                      class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-300 text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-600 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400"
-                                      data-tooltip-close
-                                      aria-label="Close course details"
-                                    >
-                                      ×
-                                    </button>
-                                  </div>
-                                  <p class="mt-1 text-slate-700 wrap-break-word dark:text-gray-300">
-                                    <span class="font-semibold">Credits:</span>{" "}
-                                    {row.meta.credits}
+                            {row.meta && (
+                              <div
+                                id={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
+                                role="dialog"
+                                aria-label={`Course details for ${row.meta.code}`}
+                                data-tooltip-panel
+                                data-tooltip-for={`${instanceId}-course-tip-${termIndex}-${rowIndex}`}
+                                tabindex="-1"
+                                class="pointer-events-none invisible fixed inset-x-3 bottom-3 z-30 max-h-[50vh] overflow-y-auto rounded-lg bg-white p-4 text-base text-slate-700 opacity-0 shadow-xl ring-1 ring-black/5 transition-opacity sm:absolute sm:inset-auto sm:left-0 sm:top-full sm:z-20 sm:mt-2 sm:w-96 sm:max-w-[calc(100vw-4rem)] dark:bg-gray-800 dark:text-gray-200 dark:ring-white/10"
+                              >
+                                <div class="flex items-start justify-between gap-2">
+                                  <p class="text-lg font-semibold text-vhcc-navy wrap-break-word dark:text-sky-300">
+                                    {row.meta.code}: {row.meta.title}
                                   </p>
-                                  <p class="mt-1 leading-relaxed wrap-break-word">
-                                    {row.meta.description}
-                                  </p>
+                                  <button
+                                    type="button"
+                                    class="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-300 text-slate-600 hover:border-vhcc-blue hover:text-vhcc-blue focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-vhcc-blue dark:border-gray-600 dark:text-gray-300 dark:hover:border-sky-400 dark:hover:text-sky-400"
+                                    data-tooltip-close
+                                    aria-label="Close course details"
+                                  >
+                                    ×
+                                  </button>
                                 </div>
-                              </>
+                                <p class="mt-1 text-slate-700 wrap-break-word dark:text-gray-300">
+                                  <span class="font-semibold">Credits:</span>{" "}
+                                  {row.meta.credits}
+                                </p>
+                                <p class="mt-1 leading-relaxed wrap-break-word">
+                                  {row.meta.description}
+                                </p>
+                              </div>
                             )}
                           </span>
                         </td>
-                        <td class="border-b border-slate-100 px-3 py-2 text-right text-gray-900 align-top dark:border-gray-700 dark:text-gray-100">
+                        <td class="border-b border-slate-100 px-4 py-3 text-right text-gray-900 align-top dark:border-gray-700 dark:text-gray-100">
                           {row.creditsText}
                         </td>
                       </tr>
@@ -610,12 +616,12 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                 </tbody>
                 {showTotals && (
                   <tfoot>
-                    <tr class="bg-slate-50 dark:bg-gray-700/50">
-                      <td class="px-3 py-2" />
-                      <td class="px-3 py-2 text-right font-semibold text-gray-900 dark:text-gray-100">
+                    <tr class="border-t-2 border-slate-200 dark:border-gray-600">
+                      <td class="px-4 py-3" />
+                      <td class="px-4 py-3 text-right font-bold text-vhcc-navy dark:text-sky-300">
                         Total
                       </td>
-                      <td class="px-3 py-2 text-right font-semibold text-gray-900 dark:text-gray-100">
+                      <td class="px-4 py-3 text-right font-bold text-vhcc-navy dark:text-sky-300">
                         {term.total}
                       </td>
                     </tr>
@@ -698,33 +704,52 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
 
       if (open) {
         // Portal panel to body so it sits in root stacking context above the backdrop
-        const iBtn = container.querySelector("button[data-tooltip-trigger]");
-        const rect = iBtn
-          ? iBtn.getBoundingClientRect()
+        const triggerNode =
+          triggerEl || container.querySelector("[data-tooltip-trigger]");
+        const rect = triggerNode
+          ? triggerNode.getBoundingClientRect()
           : container.getBoundingClientRect();
         panel._portalParent = panel.parentElement;
         panel._portalNext = panel.nextSibling;
-        panel._triggerEl = iBtn || triggerEl || null;
+        panel._triggerEl = triggerNode || null;
         document.body.appendChild(panel);
         const isMobile = window.innerWidth < 640;
         if (isMobile) {
           panel.style.cssText =
             "position:fixed;left:12px;right:12px;bottom:12px;top:auto;width:auto;max-width:none;z-index:50";
         } else {
-          const panelWidth = 320;
+          const panelWidth = 384;
           let left = rect.left;
           if (left + panelWidth > window.innerWidth - 16)
             left = window.innerWidth - panelWidth - 16;
+          if (left < 16) left = 16;
+          // Provisionally place below the trigger — panel is still
+          // invisible here, so measuring its height doesn't cause any
+          // visible jump.
           panel.style.cssText = `position:fixed;top:${rect.bottom + 6}px;left:${left}px;width:${panelWidth}px;bottom:auto;right:auto;z-index:50`;
+          const panelHeight = panel.offsetHeight;
+          const spaceBelow = window.innerHeight - rect.bottom - 6;
+          const spaceAbove = rect.top - 6;
+          if (panelHeight > spaceBelow && spaceAbove > spaceBelow) {
+            // Not enough room below, but more room above — flip it.
+            panel.style.top = `${Math.max(16, rect.top - panelHeight - 6)}px`;
+          } else if (panelHeight > spaceBelow) {
+            // Not enough room either side of the trigger — pin inside the
+            // viewport instead of letting it run off the bottom, since a
+            // fixed-position panel doesn't move when the page scrolls.
+            panel.style.top = `${Math.max(16, window.innerHeight - panelHeight - 16)}px`;
+          }
         }
         panel.classList.remove("invisible", "opacity-0", "pointer-events-none");
         panel.classList.add("visible", "opacity-100", "pointer-events-auto");
+        panel.setAttribute("aria-modal", "true");
         showBackdrop();
         const closeBtn = panel.querySelector("[data-tooltip-close]");
         if (closeBtn) closeBtn.focus();
       } else {
         panel.classList.add("invisible", "opacity-0", "pointer-events-none");
         panel.classList.remove("visible", "opacity-100", "pointer-events-auto");
+        panel.removeAttribute("aria-modal");
         const returnTarget = panel._triggerEl;
         panel._triggerEl = null;
         // Restore panel to original position in DOM
@@ -801,6 +826,52 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
       if (!(target instanceof Element)) return;
 
       if (event.key === "Escape") closeAll();
+
+      // Course titles that contain a footnote link can't be real <button>
+      // elements (a <button> can't contain an <a>), so they're marked
+      // role="button" instead and don't get native Enter/Space activation —
+      // wire that up here. Scoped to [role="button"] so real <button>
+      // triggers (which already activate natively) aren't double-toggled.
+      if (event.key === "Enter" || event.key === " ") {
+        const trigger = target.closest('[data-tooltip-trigger][role="button"]');
+        if (trigger && !target.closest("a")) {
+          event.preventDefault();
+          const container = trigger.closest("[data-tooltip-container]");
+          if (!container) return;
+          const isOpen =
+            container.getAttribute("data-tooltip-open") === "true";
+          closeAll(container);
+          setOpen(container, !isOpen, !isOpen ? trigger : null);
+          if (isOpen) {
+            const anyOpen = document.querySelector(
+              "[data-tooltip-open='true']",
+            );
+            if (!anyOpen) hideBackdrop();
+          }
+        }
+      }
+
+      // Keep Tab inside the open panel — otherwise keyboard users can
+      // tab past it into the dimmed page behind it.
+      if (event.key === "Tab") {
+        const openPanel = document.querySelector(
+          "[data-tooltip-panel].visible",
+        );
+        if (!openPanel) return;
+        const focusable = openPanel.querySelectorAll(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
     });
   })();
 </script>
