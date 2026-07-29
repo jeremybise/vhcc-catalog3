@@ -1,0 +1,197 @@
+---
+import "../styles/global.css";
+
+export interface Props {
+  title: string;
+  year: string;
+}
+
+const { title, year } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <!-- This page duplicates the whole catalog; keep it out of search engines. -->
+    <meta name="robots" content="noindex" />
+    <title>{title}</title>
+    <style is:global>
+      /* ---------------------------------------------------------------
+         Screen styles — this page is readable in the browser, but it is
+         built for "Print → Save as PDF". Deliberately light-mode only:
+         no theme toggle is loaded, so `.dark` never gets applied.
+      --------------------------------------------------------------- */
+      .print-page-title {
+        border-bottom: 1px solid #cbd5e1;
+        padding-bottom: 0.25rem;
+      }
+
+      /* Tables authored in Markdoc get the same treatment as the web view. */
+      .prose table:not([class]) {
+        width: 100%;
+        table-layout: fixed;
+      }
+      .prose table:not([class]) th,
+      .prose table:not([class]) td {
+        padding: 0.35rem 0.5rem;
+      }
+      .prose table:not([class]) thead th {
+        background-color: #e9eef5;
+        border-bottom: 2px solid #cbd5e1 !important;
+      }
+      .prose {
+        overflow-wrap: break-word;
+        word-break: break-word;
+      }
+
+      /* Course tooltips are interactive-only: strip the affordances so the
+         printed text reads as plain course names. */
+      button[data-tooltip-trigger],
+      [data-tooltip-panel] {
+        display: none !important;
+      }
+      [data-tooltip-trigger] {
+        text-decoration: none !important;
+        cursor: auto !important;
+      }
+
+      /* ---------------------------------------------------------------
+         Print styles
+      --------------------------------------------------------------- */
+      @page {
+        size: letter;
+        margin: 0.7in 0.75in;
+      }
+
+      @media print {
+        html,
+        body {
+          background: #fff !important;
+          font-size: 10.5pt;
+        }
+
+        .screen-only {
+          display: none !important;
+        }
+
+        /* Each top-level catalog section starts a fresh sheet. */
+        .print-section {
+          break-before: page;
+        }
+        .print-cover,
+        .print-toc {
+          break-after: page;
+        }
+
+        /* Keep headings attached to the text that follows them. */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          break-after: avoid;
+          break-inside: avoid;
+        }
+
+        /* Don't strand a page title at the bottom of a sheet. */
+        .print-page {
+          break-inside: auto;
+        }
+        .print-page-title {
+          break-after: avoid;
+        }
+
+        /* Course descriptions and program-of-study tables should stay whole
+           when they reasonably can. */
+        .course-entry,
+        .print-toc li,
+        blockquote,
+        figure {
+          break-inside: avoid;
+        }
+        /* A semester table is at most a handful of rows. Keeping it whole
+           avoids Chrome repeating the "Total" footer on each fragment. */
+        .program-term {
+          break-inside: avoid;
+        }
+        table {
+          break-inside: auto;
+        }
+        thead {
+          display: table-header-group;
+        }
+        tr,
+        img {
+          break-inside: avoid;
+        }
+
+        /* Orphan/widow control for body copy. */
+        p,
+        li {
+          orphans: 3;
+          widows: 3;
+        }
+
+        /* Chrome drops background fills unless "Background graphics" is on;
+           make borders carry the structure either way. */
+        .prose table:not([class]) th,
+        .prose table:not([class]) td,
+        table th,
+        table td {
+          border: 1px solid #cbd5e1 !important;
+        }
+
+        a {
+          text-decoration: none;
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="bg-white text-gray-900 antialiased"
+    data-pagefind-ignore="all"
+  >
+    <div
+      class="screen-only sticky top-0 z-10 flex flex-wrap items-center gap-3 border-b border-slate-200 bg-slate-50 px-4 py-3 text-sm"
+    >
+      <p class="font-semibold text-vhcc-navy">
+        Print view — {year} catalog, complete
+      </p>
+      <p class="text-gray-600">
+        Use your browser's Print dialog and choose <strong
+          >Save as PDF</strong
+        >. Letter paper, default margins, background graphics on.
+      </p>
+      <div class="ml-auto flex items-center gap-3">
+        <a
+          href={`/${year}`}
+          class="text-vhcc-blue underline underline-offset-2 hover:text-vhcc-navy"
+        >
+          Back to catalog
+        </a>
+        <button
+          type="button"
+          id="print-button"
+          class="rounded-md bg-vhcc-navy px-3 py-1.5 font-semibold text-white hover:bg-vhcc-blue"
+        >
+          Print
+        </button>
+      </div>
+    </div>
+
+    <div class="mx-auto w-full max-w-4xl px-6 py-8 print:max-w-none print:p-0">
+      <slot />
+    </div>
+
+    <script is:inline>
+      document
+        .getElementById("print-button")
+        ?.addEventListener("click", () => window.print());
+    </script>
+  </body>
+</html>

@@ -64,6 +64,9 @@ const instanceId = crypto.randomUUID().slice(0, 8);
 
 const pathnameParts = Astro.url.pathname.split("/").filter(Boolean);
 const year = pathnameParts[0] ?? "";
+// On the print view the tooltip panels are unreachable and would add megabytes
+// of hidden markup, so the tables render as plain course listings.
+const isPrintView = pathnameParts[1] === "print";
 
 const courses = await getCollection("courses");
 const yearCourses = courses.filter((entry) =>
@@ -355,7 +358,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
     {
       processedTerms.map((term, termIndex) => {
         return (
-          <section>
+          <section class="program-term">
             <h4 class="mb-2 text-base font-semibold text-gray-900 dark:text-gray-100">
               {term.termLabel}
             </h4>
@@ -411,12 +414,14 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                   >
                                     <span
                                       class={
-                                        item.meta
+                                        item.meta && !isPrintView
                                           ? "cursor-pointer underline decoration-dotted underline-offset-2"
                                           : undefined
                                       }
                                       data-tooltip-trigger={
-                                        item.meta ? "true" : undefined
+                                        item.meta && !isPrintView
+                                          ? "true"
+                                          : undefined
                                       }
                                     >
                                       {item.title.parts.map(
@@ -445,7 +450,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                         },
                                       )}
                                     </span>
-                                    {item.meta && (
+                                    {item.meta && !isPrintView && (
                                       <>
                                         <button
                                           type="button"
@@ -518,12 +523,12 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                           >
                             <span
                               class={
-                                row.meta
+                                row.meta && !isPrintView
                                   ? "cursor-pointer underline decoration-dotted underline-offset-2"
                                   : undefined
                               }
                               data-tooltip-trigger={
-                                row.meta ? "true" : undefined
+                                row.meta && !isPrintView ? "true" : undefined
                               }
                             >
                               {row.title.parts.map((part, partIndex) => {
@@ -549,7 +554,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
                                 );
                               })}
                             </span>
-                            {row.meta && (
+                            {row.meta && !isPrintView && (
                               <>
                                 <button
                                   type="button"
@@ -662,6 +667,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
   }
 </section>
 
+{!isPrintView && (
 <script is:inline>
   (() => {
     if (window.__vhccTooltipInit) return;
@@ -798,3 +804,4 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
     });
   })();
 </script>
+)}

@@ -13,6 +13,10 @@ const { code, label, title, credits, description } = Astro.props;
 
 const normalizedCode = code.trim();
 
+// The print view has no hover/click, and every course description is already
+// printed in the Course Descriptions section — so emit the label only.
+const isPrintView = Astro.url.pathname.split("/").filter(Boolean)[1] === "print";
+
 let resolvedTitle = title ?? "";
 let resolvedCredits = credits ?? "";
 let resolvedDescription = description ?? "";
@@ -51,11 +55,14 @@ if (!resolvedTitle || !resolvedDescription) {
 }
 
 const displayLabel = label || normalizedCode;
-const hasDetails = Boolean(
-  resolvedTitle || resolvedCredits || resolvedDescription,
-);
+const hasDetails =
+  !isPrintView &&
+  Boolean(resolvedTitle || resolvedCredits || resolvedDescription);
 ---
 
+{isPrintView && <span>{displayLabel}</span>}
+
+{!isPrintView && (
 <span
   class="group/tooltip relative inline-flex items-center gap-1 align-middle"
   data-tooltip-container
@@ -117,7 +124,9 @@ const hasDetails = Boolean(
     )
   }
 </span>
+)}
 
+{!isPrintView && (
 <script is:inline>
   (() => {
     if (window.__vhccTooltipInit) return;
@@ -255,3 +264,4 @@ const hasDetails = Boolean(
     });
   })();
 </script>
+)}

@@ -13,8 +13,9 @@
 
 1. Create a new branch (i.e. 2020-2021) for isolation and preview while working on the next catalog
 2. Duplicate as 2020-2021 as a starting point for the new catalog
-3. Add new years for courses and catalog to Astro content config (src/content/config.ts)
-4. Add new years for courses and catalog to Keystatic config (keystatic.config.mjs)
-5. Mark the previous year as archived by setting `archived: true` in the index.mdoc for the previous year
-6. Publish branch to Github so editors can work via Keystatic. Preview will be available at ???
-7. When they're ready to publish, merge that branch into master and push
+3. Search/replace any URLs with relative paths to the previous year and update to new catalog year
+4. Add new years for courses and catalog to Astro content config (src/content/config.ts)
+5. Add new years for courses and catalog to Keystatic config (keystatic.config.mjs)
+6. Mark the previous year as archived by setting `archived: true` in the index.mdoc for the previous year
+7. Publish branch to Github so editors can work via Keystatic. Preview will be available at ???
+8. When they're ready to publish, merge that branch into master and push

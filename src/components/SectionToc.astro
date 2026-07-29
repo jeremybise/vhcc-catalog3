@@ -16,9 +16,14 @@ const {
 const segments = Astro.url.pathname.split("/").filter(Boolean);
 const [year, section] = segments;
 
+// On the whole-catalog print page there is no single "current section" to list,
+// and the section's pages follow immediately in the document anyway — so the
+// link list is dropped and only the heading is kept.
+const isPrintView = section === "print";
+
 let items: { href: string; title: string; order: number }[] = [];
 
-if (year && section) {
+if (year && section && !isPrintView) {
   const entries = await getCollection("catalog", (entry) =>
     entry.id.startsWith(`${year}/catalog/${section}/`),
   );
@@ -50,10 +55,10 @@ if (year && section) {
 }
 ---
 
-{title && <h2>{title}</h2>}
+{title && !isPrintView && <h2>{title}</h2>}
 
 {
-  items.length > 0 ? (
+  isPrintView ? null : items.length > 0 ? (
     variant === "cards" ? (
       <ul class="not-prose grid grid-cols-1 gap-3">
         {items.map((item) => (
