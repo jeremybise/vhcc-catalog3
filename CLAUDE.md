@@ -57,6 +57,18 @@ Tags: `br` (line break), `coursetooltip` (inline course reference with hover/cli
 
 When editing `programofstudy` or `coursetooltip` logic, note that course lookups always resolve relative to the *current URL's year segment* (`Astro.url.pathname`), not a fixed year — so year-scoped Keystatic collections (`courses_2026`) and Keystatic `relationship` fields must be kept per-year too if a new year is added.
 
+### Program of Study JSON API
+
+Program tables are also exposed as prerendered JSON for external consumers (the VHCC marketing site) — `/api/<year>/programs.json` plus one file per program. See [docs/program-api.md](docs/program-api.md) for the response shapes and a consumption example.
+
+Three points matter when touching this code:
+
+- **Credit math is shared, not duplicated.** [src/lib/programOfStudy.ts](src/lib/programOfStudy.ts) holds course resolution, credit-range math, and footnote parsing; both [src/components/ProgramOfStudy.astro](src/components/ProgramOfStudy.astro) and the endpoints call `processProgram()`. Adding that logic back into either caller lets the catalog page and the API disagree about how many credits a degree takes.
+- **Program identity comes from the heading, not the tag.** A `programofstudy` tag's `title` attribute is usually generic ("Course of Study"); the program name is the `##` above it, so [src/lib/programSources.ts](src/lib/programSources.ts) re-parses the Markdoc body with `Markdoc.parse(entry.body)` and pairs each tag with its nearest preceding h2. `###` subsections ("Admission Requirements") are deliberately skipped unless they name an award themselves, otherwise they hijack the program name. Consecutive tables under one heading are alternate **tracks** of one program (nursing has four).
+- **Two award classifiers exist on purpose.** `getAward()` is the strict prefix match that drives the on-page links in `CoursesOfStudyLinks.astro`; `classifyAward()` adds a parenthesized-code fallback and is used only by the API, so broadening API classification can't silently change a rendered page.
+
+Years are discovered from content (`getProgramYears()`), so a new catalog year needs no changes here — but a year only appears once its pages use `programofstudy` tags (`2025-2026` predates the tag and is not covered).
+
 ### Tooltip UI pattern
 
 Course tooltips (both the standalone `CourseTooltip.astro` inline tag and the ones embedded per-row inside `ProgramOfStudy.astro`) share one hand-rolled interaction pattern implemented via `data-tooltip-*` attributes and a global `is:inline` script (guarded by `window.__vhccTooltipInit` so it only attaches once per page even though both components inject their own copy of the script). Panels are portaled to `document.body` on open so they escape table/overflow stacking contexts, and there's a shared `#tooltip-backdrop` element defined once in [src/layouts/CatalogLayout.astro](src/layouts/CatalogLayout.astro). If you touch one tooltip implementation, check whether the other needs the same fix.

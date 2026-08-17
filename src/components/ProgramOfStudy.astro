@@ -1,50 +1,11 @@
 ---
-import { getCollection } from "astro:content";
 import CourseTooltip from "./CourseTooltip.astro";
-
-type RowType = "course" | "options" | "note";
-
-interface CourseMeta {
-  code: string;
-  title: string;
-  credits: string;
-  description: string;
-}
-
-type FootnotePart =
-  | { kind: "text"; text: string }
-  | { kind: "footnote"; footnote: string };
-
-interface FootnoteText {
-  parts: FootnotePart[];
-}
-
-interface ProgramRowInput {
-  rowType?: "course" | "options" | "note";
-  course?: string | null;
-  codeOverride?: string;
-  titleOverride?: string;
-  creditsOverride?: string;
-  optionLabel?: string;
-  minChoices?: number | null;
-  maxChoices?: number | null;
-  options?: (string | null)[];
-  note?: string;
-}
-
-interface ProgramTermInput {
-  termLabel?: string;
-  rows?: ProgramRowInput[];
-}
-
-interface ProgramNoteInput {
-  number?: number | string | null;
-  text?: string;
-}
-
-type NotePart =
-  | { kind: "text"; text: string }
-  | { kind: "course"; code: string; label?: string };
+import {
+  getYearCourseIndex,
+  processProgram,
+  type ProgramNoteInput,
+  type ProgramTermInput,
+} from "../lib/programOfStudy";
 
 interface Props {
   title?: string;
@@ -65,292 +26,27 @@ const instanceId = crypto.randomUUID().slice(0, 8);
 const pathnameParts = Astro.url.pathname.split("/").filter(Boolean);
 const year = pathnameParts[0] ?? "";
 // On the print view the tooltip panels are unreachable and would add megabytes
-// of hidden markup. Dropping `meta` below switches off the trigger and the
-// panel together, so the tables render as plain course listings.
+// of hidden markup. Dropping the course meta below switches off the trigger and
+// the panel together, so the tables render as plain course listings.
 const isPrintView = pathnameParts[1] === "print";
 
-const courses = await getCollection("courses");
-const yearCourses = courses.filter((entry) =>
-  entry.id.startsWith(`${year}/courses/`),
+const courseIndex = await getYearCourseIndex(year);
+
+// Resolution, credit math and footnote parsing live in the shared lib so the
+// JSON endpoints under src/pages/api/ produce identical numbers.
+const program = processProgram(
+  { title, showTotals, notes, terms },
+  { courseIndex, includeCourseMeta: !isPrintView },
 );
 
-const slugify = (value: string) =>
-  value
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
+const processedTerms = program.terms;
+const notesWithParts = program.notes;
+const noteMap = program.noteMap;
 
-const courseMap = new Map<string, (typeof yearCourses)[number]>();
-for (const course of yearCourses) {
-  const slug = (course.id.split("/").pop() ?? "").toLowerCase();
-  const code = (course.data.code ?? "").toLowerCase();
-  const titleSlug = slugify(course.data.title ?? "");
-  if (slug) courseMap.set(slug, course);
-  if (code) courseMap.set(code, course);
-  if (titleSlug) courseMap.set(titleSlug, course);
-}
-
-const resolveCourse = (ref: string | null | undefined) => {
-  if (!ref) return null;
-  const key = ref.toLowerCase();
-  return courseMap.get(key) ?? null;
-};
-
-const parseCredits = (input: string | null | undefined) => {
-  if (!input) return null;
-  const cleaned = input.trim();
-  if (!cleaned) return null;
-
-  const range = cleaned.match(/^(\d+(?:\.\d+)?)\s*[-–]\s*(\d+(?:\.\d+)?)$/);
-  if (range) {
-    const min = Number.parseFloat(range[1]);
-    const max = Number.parseFloat(range[2]);
-    if (!Number.isNaN(min) && !Number.isNaN(max)) return { min, max };
-  }
-
-  const single = cleaned.match(/^(\d+(?:\.\d+)?)$/);
-  if (single) {
-    const value = Number.parseFloat(single[1]);
-    if (!Number.isNaN(value)) return { min: value, max: value };
-  }
-
-  return null;
-};
-
-const fmt = (num: number) =>
-  Number.isInteger(num) ? `${num}` : `${num.toFixed(1)}`;
-const fmtRange = (min: number, max: number) =>
-  min === max ? fmt(min) : `${fmt(min)}-${fmt(max)}`;
-
-const clamp = (value: number, min: number, max: number) =>
-  Math.max(min, Math.min(max, value));
-
-type DisplayRow =
-  | { kind: "note"; note: string }
-  | {
-      kind: "course";
-      code: string;
-      title: FootnoteText;
-      creditsText: string;
-      meta?: CourseMeta;
-    }
-  | {
-      kind: "options";
-      label: string;
-      options: { code: string; title: FootnoteText; meta?: CourseMeta }[];
-      creditsText: string;
-    };
-
-const stripMarkdown = (value: string) =>
-  value
-    .replace(/\[(.*?)\]\((.*?)\)/g, "$1")
-    .replace(/[*_`~>#]/g, "")
-    .trim();
-
-const getCourseDescription = (entry: (typeof yearCourses)[number]) => {
-  const body = stripMarkdown(entry.body || "");
-  if (!body) return "No description available.";
-  return body;
-};
-
-const splitNoteLinks = (value: string): FootnoteText => {
-  const parts: FootnotePart[] = [];
-  const noteLinkRegex = /\[(\d+)\]/g;
-  let lastIndex = 0;
-
-  for (const match of value.matchAll(noteLinkRegex)) {
-    const start = match.index ?? 0;
-    if (start > lastIndex) {
-      parts.push({ kind: "text", text: value.slice(lastIndex, start) });
-    }
-    parts.push({ kind: "footnote", footnote: match[1] || "" });
-    lastIndex = start + match[0].length;
-  }
-
-  if (lastIndex < value.length || parts.length === 0) {
-    parts.push({ kind: "text", text: value.slice(lastIndex) });
-  }
-
-  return { parts };
-};
-
-const normalizedNotes = notes
-  .map((note) => {
-    const raw = note.number;
-    if (raw === null || raw === undefined || raw === "") return null;
-    const num = Number(raw);
-    if (Number.isNaN(num) || num < 1) return null;
-    return {
-      number: Math.trunc(num),
-      text: note.text?.trim() || "",
-    };
-  })
-  .filter((note): note is { number: number; text: string } => note !== null)
-  .sort((a, b) => a.number - b.number);
-
-const courseTooltipTagRegex =
-  /\{\%\s*coursetooltip\s+code=\"([^\"]+)\"(?:\s+label=\"([^\"]+)\")?\s*\/\%\}/gi;
-
-const parseNoteParts = (text: string): NotePart[] => {
-  const parts: NotePart[] = [];
-  let lastIndex = 0;
-
-  for (const match of text.matchAll(courseTooltipTagRegex)) {
-    const start = match.index ?? 0;
-    if (start > lastIndex) {
-      parts.push({ kind: "text", text: text.slice(lastIndex, start) });
-    }
-    parts.push({
-      kind: "course",
-      code: (match[1] || "").trim(),
-      label: match[2]?.trim() || undefined,
-    });
-    lastIndex = start + match[0].length;
-  }
-
-  if (lastIndex < text.length) {
-    parts.push({ kind: "text", text: text.slice(lastIndex) });
-  }
-
-  return parts.length > 0 ? parts : [{ kind: "text", text }];
-};
-
-const notesWithParts = normalizedNotes.map((note) => ({
-  ...note,
-  parts: parseNoteParts(note.text),
-}));
-
-const noteMap = new Map(
-  notesWithParts.map((note) => [String(note.number), note]),
-);
 const noteId = (footnote: string) => `program-note-${footnote}`;
 const noteRefId = (contextId: string, footnote: string) =>
   `program-note-ref-${contextId}-${footnote}`;
 
-const processedTerms = terms.map((term) => {
-  const rows = term.rows ?? [];
-  let termMin = 0;
-  let termMax = 0;
-
-  const displayRows: DisplayRow[] = rows.map((row) => {
-    const rowType: RowType = row.rowType ?? "course";
-
-    if (rowType === "note") {
-      return {
-        kind: "note",
-        note: row.note || "",
-      };
-    }
-
-    if (rowType === "options") {
-      const optionRefs = (row.options ?? []).filter((value): value is string =>
-        Boolean(value),
-      );
-      const optionItems = optionRefs.map((ref) => {
-        const entry = resolveCourse(ref);
-        if (entry) {
-          const credits = entry.data.credits || "";
-          return {
-            code: entry.data.code,
-            title: entry.data.title,
-            credits: parseCredits(credits),
-            meta: isPrintView
-              ? undefined
-              : {
-                  code: entry.data.code,
-                  title: entry.data.title,
-                  credits,
-                  description: getCourseDescription(entry),
-                },
-          };
-        }
-        return {
-          code: ref,
-          title: ref,
-          credits: null,
-          meta: undefined,
-        };
-      });
-
-      const optionRanges = optionItems
-        .map((item) => item.credits)
-        .filter(
-          (parsed): parsed is { min: number; max: number } => parsed !== null,
-        );
-
-      const totalOptions = optionRanges.length;
-      const rawMinChoices = row.minChoices ?? 1;
-      const rawMaxChoices = row.maxChoices ?? Math.max(1, rawMinChoices);
-      const minChoices = clamp(rawMinChoices, 0, totalOptions);
-      const maxChoices = clamp(rawMaxChoices, minChoices, totalOptions);
-
-      const byMin = [...optionRanges].sort((a, b) => a.min - b.min);
-      const byMax = [...optionRanges].sort((a, b) => b.max - a.max);
-      const optionMin = byMin
-        .slice(0, minChoices)
-        .reduce((sum, item) => sum + item.min, 0);
-      const optionMax = byMax
-        .slice(0, maxChoices)
-        .reduce((sum, item) => sum + item.max, 0);
-
-      termMin += optionMin;
-      termMax += optionMax;
-
-      return {
-        kind: "options",
-        label: row.optionLabel || "Choose one",
-        options: optionItems.map((item) => ({
-          code: item.code,
-          title: splitNoteLinks(item.title),
-          meta: item.meta,
-        })),
-        creditsText:
-          totalOptions > 0
-            ? fmtRange(optionMin, optionMax)
-            : row.creditsOverride || "",
-      };
-    }
-
-    const entry = resolveCourse(row.course);
-    const code = row.codeOverride || entry?.data.code || row.course || "";
-    const courseTitle = row.titleOverride || entry?.data.title || "";
-    const creditsText = row.creditsOverride || entry?.data.credits || "";
-    const parsed = parseCredits(creditsText);
-    if (parsed) {
-      termMin += parsed.min;
-      termMax += parsed.max;
-    }
-
-    return {
-      kind: "course",
-      code,
-      title: splitNoteLinks(courseTitle),
-      creditsText,
-      meta:
-        entry && !isPrintView
-          ? {
-              code: entry.data.code,
-              title: entry.data.title,
-              credits: entry.data.credits || "",
-              description: getCourseDescription(entry),
-            }
-          : undefined,
-    };
-  });
-
-  return {
-    termLabel: term.termLabel || "Term",
-    rows: displayRows,
-    total: fmtRange(termMin, termMax),
-    termMin,
-    termMax,
-  };
-});
-
-const programMin = processedTerms.reduce((sum, term) => sum + term.termMin, 0);
-const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
 ---
 
 <section class="not-prose my-8">
@@ -638,7 +334,7 @@ const programMax = processedTerms.reduce((sum, term) => sum + term.termMax, 0);
   {
     showTotals && processedTerms.length > 0 && (
       <p class="mt-4 text-base font-semibold text-vhcc-navy dark:text-sky-300">
-        Total Credits: {fmtRange(programMin, programMax)}
+        Total Credits: {program.totalCredits}
       </p>
     )
   }

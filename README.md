@@ -9,6 +9,11 @@
 - Keystatic CMS for editors
 - Netlify or Vercel or Node for hosting?
 
+## Program of Study API
+
+Program tables are published as static JSON so other sites (e.g. the marketing
+site) can present the same data — see [docs/program-api.md](docs/program-api.md).
+
 ## New Year Process
 
 1. Create a new branch (i.e. 2020-2021) for isolation and preview while working on the next catalog
