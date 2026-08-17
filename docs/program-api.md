@@ -140,9 +140,10 @@ Notes on the shape:
 - **`notes[].parts`** may contain `{ "kind": "course", "code": "…", "label": "…" }`
   where the catalog renders an inline course tooltip. Render the label (or code)
   as text if you don't want a tooltip of your own.
-- **`catalogUrl`** (absolute) is only present when `site` is set in
-  `astro.config.mjs`. `catalogPath` (relative to the catalog's origin) is always
-  present — join it against the catalog origin yourself if you need a link back.
+- **`catalogUrl`** is a fully qualified link to the program's heading on the
+  catalog site, for linking back. It comes from `site` in `astro.config.mjs`,
+  which reads Netlify's `URL` build variable, so it tracks the catalog's primary
+  domain automatically. `catalogPath` is the same thing minus the origin.
 
 ## Consuming from the marketing site
 
