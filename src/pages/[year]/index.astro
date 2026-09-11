@@ -162,9 +162,22 @@ const currentYear = yearEntries2
   <Content />
 
   <nav class="not-prose mt-14" aria-label="Catalog sections">
-    <h2 class="mb-6 text-3xl font-bold text-vhcc-navy dark:text-sky-300">
-      Catalog Sections
-    </h2>
+    <div class="mb-6 flex flex-wrap items-center justify-between gap-3">
+      <h2 class="text-3xl font-bold text-vhcc-navy dark:text-sky-300">
+        Catalog Sections
+      </h2>
+      <a
+        href={`/${year}/print`}
+        class="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-semibold text-vhcc-navy no-underline transition-colors hover:bg-vhcc-blue/5 dark:text-sky-300 dark:hover:bg-sky-500/10"
+      >
+        <Icon
+          name="material-symbols:print-outline"
+          class="h-5 w-5"
+          aria-hidden="true"
+        />
+        Print
+      </a>
+    </div>
     <div class="grid gap-2 sm:grid-cols-2 sm:-mx-4">
       {
         sidebar.map((section) => (

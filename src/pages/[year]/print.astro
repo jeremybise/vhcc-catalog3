@@ -1,0 +1,217 @@
+---
+import { getCollection, render } from "astro:content";
+import logo from "../../assets/image007.png";
+import PrintLayout from "../../layouts/PrintLayout.astro";
+import CourseDescriptionCategory from "../../components/CourseDescriptionCategory.astro";
+
+export async function getStaticPaths() {
+  const allEntries = await getCollection("catalog");
+  const years = [...new Set(allEntries.map((e) => e.id.split("/")[0]))];
+  return years.map((year) => ({ params: { year }, props: { year } }));
+}
+
+const { year } = Astro.props;
+
+const allYearEntries = await getCollection("catalogYears");
+const yearIndex = allYearEntries.find(
+  (e) => e.id === year || e.id.startsWith(`${year}/`),
+);
+if (!yearIndex) throw new Error(`No index entry found for year: ${year}`);
+const { Content: YearIntro } = await render(yearIndex);
+
+const allEntries = await getCollection("catalog");
+const yearEntries = allEntries.filter((e) =>
+  e.id.startsWith(`${year}/catalog/`),
+);
+
+type PrintPage = {
+  /** Stable in-document anchor, used by the table of contents. */
+  anchor: string;
+  title: string;
+  order: number;
+  section: string;
+  /** Course-description leaves render from the courses collection instead. */
+  courseCategory: string | null;
+  Content: Awaited<ReturnType<typeof render>>["Content"];
+};
+type PrintSection = {
+  label: string;
+  slug: string;
+  order: number;
+  pages: PrintPage[];
+};
+
+const sectionsMap = new Map<string, PrintSection>();
+
+for (const entry of yearEntries) {
+  // entry.id: "2026-2027/catalog/<section>/<...page>"
+  const parts = entry.id.split("/");
+  const section = parts[2];
+  const pageParts = parts.slice(3);
+  const isIndex =
+    pageParts.length === 0 || pageParts[pageParts.length - 1] === "index";
+
+  if (!sectionsMap.has(section)) {
+    sectionsMap.set(section, {
+      label: section
+        .split("-")
+        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+        .join(" "),
+      slug: section,
+      order: 99,
+      pages: [],
+    });
+  }
+  const sec = sectionsMap.get(section)!;
+
+  const { Content } = await render(entry);
+  const pageSlug = pageParts.join("/").replace(/\.mdoc$/, "");
+
+  // Mirror [...slug].astro: course-descriptions leaves are generated from the
+  // courses collection, not from the .mdoc body.
+  const courseCategory =
+    section === "course-descriptions" && !isIndex
+      ? (pageParts[0] ?? null)
+      : null;
+
+  if (isIndex) {
+    sec.order = entry.data.order ?? 99;
+    sec.pages.unshift({
+      anchor: `sec-${section}`,
+      title: entry.data.title,
+      order: -1,
+      section,
+      courseCategory,
+      Content,
+    });
+  } else {
+    sec.pages.push({
+      anchor: `pg-${section}--${pageSlug.replace(/\//g, "-")}`,
+      title: entry.data.title,
+      order: entry.data.order ?? 99,
+      section,
+      courseCategory,
+      Content,
+    });
+  }
+}
+
+const sections: PrintSection[] = Array.from(sectionsMap.values())
+  .sort((a, b) => a.order - b.order || a.slug.localeCompare(b.slug))
+  .map((sec) => ({
+    ...sec,
+    pages: sec.pages.sort(
+      (a, b) => a.order - b.order || a.title.localeCompare(b.title),
+    ),
+  }));
+
+const isArchived = yearIndex.data.archived ?? false;
+const generatedOn = new Date().toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const proseClass =
+  "prose max-w-none prose-slate prose-h1:hidden prose-headings:font-semibold prose-h2:text-xl prose-h3:text-lg prose-a:text-vhcc-blue print:prose-sm";
+---
+
+<PrintLayout title={`${year} VHCC Catalog — Print Version`} {year}>
+  <!-- Cover -->
+  <section class="print-cover flex min-h-[8in] flex-col justify-center">
+    <!-- Plain <img> on purpose: astro:assets routes through the Netlify image
+         CDN, which the browser's print renderer should not have to wait on.
+         The source asset is already exactly the size it is displayed at. -->
+    <img
+      src={logo.src}
+      width={logo.width}
+      height={logo.height}
+      alt="Virginia Highlands Community College logo"
+      class="mb-8"
+    />
+    <h1 class="text-4xl font-bold text-vhcc-navy">
+      Virginia Highlands Community College
+    </h1>
+    <p class="mt-2 text-2xl font-semibold text-vhcc-green">
+      {year} College Catalog
+    </p>
+    {
+      isArchived && (
+        <p class="mt-4 text-base font-semibold text-amber-700">
+          Archived edition — superseded by a later catalog year.
+        </p>
+      )
+    }
+    <div class="mt-8 border-t border-slate-300 pt-6">
+      <article class={proseClass}>
+        <YearIntro />
+      </article>
+      <p class="mt-6 text-sm text-gray-500">
+        Complete catalog, generated {generatedOn}.
+      </p>
+    </div>
+  </section>
+
+  <!-- Table of contents -->
+  <nav class="print-toc" aria-label="Table of contents">
+    <h1 class="mb-6 text-3xl font-bold text-vhcc-navy">Table of Contents</h1>
+    <ol class="space-y-4">
+      {
+        sections.map((section, index) => (
+          <li>
+            <a
+              href={`#sec-${section.slug}`}
+              class="text-lg font-semibold text-vhcc-navy no-underline"
+            >
+              {index + 1}. {section.pages[0]?.title ?? section.label}
+            </a>
+            {section.pages.length > 1 && (
+              <ul class="mt-1 ml-6 space-y-0.5 text-sm text-gray-700">
+                {section.pages.slice(1).map((page) => (
+                  <li>
+                    <a href={`#${page.anchor}`} class="no-underline">
+                      {page.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </li>
+        ))
+      }
+    </ol>
+  </nav>
+
+  <!-- Body -->
+  {
+    sections.map((section, index) => (
+      <section class="print-section" id={`sec-${section.slug}`}>
+        <h1 class="mb-1 text-sm font-semibold uppercase tracking-[0.15em] text-gray-500">
+          Section {index + 1}
+        </h1>
+        {section.pages.map((page, pageIndex) => (
+          <div class="print-page" id={page.anchor}>
+            <h2
+              class:list={[
+                "print-page-title font-bold text-vhcc-navy",
+                pageIndex === 0 ? "text-3xl" : "mt-10 text-2xl",
+              ]}
+            >
+              {page.title}
+            </h2>
+            <article class={proseClass}>
+              {page.courseCategory ? (
+                <CourseDescriptionCategory
+                  year={year}
+                  category={page.courseCategory}
+                />
+              ) : (
+                <page.Content />
+              )}
+            </article>
+          </div>
+        ))}
+      </section>
+    ))
+  }
+</PrintLayout>

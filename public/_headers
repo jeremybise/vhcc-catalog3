@@ -1,0 +1,6 @@
+# Netlify serves the built dist/ output, so headers for the prerendered JSON
+# endpoints are declared here rather than in the Astro route handlers.
+/api/*
+  Access-Control-Allow-Origin: *
+  Access-Control-Allow-Methods: GET, OPTIONS
+  Cache-Control: public, max-age=300, stale-while-revalidate=86400

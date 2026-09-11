@@ -1,14 +1,17 @@
 ---
 import { getCollection, render } from "astro:content";
+import { slugify } from "../lib/programOfStudy";
+import {
+  awardMeta,
+  getAward,
+  programSections,
+  type AwardKey,
+} from "../lib/programSources";
 
 const pathnameParts = Astro.url.pathname.split("/").filter(Boolean);
 const year = pathnameParts[0] ?? "";
 
-const targetSections = [
-  "school-of-arts-and-sciences",
-  "school-of-business-and-industry",
-  "school-of-health-professions",
-];
+const targetSections = programSections;
 
 const allEntries = await getCollection("catalog");
 const sectionEntries = allEntries
@@ -19,34 +22,9 @@ const sectionEntries = allEntries
     return targetSections.includes(section) && !entry.id.endsWith("/index");
   });
 
-const slugify = (text: string) =>
-  text
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .replace(/-+/g, "-");
+const bucketMeta = awardMeta;
 
-type BucketKey = "AA" | "AS" | "AAS" | "C" | "CSC";
-
-const bucketMeta: { key: BucketKey; title: string }[] = [
-  { key: "AA", title: "Associates of Arts (AA)" },
-  { key: "AS", title: "Associates of Science (AS)" },
-  { key: "AAS", title: "Associates of Applied Science (AAS)" },
-  { key: "C", title: "Certificates (C)" },
-  { key: "CSC", title: "Career Studies Certificates (CSC)" },
-];
-
-const getBucket = (heading: string): BucketKey | null => {
-  if (/^associate of arts\b/i.test(heading)) return "AA";
-  if (/^associate of science\b/i.test(heading)) return "AS";
-  if (/^associate of applied science\b/i.test(heading)) return "AAS";
-  if (/^certificate\b/i.test(heading)) return "C";
-  if (/^career studies certificate\b/i.test(heading)) return "CSC";
-  return null;
-};
-
-const buckets = new Map<BucketKey, { text: string; href: string }[]>(
+const buckets = new Map<AwardKey, { text: string; href: string }[]>(
   bucketMeta.map((meta) => [meta.key, []]),
 );
 
@@ -61,7 +39,7 @@ for (const entry of sectionEntries) {
     // Degree/certificate titles are authored mostly as h2/h3 in these pages.
     if (heading.depth < 2 || heading.depth > 3) continue;
 
-    const bucket = getBucket(heading.text || "");
+    const bucket = getAward(heading.text || "");
     if (!bucket) continue;
 
     const anchor = slugify(heading.text || "");

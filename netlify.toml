@@ -1,0 +1,19 @@
+# Netlify configuration.
+#
+# **Only the plugin block.** There is deliberately no `[build]` section: this site's build command
+# and publish directory are configured in the Netlify UI, and `netlify.toml` overrides the UI for
+# whatever it names. Adding `command`/`publish` here would move that configuration into the repo
+# silently — a change nobody asked for, and one that breaks the next time somebody edits the UI and
+# wonders why it had no effect.
+#
+# The plugin tells the VHCC marketing site to drop its cached HTML once this deploy is live, because
+# its program pages read this site's JSON API for their credits and curricula and then cache the
+# result for a day. See plugins/purge-marketing-site/index.mjs for why it hooks `onSuccess` rather
+# than `onPostBuild` — the timing is the correctness argument, and getting it wrong would cache stale
+# data rather than merely delay fresh data.
+#
+# It is a no-op unless MARKETING_PURGE_URL and MARKETING_PURGE_SECRET are set, so deploy previews and
+# branch builds do nothing until those variables are scoped to them.
+
+[[plugins]]
+package = "/plugins/purge-marketing-site"
