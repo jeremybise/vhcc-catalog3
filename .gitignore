@@ -24,5 +24,8 @@ node_modules
 # Local Netlify folder
 .netlify
 
+# Local Cloudflare/Wrangler state
+.wrangler/
+
 # Pagefind search index (dev copy)
 public/pagefind/

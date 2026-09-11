@@ -5,8 +5,8 @@ other sites (the VHCC marketing site) can present the same data without
 re-authoring it.
 
 The endpoints are **prerendered at build time** — they're plain `.json` files in
-`dist/`, served by Netlify like any other static asset. There is no server
-runtime involved, and `output: "static"` in `astro.config.mjs` stays as-is.
+`dist/client/`, served by Cloudflare as static assets like any other. There is no
+server runtime involved, and `output: "static"` in `astro.config.mjs` stays as-is.
 
 ## Endpoints
 
@@ -142,8 +142,9 @@ Notes on the shape:
   as text if you don't want a tooltip of your own.
 - **`catalogUrl`** is a fully qualified link to the program's heading on the
   catalog site, for linking back. It comes from `site` in `astro.config.mjs`,
-  which reads Netlify's `URL` build variable, so it tracks the catalog's primary
-  domain automatically. `catalogPath` is the same thing minus the origin.
+  which is the catalog's primary domain, hardcoded — Cloudflare sets no
+  equivalent of Netlify's old `URL` build variable, so moving the site means
+  editing that value. `catalogPath` is the same thing minus the origin.
 
 ## Consuming from the marketing site
 
@@ -198,11 +199,14 @@ const [track] = program.tracks;
 ```
 
 The trade-off is that the marketing site needs a rebuild to pick up catalog
-edits. Chain a Netlify build hook from the catalog site's deploy if that matters.
+edits. `scripts/purge-marketing-site.mjs` (`npm run purge:marketing`) asks the
+marketing site to drop its cached pages, but nothing calls it yet — and it must
+run only after a catalog deploy is live, or the marketing site re-renders against
+the old JSON and caches that for a day.
 
 If you'd rather fetch in the browser instead, the endpoints send
 `Access-Control-Allow-Origin: *` (declared in [public/_headers](../public/_headers),
-since Netlify serves the static output rather than the Astro route handlers).
+which Cloudflare applies to the static output rather than the Astro route handlers).
 
 ## Where this lives
 

@@ -7,7 +7,7 @@
   - Program of Study component
   - Course Tooltip component
 - Keystatic CMS for editors
-- Netlify or Vercel or Node for hosting?
+- Cloudflare Workers for hosting (`@astrojs/cloudflare`, config in `wrangler.jsonc`)
 
 ## Program of Study API
 

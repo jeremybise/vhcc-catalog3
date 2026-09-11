@@ -9,16 +9,28 @@ This is the Virginia Highlands Community College (VHCC) course catalog site: a s
 ## Commands
 
 ```bash
-npm run dev       # astro dev — local dev server
-npm run build     # astro build && pagefind --site dist — static build + search index
-npm run preview   # astro preview — serve the built dist/ output
+npm run dev            # astro dev — local dev server
+npm run build          # astro build && pagefind --site dist/client — static build + search index
+npm run preview        # astro preview — serve the built output
+npm run generate-types # wrangler types — regenerate worker-configuration.d.ts after editing wrangler.jsonc
 ```
 
-There is no test suite, lint script, or typecheck script configured in `package.json`. To typecheck, use `npx astro check`. There is no single-test runner since there are no tests.
+The build output is split: prerendered pages and assets land in `dist/client`, the on-demand worker in `dist/server`. Pagefind must index `dist/client` — the served root — or the search index lands somewhere the site can't fetch it.
 
-Keystatic's admin UI is available at `/keystatic` when running `astro dev` (uses local mode); in production it authenticates against GitHub (see `keystatic.config.ts`'s `storage.kind: "github"`, repo `jeremybise/vhcc-catalog3`) using the env vars in `.env` (`KEYSTATIC_GITHUB_CLIENT_ID/SECRET`, `KEYSTATIC_SECRET`, `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`).
+There is no test suite, lint script, or typecheck script configured in `package.json`. Typechecking is `npx astro check`, which prompts to install `@astrojs/check` and `typescript` the first time. There is no single-test runner since there are no tests.
 
-Deployment target is Netlify (`@astrojs/netlify` adapter, `output: "static"`).
+Keystatic's admin UI is available at `/keystatic`. It authenticates against GitHub in dev and in production alike (see `keystatic.config.ts`'s `storage.kind: "github"`, repo `jeremybise/vhcc-catalog3`) using the env vars in `.env` (`KEYSTATIC_GITHUB_CLIENT_ID/SECRET`, `KEYSTATIC_SECRET`, `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG`).
+
+## Deployment
+
+Deployment target is Cloudflare Workers (`@astrojs/cloudflare` adapter, `output: "static"`, config in `wrangler.jsonc`). `output: "hybrid"` is not a valid Astro 7 value — `"static"` covers that case, and routes opt into on-demand rendering with `export const prerender = false`.
+
+`public/_headers` supplies the CORS and cache headers for the prerendered `/api/*` JSON; Cloudflare honors it for static assets, so those headers are not set in Astro route handlers.
+
+Two things do not survive the move off Netlify:
+
+- `netlify.toml` and `plugins/purge-marketing-site/` are retained but inert — Netlify build plugins do not run on Cloudflare. The logic is ported to `scripts/purge-marketing-site.mjs` (`npm run purge:marketing`), which nothing calls yet. It must only run *after* a deploy is live: purging earlier makes the marketing site re-render against the old JSON and cache that for a day, which is worse than not purging. Cloudflare Builds has no post-deploy hook, so do not move it into the build command.
+- `src/pages/api/keystatic/[...params].ts` shadows the route `@keystatic/astro` injects. Astro's dev server loads an injected route's `node_modules` entrypoint outside Vite's transform pipeline, handing Keystatic's CommonJS chain to `workerd` (`exports is not defined`). Declaring it as a project module fixes dev; builds were never affected, because the adapter forces `ssr.noExternal` for them. The duplicate route logs a build warning and will become a hard error in a future Astro version — delete this file once Astro resolves injected routes through Vite in dev.
 
 ## Architecture
 
