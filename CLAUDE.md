@@ -27,6 +27,10 @@ Deployment target is Cloudflare Workers (`@astrojs/cloudflare` adapter, `output:
 
 `public/_headers` supplies the CORS and cache headers for the prerendered `/api/*` JSON; Cloudflare honors it for static assets, so those headers are not set in Astro route handlers.
 
+Keystatic's credentials are **not** read from `.env` in production. `@keystatic/astro` v6 resolves them through `getSecret()` from `astro:env/server`, which the adapter wires to the Worker's runtime bindings — so `KEYSTATIC_GITHUB_CLIENT_ID`, `KEYSTATIC_GITHUB_CLIENT_SECRET` and `KEYSTATIC_SECRET` must be set as Worker secrets (`wrangler secret bulk .env`). `PUBLIC_KEYSTATIC_GITHUB_APP_SLUG` is separate: it is read as `import.meta.env.PUBLIC_…` and inlined at build time, so it has to exist as a *build* variable in Cloudflare Builds — a runtime secret never reaches the bundle. Missing secrets surface as a 500 from `/api/keystatic/github/login` while the rest of the site is fine.
+
+Images are optimized at build time (`imageService: "compile"`) rather than through the adapter's default `/_image` endpoint, which transforms per request via the Cloudflare Images binding and needs Image Transformations enabled on the account. The header logo is an SVG and is referenced directly as `<img src={logo.src}>`, bypassing the image pipeline entirely: no service can rasterize it (Astro's build service refuses SVG input, Cloudflare Images does not transform it, and the dev endpoint rejects `f=svg`), so routing it through `<Image>` breaks in one environment or another.
+
 Two things do not survive the move off Netlify:
 
 - `netlify.toml` and `plugins/purge-marketing-site/` are retained but inert — Netlify build plugins do not run on Cloudflare. The logic is ported to `scripts/purge-marketing-site.mjs` (`npm run purge:marketing`), which nothing calls yet. It must only run *after* a deploy is live: purging earlier makes the marketing site re-render against the old JSON and cache that for a day, which is worse than not purging. Cloudflare Builds has no post-deploy hook, so do not move it into the build command.

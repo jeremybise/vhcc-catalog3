@@ -25,8 +25,25 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+
+    // Pre-bundle Keystatic's API entrypoints at server start. Discovered lazily
+    // they trigger a mid-session re-optimize, and the reload desyncs the workerd
+    // runner from the dep-cache hashes — `astro dev` then dies on a stale
+    // rolldown-runtime chunk.
+    optimizeDeps: {
+      include: [
+        "@keystatic/astro/api",
+        "@keystatic/astro/internal/keystatic-api.js",
+      ],
+    },
   },
 
   output: "static",
-  adapter: cloudflare(),
+
+  // Optimize images at build time into static files. The adapter otherwise
+  // routes every image through `/_image` at request time via the Cloudflare
+  // Images binding, which needs Image Transformations enabled on the account —
+  // without it the images 404 in production while working under `wrangler dev`,
+  // since local mode emulates the binding regardless of entitlement.
+  adapter: cloudflare({ imageService: "compile" }),
 });

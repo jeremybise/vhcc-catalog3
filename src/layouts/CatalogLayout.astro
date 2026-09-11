@@ -1,6 +1,5 @@
 ---
 import "../styles/global.css";
-import { Image } from "astro:assets";
 import { Icon } from "astro-icon/components";
 import logo from "../assets/logo.svg";
 import CatalogSearch from "../components/CatalogSearch";
@@ -250,13 +249,22 @@ const tocHeadings = headings.filter((heading) => heading.depth === 2);
         href={`/${year}`}
         class="flex items-center gap-2 text-white font-semibold text-lg sm:text-xl hover:text-slate-200 transition-colors"
       >
-        <Image
-          src={logo}
+        <!--
+          Referenced directly rather than through <Image>: the logo is an SVG,
+          and the image pipeline cannot pass one through. Rasterizing it (the
+          old format="png") fails wherever SVG input is unsupported — Astro's
+          build service refuses it outright, and Cloudflare Images does too,
+          which is why the logo vanished in production. format="svg" trades that
+          for a 400 from the dev image endpoint instead.
+        -->
+        <img
+          src={logo.src}
+          width={logo.width}
+          height={logo.height}
           alt="Virginia Highlands Community College logo"
           class="h-6 w-auto sm:h-7"
           loading="eager"
           decoding="async"
-          format="png"
         />
         <span class="tracking-tight leading-tight">College Catalog</span>
       </a>
